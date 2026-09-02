@@ -1,4 +1,4 @@
-package com.dgi.gestionactifs.web.rest;
+﻿package com.dgi.gestionactifs.web.rest;
 
 import com.dgi.gestionactifs.repository.ActifRepository;
 import com.dgi.gestionactifs.service.ActifQueryService;
@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -59,6 +60,7 @@ public class ActifResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new actifDTO, or with status {@code 400 (Bad Request)} if the actif has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TECHNICIEN')")
     @PostMapping("")
     public ResponseEntity<ActifDTO> createActif(@Valid @RequestBody ActifDTO actifDTO) throws URISyntaxException {
         LOG.debug("REST request to save Actif : {}", actifDTO);
@@ -81,6 +83,7 @@ public class ActifResource {
      * or with status {@code 500 (Internal Server Error)} if the actifDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TECHNICIEN')")
     @PutMapping("/{id}")
     public ResponseEntity<ActifDTO> updateActif(
         @PathVariable(value = "id", required = false) final Long id,
@@ -147,6 +150,9 @@ public class ActifResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of Actifs in body.
      */
+    @PreAuthorize(
+        "hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_RESPONSABLE') or hasAuthority('ROLE_AGENT')"
+    )
     @GetMapping("")
     public ResponseEntity<List<ActifDTO>> getAllActifs(
         ActifCriteria criteria,
@@ -177,6 +183,9 @@ public class ActifResource {
      * @param id the id of the actifDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the actifDTO, or with status {@code 404 (Not Found)}.
      */
+    @PreAuthorize(
+        "hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_RESPONSABLE') or hasAuthority('ROLE_AGENT')"
+    )
     @GetMapping("/{id}")
     public ResponseEntity<ActifDTO> getActif(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Actif : {}", id);
@@ -190,6 +199,7 @@ public class ActifResource {
      * @param id the id of the actifDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteActif(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Actif : {}", id);
