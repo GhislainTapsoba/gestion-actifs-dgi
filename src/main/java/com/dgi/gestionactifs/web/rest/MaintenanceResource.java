@@ -1,4 +1,4 @@
-package com.dgi.gestionactifs.web.rest;
+﻿package com.dgi.gestionactifs.web.rest;
 
 import com.dgi.gestionactifs.repository.MaintenanceRepository;
 import com.dgi.gestionactifs.service.MaintenanceQueryService;
@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -63,6 +64,7 @@ public class MaintenanceResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new maintenanceDTO, or with status {@code 400 (Bad Request)} if the maintenance has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @PreAuthorize("hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_AGENT')")
     @PostMapping("")
     public ResponseEntity<MaintenanceDTO> createMaintenance(@Valid @RequestBody MaintenanceDTO maintenanceDTO) throws URISyntaxException {
         LOG.debug("REST request to save Maintenance : {}", maintenanceDTO);
@@ -85,6 +87,7 @@ public class MaintenanceResource {
      * or with status {@code 500 (Internal Server Error)} if the maintenanceDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
+    @PreAuthorize("hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_RESPONSABLE')")
     @PutMapping("/{id}")
     public ResponseEntity<MaintenanceDTO> updateMaintenance(
         @PathVariable(value = "id", required = false) final Long id,
@@ -151,6 +154,9 @@ public class MaintenanceResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of Maintenances in body.
      */
+    @PreAuthorize(
+        "hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_RESPONSABLE') or hasAuthority('ROLE_AGENT')"
+    )
     @GetMapping("")
     public ResponseEntity<List<MaintenanceDTO>> getAllMaintenances(
         MaintenanceCriteria criteria,
@@ -181,6 +187,9 @@ public class MaintenanceResource {
      * @param id the id of the maintenanceDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the maintenanceDTO, or with status {@code 404 (Not Found)}.
      */
+    @PreAuthorize(
+        "hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_RESPONSABLE') or hasAuthority('ROLE_AGENT')"
+    )
     @GetMapping("/{id}")
     public ResponseEntity<MaintenanceDTO> getMaintenance(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Maintenance : {}", id);
@@ -194,6 +203,7 @@ public class MaintenanceResource {
      * @param id the id of the maintenanceDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMaintenance(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Maintenance : {}", id);
