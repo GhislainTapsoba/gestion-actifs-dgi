@@ -1,0 +1,47 @@
+{
+  "annotations": {
+    "changelogDate": "20260902202142"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "typeContrat",
+      "fieldType": "TypeContrat",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "GARANTIE,MAINTENANCE"
+    },
+    {
+      "fieldName": "reference",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dateDebut",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "dateFin",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Contrat",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "actif",
+      "relationshipName": "actif",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "fournisseur",
+      "relationshipName": "fournisseur",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

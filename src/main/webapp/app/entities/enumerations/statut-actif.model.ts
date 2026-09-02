@@ -1,0 +1,9 @@
+export enum StatutActif {
+  EN_SERVICE = 'EN_SERVICE',
+
+  EN_MAINTENANCE = 'EN_MAINTENANCE',
+
+  REFORME = 'REFORME',
+
+  PERDU_VOLE = 'PERDU_VOLE',
+}

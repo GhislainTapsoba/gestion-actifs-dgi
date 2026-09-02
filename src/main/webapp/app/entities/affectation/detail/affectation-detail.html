@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (affectation(); as affectationRef) {
+      <div>
+        <h2 data-cy="affectationDetailsHeading"><span jhiTranslate="gestionActifsDgiApp.affectation.detail.title">Affectation</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ affectationRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.affectation.dateAffectation">Date Affectation</span></dt>
+          <dd>
+            <span>{{ affectationRef.dateAffectation | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.affectation.dateRestitution">Date Restitution</span></dt>
+          <dd>
+            <span>{{ affectationRef.dateRestitution | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.affectation.numeroBordereau">Numero Bordereau</span></dt>
+          <dd>
+            <span>{{ affectationRef.numeroBordereau }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.affectation.utilisateur">Utilisateur</span></dt>
+          <dd>
+            <span>{{ affectationRef.utilisateur?.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.affectation.actif">Actif</span></dt>
+          <dd>
+            @if (affectation()!.actif) {
+              <div>
+                <a [routerLink]="['/actif', affectation()!.actif?.id, 'view']">{{ affectationRef.actif?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/affectation', affectationRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,38 @@
+{
+  "annotations": {
+    "changelogDate": "20260902202141"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "nom",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "contact",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "telephone",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Fournisseur",
+  "relationships": [
+    {
+      "otherEntityName": "contrat",
+      "otherEntityRelationshipName": "fournisseur",
+      "relationshipName": "contrat",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

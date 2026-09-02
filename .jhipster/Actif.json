@@ -1,0 +1,66 @@
+{
+  "annotations": {
+    "changelogDate": "20260902202137"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "identifiantUnique",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "codeBarreQR",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "TypeActif",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "POSTE_TRAVAIL,IMPRIMANTE,SERVEUR,RESEAU,PERIPHERIQUE"
+    },
+    {
+      "fieldName": "etat",
+      "fieldType": "StatutActif",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "EN_SERVICE,EN_MAINTENANCE,REFORME,PERDU_VOLE"
+    },
+    {
+      "fieldName": "localisation",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dateAcquisition",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Actif",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "affectation",
+      "otherEntityRelationshipName": "actif",
+      "relationshipName": "affectation",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "transfert",
+      "otherEntityRelationshipName": "actif",
+      "relationshipName": "transfert",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "maintenance",
+      "otherEntityRelationshipName": "actif",
+      "relationshipName": "maintenance",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

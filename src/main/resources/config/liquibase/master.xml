@@ -12,7 +12,19 @@
     <property name="timeType" value="time(6)" dbms="postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260902202137_added_entity_Actif.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260902202138_added_entity_Affectation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260902202139_added_entity_Transfert.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260902202140_added_entity_Maintenance.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260902202141_added_entity_Fournisseur.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260902202142_added_entity_Contrat.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20260902202138_added_entity_constraints_Affectation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260902202139_added_entity_constraints_Transfert.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260902202140_added_entity_constraints_Maintenance.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20260902202142_added_entity_constraints_Contrat.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <include file="config/liquibase/changelog/20260902210000_added_custom_authorities.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

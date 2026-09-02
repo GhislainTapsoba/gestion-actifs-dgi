@@ -1,0 +1,56 @@
+{
+  "annotations": {
+    "changelogDate": "20260902202139"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "dateDemande",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "statut",
+      "fieldType": "StatutTransfert",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "EN_ATTENTE,VALIDE,REJETE"
+    },
+    {
+      "fieldName": "commentaireRejet",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dateTraitement",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Transfert",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "user",
+      "relationshipName": "demandeur",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipWithBuiltInEntity": true
+    },
+    {
+      "otherEntityName": "user",
+      "relationshipName": "validateur",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipWithBuiltInEntity": true
+    },
+    {
+      "otherEntityName": "actif",
+      "relationshipName": "actif",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

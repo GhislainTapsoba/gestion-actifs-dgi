@@ -1,0 +1,30 @@
+{
+  "gestionActifsDgiApp": {
+    "transfert": {
+      "home": {
+        "title": "Transferts",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Transfert",
+        "createOrEditLabel": "Create or edit a Transfert",
+        "notFound": "No Transferts found"
+      },
+      "created": "A new Transfert is created with identifier {{ param }}",
+      "updated": "A Transfert is updated with identifier {{ param }}",
+      "deleted": "A Transfert is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Transfert {{ id }}?"
+      },
+      "detail": {
+        "title": "Transfert"
+      },
+      "id": "ID",
+      "dateDemande": "Date Demande",
+      "statut": "Statut",
+      "commentaireRejet": "Commentaire Rejet",
+      "dateTraitement": "Date Traitement",
+      "demandeur": "Demandeur",
+      "validateur": "Validateur",
+      "actif": "Actif"
+    }
+  }
+}

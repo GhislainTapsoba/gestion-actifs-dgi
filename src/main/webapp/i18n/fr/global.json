@@ -8,7 +8,13 @@
       "entities": {
         "main": "Entités",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
-        "adminAuthority": "Authority"
+        "adminAuthority": "Authority",
+        "actif": "Actif",
+        "affectation": "Affectation",
+        "transfert": "Transfert",
+        "maintenance": "Maintenance",
+        "fournisseur": "Fournisseur",
+        "contrat": "Contrat"
       },
       "account": {
         "main": "Compte",

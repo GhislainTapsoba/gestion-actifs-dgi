@@ -1,0 +1,9 @@
+{
+  "gestionActifsDgiApp": {
+    "TypeContrat": {
+      "null": "",
+      "GARANTIE": "GARANTIE",
+      "MAINTENANCE": "MAINTENANCE"
+    }
+  }
+}

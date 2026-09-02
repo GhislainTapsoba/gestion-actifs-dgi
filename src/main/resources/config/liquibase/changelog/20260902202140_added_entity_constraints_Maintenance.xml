@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity Maintenance.
+    -->
+    <changeSet id="20260902202140-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="technicien_id"
+                                 baseTableName="maintenance"
+                                 constraintName="fk_maintenance__technicien_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="actif_id"
+                                 baseTableName="maintenance"
+                                 constraintName="fk_maintenance__actif_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="actif"
+                                 />
+    </changeSet>
+</databaseChangeLog>

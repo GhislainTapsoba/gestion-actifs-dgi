@@ -1,0 +1,32 @@
+{
+  "gestionActifsDgiApp": {
+    "actif": {
+      "home": {
+        "title": "Actifs",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Actif",
+        "createOrEditLabel": "Créer ou éditer un Actif",
+        "notFound": "Aucun Actif trouvé"
+      },
+      "created": "Un nouveau Actif a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Actif avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Actif avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Actif {{ id }} ?"
+      },
+      "detail": {
+        "title": "Actif"
+      },
+      "id": "ID",
+      "identifiantUnique": "Identifiant Unique",
+      "codeBarreQR": "Code Barre QR",
+      "type": "Type",
+      "etat": "Etat",
+      "localisation": "Localisation",
+      "dateAcquisition": "Date Acquisition",
+      "affectation": "Affectation",
+      "transfert": "Transfert",
+      "maintenance": "Maintenance"
+    }
+  }
+}

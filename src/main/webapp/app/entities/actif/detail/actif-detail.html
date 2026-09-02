@@ -1,0 +1,67 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (actif(); as actifRef) {
+      <div>
+        <h2 data-cy="actifDetailsHeading"><span jhiTranslate="gestionActifsDgiApp.actif.detail.title">Actif</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ actifRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.actif.identifiantUnique">Identifiant Unique</span></dt>
+          <dd>
+            <span>{{ actifRef.identifiantUnique }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.actif.codeBarreQR">Code Barre QR</span></dt>
+          <dd>
+            <span>{{ actifRef.codeBarreQR }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.actif.type">Type</span></dt>
+          <dd>
+            <span [jhiTranslate]="'gestionActifsDgiApp.TypeActif.' + (actifRef.type ?? 'null')">{{
+              {
+                null: '',
+                POSTE_TRAVAIL: 'POSTE_TRAVAIL',
+                IMPRIMANTE: 'IMPRIMANTE',
+                SERVEUR: 'SERVEUR',
+                RESEAU: 'RESEAU',
+                PERIPHERIQUE: 'PERIPHERIQUE',
+              }[actifRef.type ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.actif.etat">Etat</span></dt>
+          <dd>
+            <span [jhiTranslate]="'gestionActifsDgiApp.StatutActif.' + (actifRef.etat ?? 'null')">{{
+              { null: '', EN_SERVICE: 'EN_SERVICE', EN_MAINTENANCE: 'EN_MAINTENANCE', REFORME: 'REFORME', PERDU_VOLE: 'PERDU_VOLE' }[
+                actifRef.etat ?? 'null'
+              ]
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.actif.localisation">Localisation</span></dt>
+          <dd>
+            <span>{{ actifRef.localisation }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.actif.dateAcquisition">Date Acquisition</span></dt>
+          <dd>
+            <span>{{ actifRef.dateAcquisition | formatMediumDate }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/actif', actifRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

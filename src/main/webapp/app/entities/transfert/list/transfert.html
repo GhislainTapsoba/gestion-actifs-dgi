@@ -1,0 +1,157 @@
+<div>
+  <h2 id="page-heading" data-cy="TransfertHeading">
+    <span jhiTranslate="gestionActifsDgiApp.transfert.home.title">Transferts</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading()">
+        <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined" />
+        <span jhiTranslate="gestionActifsDgiApp.transfert.home.refreshListLabel">Actualiser la liste</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-transfert"
+        [routerLink]="['/transfert/new']"
+      >
+        <fa-icon icon="plus" />
+        <span jhiTranslate="gestionActifsDgiApp.transfert.home.createLabel">Créer un nouveau Transfert</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  <jhi-filter [filters]="filters" />
+
+  @if (transferts().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="gestionActifsDgiApp.transfert.home.notFound">Aucun Transfert trouvé</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dateDemande">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.transfert.dateDemande">Date Demande</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="statut">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.transfert.statut">Statut</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="commentaireRejet">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.transfert.commentaireRejet">Commentaire Rejet</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dateTraitement">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.transfert.dateTraitement">Date Traitement</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="demandeur.id">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.transfert.demandeur">Demandeur</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="validateur.id">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.transfert.validateur">Validateur</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="actif.id">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.transfert.actif">Actif</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (transfert of transferts(); track trackId(transfert)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/transfert', transfert.id, 'view']">{{ transfert.id }}</a>
+              </td>
+              <td>{{ transfert.dateDemande | formatMediumDate }}</td>
+              <td [jhiTranslate]="'gestionActifsDgiApp.StatutTransfert.' + (transfert.statut ?? 'null')">
+                {{ { null: '', EN_ATTENTE: 'EN_ATTENTE', VALIDE: 'VALIDE', REJETE: 'REJETE' }[transfert.statut ?? 'null'] }}
+              </td>
+              <td>{{ transfert.commentaireRejet }}</td>
+              <td>{{ transfert.dateTraitement | formatMediumDate }}</td>
+              <td>
+                {{ transfert.demandeur?.id }}
+              </td>
+              <td>
+                {{ transfert.validateur?.id }}
+              </td>
+              <td>
+                @if (transfert.actif) {
+                  <div>
+                    <a [routerLink]="['/actif', transfert.actif.id, 'view']">{{ transfert.actif.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/transfert', transfert.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye" />
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Voir</span>
+                  </a>
+
+                  <a [routerLink]="['/transfert', transfert.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt" />
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editer</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(transfert)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times" />
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Supprimer</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (transferts().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page(), totalItems: totalItems(), itemsPerPage: itemsPerPage() }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems()"
+          [page]="page()"
+          [pageSize]="itemsPerPage()"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        />
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (fournisseur(); as fournisseurRef) {
+      <div>
+        <h2 data-cy="fournisseurDetailsHeading"><span jhiTranslate="gestionActifsDgiApp.fournisseur.detail.title">Fournisseur</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ fournisseurRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.fournisseur.nom">Nom</span></dt>
+          <dd>
+            <span>{{ fournisseurRef.nom }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.fournisseur.contact">Contact</span></dt>
+          <dd>
+            <span>{{ fournisseurRef.contact }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.fournisseur.email">Email</span></dt>
+          <dd>
+            <span>{{ fournisseurRef.email }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.fournisseur.telephone">Telephone</span></dt>
+          <dd>
+            <span>{{ fournisseurRef.telephone }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/fournisseur', fournisseurRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

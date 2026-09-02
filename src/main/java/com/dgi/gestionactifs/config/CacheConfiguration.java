@@ -44,6 +44,16 @@ public class CacheConfiguration {
             createCache(cm, com.dgi.gestionactifs.domain.User.class.getName());
             createCache(cm, com.dgi.gestionactifs.domain.Authority.class.getName());
             createCache(cm, com.dgi.gestionactifs.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.dgi.gestionactifs.domain.Actif.class.getName());
+            createCache(cm, com.dgi.gestionactifs.domain.Actif.class.getName() + ".affectations");
+            createCache(cm, com.dgi.gestionactifs.domain.Actif.class.getName() + ".transferts");
+            createCache(cm, com.dgi.gestionactifs.domain.Actif.class.getName() + ".maintenances");
+            createCache(cm, com.dgi.gestionactifs.domain.Affectation.class.getName());
+            createCache(cm, com.dgi.gestionactifs.domain.Transfert.class.getName());
+            createCache(cm, com.dgi.gestionactifs.domain.Maintenance.class.getName());
+            createCache(cm, com.dgi.gestionactifs.domain.Fournisseur.class.getName());
+            createCache(cm, com.dgi.gestionactifs.domain.Fournisseur.class.getName() + ".contrats");
+            createCache(cm, com.dgi.gestionactifs.domain.Contrat.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

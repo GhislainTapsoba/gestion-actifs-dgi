@@ -1,0 +1,64 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (transfert(); as transfertRef) {
+      <div>
+        <h2 data-cy="transfertDetailsHeading"><span jhiTranslate="gestionActifsDgiApp.transfert.detail.title">Transfert</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ transfertRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.transfert.dateDemande">Date Demande</span></dt>
+          <dd>
+            <span>{{ transfertRef.dateDemande | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.transfert.statut">Statut</span></dt>
+          <dd>
+            <span [jhiTranslate]="'gestionActifsDgiApp.StatutTransfert.' + (transfertRef.statut ?? 'null')">{{
+              { null: '', EN_ATTENTE: 'EN_ATTENTE', VALIDE: 'VALIDE', REJETE: 'REJETE' }[transfertRef.statut ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.transfert.commentaireRejet">Commentaire Rejet</span></dt>
+          <dd>
+            <span>{{ transfertRef.commentaireRejet }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.transfert.dateTraitement">Date Traitement</span></dt>
+          <dd>
+            <span>{{ transfertRef.dateTraitement | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.transfert.demandeur">Demandeur</span></dt>
+          <dd>
+            <span>{{ transfertRef.demandeur?.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.transfert.validateur">Validateur</span></dt>
+          <dd>
+            <span>{{ transfertRef.validateur?.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.transfert.actif">Actif</span></dt>
+          <dd>
+            @if (transfert()!.actif) {
+              <div>
+                <a [routerLink]="['/actif', transfert()!.actif?.id, 'view']">{{ transfertRef.actif?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/transfert', transfertRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

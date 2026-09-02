@@ -1,0 +1,32 @@
+{
+  "gestionActifsDgiApp": {
+    "actif": {
+      "home": {
+        "title": "Actifs",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Actif",
+        "createOrEditLabel": "Create or edit a Actif",
+        "notFound": "No Actifs found"
+      },
+      "created": "A new Actif is created with identifier {{ param }}",
+      "updated": "A Actif is updated with identifier {{ param }}",
+      "deleted": "A Actif is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Actif {{ id }}?"
+      },
+      "detail": {
+        "title": "Actif"
+      },
+      "id": "ID",
+      "identifiantUnique": "Identifiant Unique",
+      "codeBarreQR": "Code Barre QR",
+      "type": "Type",
+      "etat": "Etat",
+      "localisation": "Localisation",
+      "dateAcquisition": "Date Acquisition",
+      "affectation": "Affectation",
+      "transfert": "Transfert",
+      "maintenance": "Maintenance"
+    }
+  }
+}

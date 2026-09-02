@@ -1,0 +1,66 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (maintenance(); as maintenanceRef) {
+      <div>
+        <h2 data-cy="maintenanceDetailsHeading"><span jhiTranslate="gestionActifsDgiApp.maintenance.detail.title">Maintenance</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ maintenanceRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.maintenance.typeMaintenance">Type Maintenance</span></dt>
+          <dd>
+            <span [jhiTranslate]="'gestionActifsDgiApp.TypeMaintenance.' + (maintenanceRef.typeMaintenance ?? 'null')">{{
+              { null: '', PREVENTIVE: 'PREVENTIVE', CORRECTIVE: 'CORRECTIVE' }[maintenanceRef.typeMaintenance ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.maintenance.datePanne">Date Panne</span></dt>
+          <dd>
+            <span>{{ maintenanceRef.datePanne | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.maintenance.statut">Statut</span></dt>
+          <dd>
+            <span [jhiTranslate]="'gestionActifsDgiApp.StatutMaintenance.' + (maintenanceRef.statut ?? 'null')">{{
+              { null: '', OUVERTE: 'OUVERTE', EN_COURS: 'EN_COURS', CLOTUREE: 'CLOTUREE' }[maintenanceRef.statut ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.maintenance.compteRendu">Compte Rendu</span></dt>
+          <dd>
+            <span>{{ maintenanceRef.compteRendu }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.maintenance.dateCloture">Date Cloture</span></dt>
+          <dd>
+            <span>{{ maintenanceRef.dateCloture | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.maintenance.technicien">Technicien</span></dt>
+          <dd>
+            <span>{{ maintenanceRef.technicien?.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.maintenance.actif">Actif</span></dt>
+          <dd>
+            @if (maintenance()!.actif) {
+              <div>
+                <a [routerLink]="['/actif', maintenance()!.actif?.id, 'view']">{{ maintenanceRef.actif?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/maintenance', maintenanceRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

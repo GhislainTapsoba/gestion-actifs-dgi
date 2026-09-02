@@ -1,0 +1,64 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (contrat(); as contratRef) {
+      <div>
+        <h2 data-cy="contratDetailsHeading"><span jhiTranslate="gestionActifsDgiApp.contrat.detail.title">Contrat</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ contratRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.contrat.typeContrat">Type Contrat</span></dt>
+          <dd>
+            <span [jhiTranslate]="'gestionActifsDgiApp.TypeContrat.' + (contratRef.typeContrat ?? 'null')">{{
+              { null: '', GARANTIE: 'GARANTIE', MAINTENANCE: 'MAINTENANCE' }[contratRef.typeContrat ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.contrat.reference">Reference</span></dt>
+          <dd>
+            <span>{{ contratRef.reference }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.contrat.dateDebut">Date Debut</span></dt>
+          <dd>
+            <span>{{ contratRef.dateDebut | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.contrat.dateFin">Date Fin</span></dt>
+          <dd>
+            <span>{{ contratRef.dateFin | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.contrat.actif">Actif</span></dt>
+          <dd>
+            @if (contrat()!.actif) {
+              <div>
+                <a [routerLink]="['/actif', contrat()!.actif?.id, 'view']">{{ contratRef.actif?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.contrat.fournisseur">Fournisseur</span></dt>
+          <dd>
+            @if (contrat()!.fournisseur) {
+              <div>
+                <a [routerLink]="['/fournisseur', contrat()!.fournisseur?.id, 'view']">{{ contratRef.fournisseur?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/contrat', contratRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

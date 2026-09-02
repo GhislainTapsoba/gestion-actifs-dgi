@@ -1,0 +1,12 @@
+{
+  "gestionActifsDgiApp": {
+    "TypeActif": {
+      "null": "",
+      "POSTE_TRAVAIL": "POSTE_TRAVAIL",
+      "IMPRIMANTE": "IMPRIMANTE",
+      "SERVEUR": "SERVEUR",
+      "RESEAU": "RESEAU",
+      "PERIPHERIQUE": "PERIPHERIQUE"
+    }
+  }
+}

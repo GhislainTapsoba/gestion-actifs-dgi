@@ -1,0 +1,136 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-affectation-heading"
+        data-cy="AffectationCreateUpdateHeading"
+        jhiTranslate="gestionActifsDgiApp.affectation.home.createOrEditLabel"
+      >
+        Créer ou éditer un Affectation
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="global.field.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let dateAffectationRef = editForm.get('dateAffectation')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_dateAffectation" jhiTranslate="gestionActifsDgiApp.affectation.dateAffectation"
+            >Date Affectation</label
+          >
+          <div class="input-group">
+            <input
+              id="field_dateAffectation"
+              data-cy="dateAffectation"
+              type="text"
+              class="form-control"
+              name="dateAffectation"
+              ngbDatepicker
+              #dateAffectationDp="ngbDatepicker"
+              formControlName="dateAffectation"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dateAffectationDp.toggle()"><fa-icon icon="calendar-alt" /></button>
+          </div>
+          @if (dateAffectationRef.invalid && (dateAffectationRef.dirty || dateAffectationRef.touched)) {
+            <div>
+              @if (dateAffectationRef.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_dateRestitution" jhiTranslate="gestionActifsDgiApp.affectation.dateRestitution"
+            >Date Restitution</label
+          >
+          <div class="input-group">
+            <input
+              id="field_dateRestitution"
+              data-cy="dateRestitution"
+              type="text"
+              class="form-control"
+              name="dateRestitution"
+              ngbDatepicker
+              #dateRestitutionDp="ngbDatepicker"
+              formControlName="dateRestitution"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dateRestitutionDp.toggle()"><fa-icon icon="calendar-alt" /></button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_numeroBordereau" jhiTranslate="gestionActifsDgiApp.affectation.numeroBordereau"
+            >Numero Bordereau</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="numeroBordereau"
+            id="field_numeroBordereau"
+            data-cy="numeroBordereau"
+            formControlName="numeroBordereau"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_utilisateur" jhiTranslate="gestionActifsDgiApp.affectation.utilisateur">Utilisateur</label>
+          <select
+            class="form-control"
+            id="field_utilisateur"
+            data-cy="utilisateur"
+            name="utilisateur"
+            formControlName="utilisateur"
+            [compareWith]="compareUser"
+          >
+            <option [ngValue]="null"></option>
+            @for (userOption of usersSharedCollection(); track $index) {
+              <option [ngValue]="userOption">{{ userOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_actif" jhiTranslate="gestionActifsDgiApp.affectation.actif">Actif</label>
+          <select class="form-control" id="field_actif" data-cy="actif" name="actif" formControlName="actif" [compareWith]="compareActif">
+            @if (editForm.get(['actif'])!.value === null) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (actifOption of actifsSharedCollection(); track $index) {
+              <option [ngValue]="actifOption">{{ actifOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['actif'])!.invalid && (editForm.get(['actif'])!.dirty || editForm.get(['actif'])!.touched)) {
+          <div>
+            @if (editForm.get(['actif'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban" />&nbsp;<span jhiTranslate="entity.action.cancel">Annuler</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving()"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save" />&nbsp;<span jhiTranslate="entity.action.save">Sauvegarder</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

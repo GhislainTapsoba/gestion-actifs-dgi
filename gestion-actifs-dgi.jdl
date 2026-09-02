@@ -1,0 +1,91 @@
+// Modèle JDL - Application de gestion des actifs informatiques (DGI)
+// Généré à partir du cahier des charges et de l'expression des besoins v2.0
+
+entity Actif {
+  identifiantUnique String required unique
+  codeBarreQR String
+  type TypeActif required
+  etat StatutActif required
+  localisation String
+  dateAcquisition LocalDate
+}
+
+entity Affectation {
+  dateAffectation LocalDate required
+  dateRestitution LocalDate
+  numeroBordereau String
+}
+
+entity Transfert {
+  dateDemande LocalDate required
+  statut StatutTransfert required
+  commentaireRejet String
+  dateTraitement LocalDate
+}
+
+entity Maintenance {
+  typeMaintenance TypeMaintenance required
+  datePanne LocalDate
+  statut StatutMaintenance required
+  compteRendu TextBlob
+  dateCloture LocalDate
+}
+
+entity Fournisseur {
+  nom String required
+  contact String
+  email String
+  telephone String
+}
+
+entity Contrat {
+  typeContrat TypeContrat required
+  reference String
+  dateDebut LocalDate
+  dateFin LocalDate required
+}
+
+enum TypeActif {
+  POSTE_TRAVAIL, IMPRIMANTE, SERVEUR, RESEAU, PERIPHERIQUE
+}
+
+enum StatutActif {
+  EN_SERVICE, EN_MAINTENANCE, REFORME, PERDU_VOLE
+}
+
+enum StatutTransfert {
+  EN_ATTENTE, VALIDE, REJETE
+}
+
+enum TypeMaintenance {
+  PREVENTIVE, CORRECTIVE
+}
+
+enum StatutMaintenance {
+  OUVERTE, EN_COURS, CLOTUREE
+}
+
+enum TypeContrat {
+  GARANTIE, MAINTENANCE
+}
+
+relationship OneToMany {
+  Actif to Affectation{actif required}
+  Actif to Transfert{actif required}
+  Actif to Maintenance{actif required}
+  Fournisseur to Contrat{fournisseur required}
+}
+
+relationship ManyToOne {
+  Contrat{actif} to Actif
+  Affectation{utilisateur} to User with builtInEntity
+  Transfert{demandeur} to User with builtInEntity
+  Transfert{validateur} to User with builtInEntity
+  Maintenance{technicien} to User with builtInEntity
+}
+
+// Options de génération
+paginate Actif, Affectation, Transfert, Maintenance, Contrat with pagination
+dto * with mapstruct
+service * with serviceImpl
+filter Actif, Affectation, Transfert, Maintenance

@@ -1,0 +1,54 @@
+{
+  "annotations": {
+    "changelogDate": "20260902202140"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "typeMaintenance",
+      "fieldType": "TypeMaintenance",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PREVENTIVE,CORRECTIVE"
+    },
+    {
+      "fieldName": "datePanne",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "statut",
+      "fieldType": "StatutMaintenance",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "OUVERTE,EN_COURS,CLOTUREE"
+    },
+    {
+      "fieldName": "compteRendu",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "dateCloture",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Maintenance",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "user",
+      "relationshipName": "technicien",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipWithBuiltInEntity": true
+    },
+    {
+      "otherEntityName": "actif",
+      "relationshipName": "actif",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}
