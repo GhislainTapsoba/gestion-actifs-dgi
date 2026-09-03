@@ -1,6 +1,8 @@
 ﻿package com.dgi.gestionactifs.web.rest;
 
 import com.dgi.gestionactifs.repository.ActifRepository;
+import com.dgi.gestionactifs.repository.AffectationRepository;
+import com.dgi.gestionactifs.security.SecurityUtils;
 import com.dgi.gestionactifs.service.ActifQueryService;
 import com.dgi.gestionactifs.service.ActifService;
 import com.dgi.gestionactifs.service.criteria.ActifCriteria;
@@ -23,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -47,10 +50,18 @@ public class ActifResource {
 
     private final ActifQueryService actifQueryService;
 
-    public ActifResource(ActifService actifService, ActifRepository actifRepository, ActifQueryService actifQueryService) {
+    private final AffectationRepository affectationRepository;
+
+    public ActifResource(
+        ActifService actifService,
+        ActifRepository actifRepository,
+        ActifQueryService actifQueryService,
+        AffectationRepository affectationRepository
+    ) {
         this.actifService = actifService;
         this.actifRepository = actifRepository;
         this.actifQueryService = actifQueryService;
+        this.affectationRepository = affectationRepository;
     }
 
     /**
@@ -159,6 +170,24 @@ public class ActifResource {
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
         LOG.debug("REST request to get Actifs by criteria: {}", criteria);
+
+        boolean isAgentOnly =
+            SecurityUtils.hasCurrentUserThisAuthority("ROLE_AGENT") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_ADMIN") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_TECHNICIEN") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_RESPONSABLE");
+
+        if (isAgentOnly) {
+            List<Long> actifIds = affectationRepository
+                .findByUtilisateur_LoginAndDateRestitutionIsNull(SecurityUtils.getCurrentUserLogin().orElse(""))
+                .stream()
+                .map(affectation -> affectation.getActif().getId())
+                .distinct()
+                .toList();
+            LongFilter idFilter = new LongFilter();
+            idFilter.setIn(actifIds);
+            criteria.setId(idFilter);
+        }
 
         Page<ActifDTO> page = actifQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);

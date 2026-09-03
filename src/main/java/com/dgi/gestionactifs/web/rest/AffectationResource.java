@@ -1,6 +1,7 @@
 ﻿package com.dgi.gestionactifs.web.rest;
 
 import com.dgi.gestionactifs.repository.AffectationRepository;
+import com.dgi.gestionactifs.security.SecurityUtils;
 import com.dgi.gestionactifs.service.AffectationQueryService;
 import com.dgi.gestionactifs.service.AffectationService;
 import com.dgi.gestionactifs.service.criteria.AffectationCriteria;
@@ -23,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -163,6 +165,24 @@ public class AffectationResource {
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
         LOG.debug("REST request to get Affectations by criteria: {}", criteria);
+
+        boolean isAgentOnly =
+            SecurityUtils.hasCurrentUserThisAuthority("ROLE_AGENT") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_ADMIN") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_TECHNICIEN") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_RESPONSABLE");
+
+        if (isAgentOnly) {
+            java.util.List<Long> affectationIds = affectationRepository
+                .findByUtilisateur_Login(SecurityUtils.getCurrentUserLogin().orElse(""))
+                .stream()
+                .map(com.dgi.gestionactifs.domain.Affectation::getId)
+                .distinct()
+                .toList();
+            LongFilter idFilter = new LongFilter();
+            idFilter.setIn(affectationIds);
+            criteria.setId(idFilter);
+        }
 
         Page<AffectationDTO> page = affectationQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
