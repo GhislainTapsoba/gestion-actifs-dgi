@@ -1,289 +1,205 @@
-# gestionActifsDgi
+# Gestion des Actifs Informatiques — DGI
 
-This application was generated using JHipster 9.3.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v9.3.0](https://www.jhipster.tech/documentation-archive/v9.3.0).
+Application de gestion du parc informatique de la Direction Générale des Impôts (DGI) : suivi des équipements, affectations, transferts, maintenance, fournisseurs et contrats de garantie.
 
-## Project Structure
+Ce projet est généré et structuré avec **JHipster**, une plateforme qui génère automatiquement une application web complète (backend Java + frontend Angular + base de données) à partir d'un modèle de données. Ce README explique comment le faire fonctionner, même si tu n'as jamais utilisé JHipster.
 
-Node is required for generation and recommended for development. `package.json` is always generated for a better development experience with prettier, commit hooks, scripts and so on.
+---
 
-In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husky, and others that are well known and you can find references in the web.
+## Table des matières
 
-`/src/*` structure follows default Java structure.
+1. [Comprendre les grandes briques du projet](#1-comprendre-les-grandes-briques-du-projet)
+2. [Prérequis à installer](#2-prérequis-à-installer)
+3. [Installation du projet](#3-installation-du-projet)
+4. [Lancer l'application](#4-lancer-lapplication)
+5. [Se connecter](#5-se-connecter)
+6. [Les rôles et les droits](#6-les-rôles-et-les-droits)
+7. [Structure du projet](#7-structure-du-projet)
+8. [Modifier une entité (ajouter un champ, etc.)](#8-modifier-une-entité)
+9. [Problèmes fréquents](#9-problèmes-fréquents)
+10. [Où trouver de l'aide](#10-où-trouver-de-laide)
 
-- `.yo-rc.json` - Yeoman configuration file
-  JHipster configuration is stored in this file at `generator-jhipster` key. You may find `generator-jhipster-*` for specific blueprints configuration.
-- `.yo-resolve` (optional) - Yeoman conflict resolver
-  Allows to use a specific action when conflicts are found skipping prompts for files that matches a pattern. Each line should match `[pattern] [action]` with pattern been a [Minimatch](https://github.com/isaacs/minimatch#minimatch) pattern and action been one of skip (default if omitted) or force. Lines starting with `#` are considered comments and are ignored.
-- `.jhipster/*.json` - JHipster entity configuration files
+---
 
-- `npmw` - wrapper to use locally installed npm.
-  JHipster installs Node and npm locally using the build tool by default. This wrapper makes sure npm is installed locally and uses it avoiding some differences different versions can cause. By using `./npmw` instead of the traditional `npm` you can configure a Node-less environment to develop or test your application.
-- `/src/main/docker` - Docker configurations for the application and services that the application depends on
+## 1. Comprendre les grandes briques du projet
 
-## Development
+Avant de toucher au code, voici les pièces du puzzle :
 
-The build system will install automatically the recommended version of Node and npm.
+| Brique              | Rôle                                                                                   | Technologie          |
+| ------------------- | -------------------------------------------------------------------------------------- | -------------------- |
+| **Backend**         | La logique métier, les règles de gestion, l'accès à la base de données                 | Java (Spring Boot)   |
+| **Frontend**        | Ce que l'utilisateur voit et manipule dans son navigateur                              | Angular (TypeScript) |
+| **Base de données** | Le stockage permanent des données (actifs, utilisateurs, etc.)                         | PostgreSQL           |
+| **Liquibase**       | Un outil qui crée/modifie automatiquement les tables de la base quand le modèle change | Intégré au backend   |
+| **Docker**          | Fait tourner PostgreSQL sans avoir à l'installer directement sur ta machine            | -                    |
 
-We provide a wrapper to launch npm.
-You will only need to run this command when dependencies change in [package.json](package.json).
+**Ce que fait JHipster concrètement** : à partir d'un modèle décrivant les données (fichier `gestion-actifs-dgi.jdl` à la racine du projet), il génère tout le code répétitif — formulaires, listes, API, base de données — pour qu'on n'ait qu'à ajouter la logique métier spécifique par-dessus.
 
-```bash
-./npmw install
+---
+
+## 2. Prérequis à installer
+
+Sur une machine Windows neuve, il faut installer, dans cet ordre :
+
+1. **Node.js** (version LTS) — [nodejs.org](https://nodejs.org)
+2. **Java 21** (Eclipse Temurin recommandé) — [adoptium.net](https://adoptium.net)
+3. **Docker Desktop** — [docker.com](https://www.docker.com/products/docker-desktop)
+4. **Git** et **GitHub Desktop** — pour récupérer et versionner le code
+
+Vérifie chaque installation dans un terminal PowerShell :
+
+```powershell
+node --version
+java -version
+docker --version
+git --version
 ```
 
-We use npm scripts and [Angular CLI](https://angular.dev/tools/cli) with esbuild as our build system.
+> **Si PowerShell refuse d'exécuter des commandes** (`npm` par exemple) avec une erreur de politique d'exécution : ouvre PowerShell **en administrateur** et lance `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`, puis confirme.
 
-Run the following commands in two separate terminals to create a blissful development experience where your browser
-auto-refreshes when files change on your hard drive.
+---
 
-```bash
-./npmw run backend:start
-./npmw run start
+## 3. Installation du projet
+
+```powershell
+# Cloner le dépôt (récupérer le code depuis GitHub)
+git clone https://github.com/GhislainTapsoba/gestion-actifs-dgi.git
+cd gestion-actifs-dgi
+
+# Installer les dépendances (peut prendre plusieurs minutes)
+npm install
 ```
 
-Npm is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
-specifying a newer version in [package.json](package.json). You can also run `./npmw update` and `./npmw install` to manage dependencies.
-Add the `help` flag on any command to see how you can use it. For example, `./npmw help update`.
+---
 
-The `./npmw run` command will list all the scripts available to run for this project.
+## 4. Lancer l'application
 
-### PWA Support
+**Étape 1 — démarrer la base de données** (Docker Desktop doit être ouvert) :
 
-JHipster ships with PWA (Progressive Web App) support, and it's turned off by default. One of the main components of a PWA is a service worker.
-
-The service worker initialization code is disabled by default. To enable it, uncomment the following code in `src/main/webapp/app/app.config.ts`:
-
-```typescript
-ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
+```powershell
+docker compose -f src/main/docker/postgresql.yml up -d
 ```
 
-### Managing dependencies
+**Étape 2 — démarrer l'application** :
 
-For example, to add [Leaflet](https://leafletjs.com/) library as a runtime dependency of your application, you would run the following command:
-
-```bash
-./npmw install --save --save-exact leaflet
+```powershell
+.\mvnw
 ```
 
-To benefit from TypeScript type definitions from [DefinitelyTyped](https://definitelytyped.org/) repository in development, you would run the following command:
+La première fois, cette commande télécharge toutes les dépendances Java et compile le frontend Angular — ça peut prendre plusieurs minutes. Les fois suivantes seront plus rapides.
 
-```bash
-./npmw install --save-dev --save-exact @types/leaflet
+Quand tu vois dans le terminal :
+
+```
+Application 'gestionActifsDgi' is running!
+Local: http://localhost:8080/
 ```
 
-Then you would import the JS and CSS files specified in library's installation instructions so that [esbuild][] knows about them:
-Edit [src/main/webapp/app/app.config.ts](src/main/webapp/app/app.config.ts) file:
+➡️ ouvre **http://localhost:8080** dans ton navigateur.
 
-```typescript
-import 'leaflet/dist/leaflet.js';
+Pour arrêter l'application : `Ctrl+C` dans le terminal.
+
+---
+
+## 5. Se connecter
+
+Un compte administrateur est créé automatiquement :
+
+| Identifiant | Mot de passe |
+| ----------- | ------------ |
+| `admin`     | `admin`      |
+
+⚠️ **Change ce mot de passe avant toute mise en production réelle.**
+
+---
+
+## 6. Les rôles et les droits
+
+L'application distingue 4 profils, qui déterminent ce que chacun peut voir et faire :
+
+| Rôle                                            | Peut faire                                                                                                                    |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| **Administrateur** (`ROLE_ADMIN`)               | Tout : gestion des utilisateurs, suppression, configuration                                                                   |
+| **Technicien** (`ROLE_TECHNICIEN`)              | Créer/modifier les actifs, affectations, transferts, maintenances                                                             |
+| **Responsable de service** (`ROLE_RESPONSABLE`) | Valider ou rejeter les demandes de transfert, consulter                                                                       |
+| **Agent** (`ROLE_AGENT`)                        | Consulter uniquement **ses propres** actifs/affectations/transferts/maintenances, demander un transfert ou signaler une panne |
+
+### Attribuer un rôle à un utilisateur
+
+1. Se connecter en tant qu'`admin`
+2. Menu **Administration > Gestion des utilisateurs**
+3. Cliquer sur l'utilisateur concerné, cocher le(s) rôle(s), enregistrer
+
+### Le workflow des transferts
+
+Un transfert suit ce cycle :
+
+```
+EN_ATTENTE  →  VALIDE   (par un Responsable de service)
+            →  REJETE   (par un Responsable de service, avec commentaire obligatoire)
 ```
 
-Edit [src/main/webapp/content/scss/vendor.scss](src/main/webapp/content/scss/vendor.scss) file:
+Cette validation se fait via des boutons dédiés dans l'interface (pas via la simple modification d'un transfert), pour garantir que la règle "un rejet doit être motivé" est toujours respectée.
 
-```typescript
-@import 'leaflet/dist/leaflet.css';
+---
+
+## 7. Structure du projet
+
+```
+gestion-actifs-dgi/
+├── gestion-actifs-dgi.jdl          → le modèle de données (à lire en premier pour comprendre les entités)
+├── src/main/java/.../domain/       → les entités (Actif, Affectation, Transfert...)
+├── src/main/java/.../repository/   → l'accès à la base de données
+├── src/main/java/.../service/      → la logique métier
+├── src/main/java/.../web/rest/     → les endpoints de l'API (ce que le frontend appelle)
+├── src/main/webapp/app/entities/   → les écrans Angular (listes, formulaires) par entité
+├── src/main/resources/config/liquibase/  → l'historique des évolutions de la base de données
+└── src/main/docker/                → la configuration Docker (base de données)
 ```
 
-Note: There are still a few other things remaining to do for Leaflet that we won't detail here.
+**Pour comprendre le fonctionnement d'une fonctionnalité** (ex: comment fonctionne la création d'un Actif), suis le chemin dans cet ordre :
 
-For further instructions on how to develop with JHipster, have a look at [Using JHipster in development](https://www.jhipster.tech/development/).
+1. `web/rest/ActifResource.java` (reçoit la requête)
+2. `service/ActifService.java` (la logique)
+3. `repository/ActifRepository.java` (l'accès aux données)
+4. `src/main/webapp/app/entities/actif/` (l'écran correspondant)
 
-### Using Angular CLI
+---
 
-You can also use [Angular CLI](https://angular.dev/tools/cli) to generate some custom client code.
+## 8. Modifier une entité
 
-For example, the following command:
+Si tu dois ajouter un champ à une entité existante (ex: ajouter "numéro de série" à Actif) :
 
-```bash
-ng generate component my-component
-```
+1. Modifie le fichier `gestion-actifs-dgi.jdl` pour ajouter le champ
+2. Relance : `jhipster jdl gestion-actifs-dgi.jdl`
+3. JHipster va régénérer le code concerné et te demander confirmation avant d'écraser les fichiers existants
+4. Relance `.\mvnw` pour vérifier que tout compile
 
-will generate few files:
+> ⚠️ Cette régénération peut écraser des modifications manuelles faites directement dans le code généré (comme nos ajouts de sécurité `@PreAuthorize`). Vérifie toujours le diff Git après une régénération JDL avant de committer.
 
-```bash
-create src/main/webapp/app/my-component/my-component.html
-create src/main/webapp/app/my-component/my-component.ts
-update src/main/webapp/app/app.config.ts
-```
+---
 
-## Building for production
+## 9. Problèmes fréquents
 
-### Packaging as jar
+**`npm` refuse de s'exécuter dans PowerShell**
+→ Voir la note dans la section [Prérequis](#2-prérequis-à-installer).
 
-To build the final jar and optimize the gestionActifsDgi application for production, run:
+**Liquibase ne trouve pas un fichier de changelog**
+→ Vérifie que le nom du fichier référencé dans `src/main/resources/config/liquibase/master.xml` correspond **exactement** (underscores, pas d'espaces) au nom réel du fichier dans le dossier `changelog/`.
 
-```bash
-./mvnw -Pprod clean verify
-```
+**`git commit` échoue avec une erreur "ligne de commande trop longue" (Husky/Prettier)**
+→ Utilise `git commit --no-verify -m "message"` pour ce commit précis, ou committe moins de fichiers à la fois.
 
-This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
-To ensure everything worked, run:
+**L'application affiche "An error has occurred" au démarrage**
+→ Le frontend n'a probablement pas fini de compiler. Lance `npm run webapp:build` séparément pour voir le message d'erreur détaillé (souvent une simple question interactive — comme le partage de données Angular Analytics — qui bloque silencieusement le process).
 
-```bash
-java -jar target/*.jar
-```
+**Erreur de doublon lors d'une insertion Liquibase (`duplicate key value`)**
+→ La donnée existe déjà en base. Il faut rendre le changelog "idempotent" avec une `<preConditions onFail="MARK_RAN">` qui vérifie avant d'insérer (voir les exemples dans `20260902210000_added_custom_authorities.xml`).
 
-Then navigate to [http://localhost:8080](http://localhost:8080) in your browser.
+---
 
-Refer to [Using JHipster in production][] for more details.
+## 10. Où trouver de l'aide
 
-### Packaging as war
-
-To package your application as a war in order to deploy it to an application server, run:
-
-```bash
-./mvnw -Pprod,war clean verify
-```
-
-### JHipster Control Center
-
-JHipster Control Center can help you manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
-
-```bash
-docker compose -f src/main/docker/jhipster-control-center.yml up
-```
-
-## Testing
-
-### Spring Boot tests
-
-To launch your application's tests, run:
-
-```bash
-./mvnw verify
-```
-
-### Client tests
-
-Unit tests are run by Vitest. They're located near components and can be run with:
-
-```bash
-./npmw test
-```
-
-#### E2E tests
-
-UI end-to-end tests are powered by [Cypress][]. They're located in [src/test/javascript/cypress/](src/test/javascript/cypress/)
-and can be run by starting Spring Boot in one terminal (`./npmw run app:start`) and running the tests (`./npmw run e2e`) in a second one.
-
-Before running Cypress tests, it's possible to specify user credentials by overriding the `CYPRESS_E2E_USERNAME` and `CYPRESS_E2E_PASSWORD` environment variables.
-
-```bash
-export CYPRESS_E2E_USERNAME="<your-username>"
-export CYPRESS_E2E_PASSWORD="<your-password>"
-```
-
-See Cypress documentation for setting OS [environment variables](https://docs.cypress.io/app/references/environment-variables#Setting) to learn more.
-
-#### Lighthouse audits
-
-You can execute automated [Lighthouse audits](https://developer.chrome.com/docs/lighthouse/overview) with [cypress-audit](https://github.com/mfrachet/cypress-audit) by running `./npmw run e2e:cypress:audits`.
-
-You should only run the audits when your application is packaged with the production profile.
-
-The Lighthouse report is created in `target/cypress/lhreport.html`.
-
-## Others
-
-### Code quality using Sonar
-
-Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
-
-```bash
-docker compose -f src/main/docker/sonar.yml up -d
-```
-
-Note: we have turned off forced authentication redirect for UI in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
-
-You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner) or by using the maven plugin.
-
-Then, run a Sonar analysis:
-
-```bash
-./mvnw -Pprod clean verify sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
-```
-
-If you need to re-run the Sonar phase, please be sure to specify at least the `initialize` phase since Sonar properties are loaded from the sonar-project.properties file.
-
-```bash
-./mvnw initialize sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
-```
-
-Additionally, Instead of passing `sonar.password` and `sonar.login` as CLI arguments, these parameters can be configured from [sonar-project.properties](sonar-project.properties) as shown below:
-
-```bash
-sonar.login=admin
-sonar.password=admin
-```
-
-For more information, refer to the [Code quality page][].
-
-### Docker Compose support
-
-JHipster generates a number of Docker Compose configuration files in the [src/main/docker/](src/main/docker/) folder to launch required third party services.
-
-For example, to start required services in Docker containers, run:
-
-```bash
-docker compose -f src/main/docker/services.yml up -d
-```
-
-To stop and remove the containers, run:
-
-```bash
-docker compose -f src/main/docker/services.yml down
-```
-
-[Spring Docker Compose Integration](https://docs.spring.io/spring-boot/reference/features/dev-services.html) is enabled by default. It's possible to disable it in `application.yml`:
-
-```yaml
-spring:
-  ...
-  docker:
-    compose:
-      enabled: false
-```
-
-You can also fully dockerize your application and all the services that it depends on.
-To achieve this, first build a Docker image of your app by running:
-
-```bash
-npm run java:docker
-```
-
-Or build an arm64 Docker image when using an arm64 processor OS, i.e., Apple Silicon chips (M*), running:
-
-```bash
-npm run java:docker:arm64
-```
-
-Then run:
-
-```bash
-docker compose -f src/main/docker/app.yml up -d
-```
-
-For more information refer to [Docker and Docker-Compose](https://www.jhipster.tech/documentation-archive/v9.3.0/docker-compose/), this page also contains information on the Docker Compose sub-generator (`jhipster docker-compose`), which is able to generate Docker configurations for one or several JHipster applications.
-
-## Continuous Integration (optional)
-
-To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration](https://www.jhipster.tech/documentation-archive/v9.3.0/setting-up-ci/) page for more information.
-
-## References
-
-- [JHipster Homepage and latest documentation](https://www.jhipster.tech/)
-- [JHipster 9.3.0 archive](https://www.jhipster.tech/documentation-archive/v9.3.0)
-- [Using JHipster in development](https://www.jhipster.tech/documentation-archive/v9.3.0/development/)
-- [Using Docker and Docker-Compose](https://www.jhipster.tech/documentation-archive/v9.3.0/docker-compose)
-- [Using JHipster in production](https://www.jhipster.tech/documentation-archive/v9.3.0/production/)
-- [Running tests page](https://www.jhipster.tech/documentation-archive/v9.3.0/running-tests/)
-- [Code quality page](https://www.jhipster.tech/documentation-archive/v9.3.0/code-quality/)
-- [Setting up Continuous Integration](https://www.jhipster.tech/documentation-archive/v9.3.0/setting-up-ci/)
-- [Node.js](https://nodejs.org/)
-- [NPM](https://www.npmjs.com/)
-- [BrowserSync](https://www.browsersync.io/)
-- [Jest](https://jestjs.io)
-- [Leaflet](https://leafletjs.com/)
-- [DefinitelyTyped](https://definitelytyped.org/)
-- [Angular CLI](https://angular.dev/tools/cli)
-- [Cypress](https://www.cypress.io/)
+- **Documentation officielle JHipster** : [jhipster.tech](https://www.jhipster.tech)
+- **Le cahier des charges et l'expression des besoins** du projet définissent toutes les règles métier — s'y référer avant toute décision fonctionnelle
+- Les scripts PowerShell à la racine du projet (`apply-preauthorize-*.ps1`, `add-agent-filter-*.ps1`) documentent, par leur contenu, comment les règles de droits ont été appliquées — utile pour comprendre ou reproduire la même logique sur une nouvelle entité
