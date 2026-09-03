@@ -1,6 +1,8 @@
 ﻿package com.dgi.gestionactifs.web.rest;
 
+import com.dgi.gestionactifs.repository.AffectationRepository;
 import com.dgi.gestionactifs.repository.MaintenanceRepository;
+import com.dgi.gestionactifs.security.SecurityUtils;
 import com.dgi.gestionactifs.service.MaintenanceQueryService;
 import com.dgi.gestionactifs.service.MaintenanceService;
 import com.dgi.gestionactifs.service.criteria.MaintenanceCriteria;
@@ -23,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -47,14 +50,18 @@ public class MaintenanceResource {
 
     private final MaintenanceQueryService maintenanceQueryService;
 
+    private final AffectationRepository affectationRepository;
+
     public MaintenanceResource(
         MaintenanceService maintenanceService,
         MaintenanceRepository maintenanceRepository,
-        MaintenanceQueryService maintenanceQueryService
+        MaintenanceQueryService maintenanceQueryService,
+        AffectationRepository affectationRepository
     ) {
         this.maintenanceService = maintenanceService;
         this.maintenanceRepository = maintenanceRepository;
         this.maintenanceQueryService = maintenanceQueryService;
+        this.affectationRepository = affectationRepository;
     }
 
     /**
@@ -163,6 +170,24 @@ public class MaintenanceResource {
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
         LOG.debug("REST request to get Maintenances by criteria: {}", criteria);
+
+        boolean isAgentOnly =
+            SecurityUtils.hasCurrentUserThisAuthority("ROLE_AGENT") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_ADMIN") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_TECHNICIEN") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_RESPONSABLE");
+
+        if (isAgentOnly) {
+            List<Long> actifIds = affectationRepository
+                .findByUtilisateur_LoginAndDateRestitutionIsNull(SecurityUtils.getCurrentUserLogin().orElse(""))
+                .stream()
+                .map(affectation -> affectation.getActif().getId())
+                .distinct()
+                .toList();
+            LongFilter actifIdFilter = new LongFilter();
+            actifIdFilter.setIn(actifIds);
+            criteria.setActifId(actifIdFilter);
+        }
 
         Page<MaintenanceDTO> page = maintenanceQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);

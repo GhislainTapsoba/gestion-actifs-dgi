@@ -1,6 +1,8 @@
 ﻿package com.dgi.gestionactifs.web.rest;
 
+import com.dgi.gestionactifs.repository.AffectationRepository;
 import com.dgi.gestionactifs.repository.TransfertRepository;
+import com.dgi.gestionactifs.security.SecurityUtils;
 import com.dgi.gestionactifs.service.TransfertQueryService;
 import com.dgi.gestionactifs.service.TransfertService;
 import com.dgi.gestionactifs.service.criteria.TransfertCriteria;
@@ -11,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -23,6 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -47,14 +51,18 @@ public class TransfertResource {
 
     private final TransfertQueryService transfertQueryService;
 
+    private final AffectationRepository affectationRepository;
+
     public TransfertResource(
         TransfertService transfertService,
         TransfertRepository transfertRepository,
-        TransfertQueryService transfertQueryService
+        TransfertQueryService transfertQueryService,
+        AffectationRepository affectationRepository
     ) {
         this.transfertService = transfertService;
         this.transfertRepository = transfertRepository;
         this.transfertQueryService = transfertQueryService;
+        this.affectationRepository = affectationRepository;
     }
 
     /**
@@ -164,6 +172,24 @@ public class TransfertResource {
     ) {
         LOG.debug("REST request to get Transferts by criteria: {}", criteria);
 
+        boolean isAgentOnly =
+            SecurityUtils.hasCurrentUserThisAuthority("ROLE_AGENT") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_ADMIN") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_TECHNICIEN") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_RESPONSABLE");
+
+        if (isAgentOnly) {
+            List<Long> actifIds = affectationRepository
+                .findByUtilisateur_LoginAndDateRestitutionIsNull(SecurityUtils.getCurrentUserLogin().orElse(""))
+                .stream()
+                .map(affectation -> affectation.getActif().getId())
+                .distinct()
+                .toList();
+            LongFilter actifIdFilter = new LongFilter();
+            actifIdFilter.setIn(actifIds);
+            criteria.setActifId(actifIdFilter);
+        }
+
         Page<TransfertDTO> page = transfertQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
@@ -211,5 +237,34 @@ public class TransfertResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    /**
+     * {@code PATCH  /transferts/:id/valider} : valide un transfert en attente.
+     *
+     * @param id l'id du transfert a valider.
+     * @return le transfert mis a jour.
+     */
+    @PreAuthorize("hasAuthority('ROLE_RESPONSABLE')")
+    @PatchMapping("/{id}/valider")
+    public ResponseEntity<TransfertDTO> validerTransfert(@PathVariable Long id) {
+        LOG.debug("REST request to valider Transfert : {}", id);
+        TransfertDTO result = transfertService.valider(id);
+        return ResponseEntity.ok(result);
+    }
+
+    /**
+     * {@code PATCH  /transferts/:id/rejeter} : rejette un transfert en attente.
+     *
+     * @param id l'id du transfert a rejeter.
+     * @param body doit contenir la cle "commentaireRejet" (obligatoire).
+     * @return le transfert mis a jour.
+     */
+    @PreAuthorize("hasAuthority('ROLE_RESPONSABLE')")
+    @PatchMapping("/{id}/rejeter")
+    public ResponseEntity<TransfertDTO> rejeterTransfert(@PathVariable Long id, @RequestBody Map<String, String> body) {
+        LOG.debug("REST request to rejeter Transfert : {}", id);
+        TransfertDTO result = transfertService.rejeter(id, body.get("commentaireRejet"));
+        return ResponseEntity.ok(result);
     }
 }
