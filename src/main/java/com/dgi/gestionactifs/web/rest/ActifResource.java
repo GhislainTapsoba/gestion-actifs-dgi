@@ -203,6 +203,22 @@ public class ActifResource {
     @GetMapping("/count")
     public ResponseEntity<Long> countActifs(ActifCriteria criteria) {
         LOG.debug("REST request to count Actifs by criteria: {}", criteria);
+        boolean isAgentOnlyCount =
+            SecurityUtils.hasCurrentUserThisAuthority("ROLE_AGENT") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_ADMIN") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_TECHNICIEN") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_RESPONSABLE");
+        if (isAgentOnlyCount) {
+            List<Long> actifIds = affectationRepository
+                .findByUtilisateur_LoginAndDateRestitutionIsNull(SecurityUtils.getCurrentUserLogin().orElse(""))
+                .stream()
+                .map(affectation -> affectation.getActif().getId())
+                .distinct()
+                .toList();
+            LongFilter idFilter = new LongFilter();
+            idFilter.setIn(actifIds);
+            criteria.setId(idFilter);
+        }
         return ResponseEntity.ok().body(actifQueryService.countByCriteria(criteria));
     }
 

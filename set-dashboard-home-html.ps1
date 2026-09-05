@@ -1,4 +1,6 @@
-﻿<div class="dashboard">
+$path = "src\main\webapp\app\home\home.html"
+$content = @'
+<div class="dashboard">
   @if (account(); as accountRef) {
     <header class="dashboard-header">
       <h1>Gestion des actifs informatiques</h1>
@@ -8,7 +10,7 @@
     <section class="stat-grid">
       @for (card of cards(); track card.label) {
         <a class="stat-card" [class.stat-card--warning]="card.accent === 'warning'" [routerLink]="card.routerLink">
-          <span class="stat-card__value">{{ card.value ?? 'â€”' }}</span>
+          <span class="stat-card__value">{{ card.value ?? '—' }}</span>
           <span class="stat-card__label">{{ card.label }}</span>
         </a>
       }
@@ -34,3 +36,6 @@
     </div>
   }
 </div>
+'@
+Set-Content -Path $path -Value $content -Encoding UTF8
+Write-Host "OK : home.html remplace par le nouveau dashboard" -ForegroundColor Green

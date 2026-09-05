@@ -204,6 +204,22 @@ public class TransfertResource {
     @GetMapping("/count")
     public ResponseEntity<Long> countTransferts(TransfertCriteria criteria) {
         LOG.debug("REST request to count Transferts by criteria: {}", criteria);
+        boolean isAgentOnlyCount =
+            SecurityUtils.hasCurrentUserThisAuthority("ROLE_AGENT") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_ADMIN") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_TECHNICIEN") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_RESPONSABLE");
+        if (isAgentOnlyCount) {
+            List<Long> actifIds = affectationRepository
+                .findByUtilisateur_LoginAndDateRestitutionIsNull(SecurityUtils.getCurrentUserLogin().orElse(""))
+                .stream()
+                .map(affectation -> affectation.getActif().getId())
+                .distinct()
+                .toList();
+            LongFilter actifIdFilter = new LongFilter();
+            actifIdFilter.setIn(actifIds);
+            criteria.setActifId(actifIdFilter);
+        }
         return ResponseEntity.ok().body(transfertQueryService.countByCriteria(criteria));
     }
 

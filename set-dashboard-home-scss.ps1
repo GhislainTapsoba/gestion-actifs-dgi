@@ -1,4 +1,6 @@
-﻿.dashboard {
+$path = "src\main\webapp\app\home\home.scss"
+$content = @'
+.dashboard {
   max-width: 960px;
   margin: 0 auto;
   padding: 2rem 1rem 3rem;
@@ -114,3 +116,6 @@
     text-decoration: none;
   }
 }
+'@
+Set-Content -Path $path -Value $content -Encoding UTF8
+Write-Host "OK : home.scss remplace par le style du dashboard" -ForegroundColor Green

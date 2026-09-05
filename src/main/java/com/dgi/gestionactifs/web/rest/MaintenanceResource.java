@@ -203,6 +203,22 @@ public class MaintenanceResource {
     @GetMapping("/count")
     public ResponseEntity<Long> countMaintenances(MaintenanceCriteria criteria) {
         LOG.debug("REST request to count Maintenances by criteria: {}", criteria);
+        boolean isAgentOnlyCount =
+            SecurityUtils.hasCurrentUserThisAuthority("ROLE_AGENT") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_ADMIN") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_TECHNICIEN") &&
+            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_RESPONSABLE");
+        if (isAgentOnlyCount) {
+            List<Long> actifIds = affectationRepository
+                .findByUtilisateur_LoginAndDateRestitutionIsNull(SecurityUtils.getCurrentUserLogin().orElse(""))
+                .stream()
+                .map(affectation -> affectation.getActif().getId())
+                .distinct()
+                .toList();
+            LongFilter actifIdFilter = new LongFilter();
+            actifIdFilter.setIn(actifIds);
+            criteria.setActifId(actifIdFilter);
+        }
         return ResponseEntity.ok().body(maintenanceQueryService.countByCriteria(criteria));
     }
 

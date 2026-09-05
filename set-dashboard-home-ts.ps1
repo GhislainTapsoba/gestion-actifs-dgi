@@ -1,4 +1,6 @@
-﻿import { Component, OnInit, inject, signal } from '@angular/core';
+$path = "src\main\webapp\app\home\home.ts"
+$content = @'
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { AccountService } from 'app/core/auth';
@@ -75,3 +77,6 @@ export default class Home implements OnInit {
     this.cards.set(updated);
   }
 }
+'@
+Set-Content -Path $path -Value $content -Encoding UTF8
+Write-Host "OK : home.ts remplace par le nouveau dashboard" -ForegroundColor Green
