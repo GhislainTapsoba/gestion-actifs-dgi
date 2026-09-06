@@ -506,6 +506,8 @@ body {
   flex: 1;
   min-width: 0;
   transition: margin-left 0.22s ease;
+  border-left: 0;
+  box-shadow: none;
 
   &--expanded {
     margin-left: 64px;
