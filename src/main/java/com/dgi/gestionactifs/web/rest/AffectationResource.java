@@ -179,6 +179,13 @@ public class AffectationResource {
                 .map(com.dgi.gestionactifs.domain.Affectation::getId)
                 .distinct()
                 .toList();
+            if (affectationIds.isEmpty()) {
+                HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(
+                    ServletUriComponentsBuilder.fromCurrentRequest(),
+                    Page.empty(pageable)
+                );
+                return ResponseEntity.ok().headers(headers).body(List.of());
+            }
             LongFilter idFilter = new LongFilter();
             idFilter.setIn(affectationIds);
             criteria.setId(idFilter);

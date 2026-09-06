@@ -247,6 +247,18 @@ class MaintenanceResourceIT {
 
     @Test
     @Transactional
+    @WithMockUser(username = "agent", authorities = { "ROLE_AGENT" })
+    void getAllMaintenancesForAgentWithoutAssignedActifsReturnsEmptyList() throws Exception {
+        restMaintenanceMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$").isEmpty());
+    }
+
+    @Test
+    @Transactional
     void getMaintenance() throws Exception {
         // Initialize the database
         insertedMaintenance = maintenanceRepository.saveAndFlush(maintenance);

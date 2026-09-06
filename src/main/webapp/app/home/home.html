@@ -1,36 +1,216 @@
-﻿<div class="dashboard">
-  @if (account(); as accountRef) {
-    <header class="dashboard-header">
-      <h1>Gestion des actifs informatiques</h1>
-      <p class="dashboard-subtitle">Direction Generale des Impots &mdash; connecte en tant que {{ accountRef.login }}</p>
+@if (account(); as acc) {
+  <div class="dash">
+    <!-- Header -->
+    <header class="dash__header">
+      <div class="dash__header-left">
+        <span class="dash__eyebrow">Tableau de bord</span>
+        <h1 class="dash__title">
+          {{ greeting() }}, <span>{{ acc.login }}</span>
+        </h1>
+        <p class="dash__date">{{ today }}</p>
+      </div>
+      @if (!isAgentOnly()) {
+        <div class="dash__header-right">
+          <a routerLink="/actif/new" class="btn-primary-dash">
+            <fa-icon icon="plus" />
+            Nouvel actif
+          </a>
+        </div>
+      }
     </header>
 
-    <section class="stat-grid">
-      @for (card of cards(); track card.label) {
-        <a class="stat-card" [class.stat-card--warning]="card.accent === 'warning'" [routerLink]="card.routerLink">
-          <span class="stat-card__value">{{ card.value ?? 'â€”' }}</span>
-          <span class="stat-card__label">{{ card.label }}</span>
-        </a>
-      }
-    </section>
-
-    <section class="quick-links">
-      <h2>Acces rapides</h2>
-      <div class="quick-links__grid">
-        <a routerLink="/actif" class="quick-link">Inventaire des actifs</a>
-        <a routerLink="/affectation" class="quick-link">Affectations</a>
-        <a routerLink="/transfert" class="quick-link">Transferts</a>
-        <a routerLink="/maintenance" class="quick-link">Maintenance</a>
+    @if (!isAgentOnly() && chartBars().length) {
+      <div class="dash__overview" aria-label="Indicateurs de performance">
+        <div class="overview-chip overview-chip--success">
+          <span class="overview-chip__label">Disponibilité</span>
+          <strong>{{ availabilityPercent() }}%</strong>
+        </div>
+        <div class="overview-chip overview-chip--warning">
+          <span class="overview-chip__label">Maintenance</span>
+          <strong>{{ maintenancePercent() }}%</strong>
+        </div>
+        <div class="overview-chip overview-chip--neutral">
+          <span class="overview-chip__label">En attente</span>
+          <strong>{{ pendingTransfers() }}</strong>
+        </div>
       </div>
-    </section>
-  } @else {
-    <div class="dashboard-login">
-      <h1>Gestion des actifs informatiques</h1>
-      <p class="dashboard-subtitle">Direction Generale des Impots</p>
-      <p>
-        <span jhiTranslate="global.messages.info.authenticated.prefix">Si vous voulez vous </span>
-        <a class="alert-link" (click)="login()" jhiTranslate="global.messages.info.authenticated.link">connecter</a>
-      </p>
+    }
+
+    @if (loading()) {
+      <div class="dash__loading">
+        <fa-icon icon="sync" class="spin" />
+        <span>Chargement des données…</span>
+      </div>
+    } @else {
+      <!-- KPI Cards -->
+      <section class="dash__kpis">
+        @for (kpi of kpis(); track kpi.label) {
+          <a class="kpi-card kpi-card--{{ kpi.color }}" [routerLink]="kpi.routerLink">
+            <div class="kpi-card__icon">
+              <fa-icon [icon]="kpi.icon" />
+            </div>
+            <div class="kpi-card__body">
+              <span class="kpi-card__value">{{ kpi.value ?? '—' }}</span>
+              <span class="kpi-card__label">{{ kpi.label }}</span>
+              @if (kpi.trend) {
+                <span class="kpi-card__trend">{{ kpi.trend }}</span>
+              }
+            </div>
+          </a>
+        }
+      </section>
+
+      @if (!isAgentOnly()) {
+        <div class="dash__row">
+          <!-- Graphique répartition parc -->
+          <section class="dash__card dash__card--chart">
+            <div class="dash__card-header">
+              <fa-icon icon="chart-bar" />
+              <h2>Répartition du parc</h2>
+            </div>
+            <div class="chart-bars">
+              @for (bar of chartBars(); track bar.label) {
+                <div class="chart-bar">
+                  <div class="chart-bar__meta">
+                    <span class="chart-bar__label">{{ bar.label }}</span>
+                    <span class="chart-bar__count"
+                      >{{ bar.value }} <small>({{ barPercent(bar) }}%)</small></span
+                    >
+                  </div>
+                  <div class="chart-bar__track">
+                    <div class="chart-bar__fill" [style.width]="barWidth(bar)" [style.background]="bar.color"></div>
+                  </div>
+                </div>
+              }
+            </div>
+          </section>
+
+          <!-- Accès rapides -->
+          <section class="dash__card dash__card--actions">
+            <div class="dash__card-header">
+              <fa-icon icon="th-list" />
+              <h2>Accès rapides</h2>
+            </div>
+            <div class="quick-actions">
+              <a routerLink="/actif" class="quick-action">
+                <fa-icon icon="desktop" />
+                <span>Inventaire</span>
+              </a>
+              <a routerLink="/affectation" class="quick-action">
+                <fa-icon icon="users" />
+                <span>Affectations</span>
+              </a>
+              <a routerLink="/transfert" class="quick-action">
+                <fa-icon icon="exchange-alt" />
+                <span>Transferts</span>
+              </a>
+              <a routerLink="/maintenance" class="quick-action">
+                <fa-icon icon="tools" />
+                <span>Maintenance</span>
+              </a>
+              @if (isAdmin() || isResponsable()) {
+                <a routerLink="/fournisseur" class="quick-action">
+                  <fa-icon icon="truck" />
+                  <span>Fournisseurs</span>
+                </a>
+                <a routerLink="/contrat" class="quick-action">
+                  <fa-icon icon="file-contract" />
+                  <span>Contrats</span>
+                </a>
+              }
+              @if (isAdmin()) {
+                <a routerLink="/user-management" class="quick-action quick-action--admin">
+                  <fa-icon icon="users-cog" />
+                  <span>Utilisateurs</span>
+                </a>
+              }
+            </div>
+          </section>
+        </div>
+
+        <!-- Alertes / Indicateurs clés -->
+        @if ((kpiTransferts()?.value ?? 0) > 0 || (kpiEnMaintenance()?.value ?? 0) > 0 || (kpiInterventions()?.value ?? 0) > 0) {
+          <section class="dash__card dash__card--alerts">
+            <div class="dash__card-header">
+              <fa-icon icon="exclamation-triangle" />
+              <h2>Points d'attention</h2>
+            </div>
+            <div class="alert-list">
+              @if ((kpiTransferts()?.value ?? 0) > 0) {
+                <a routerLink="/transfert" class="alert-item alert-item--warning">
+                  <fa-icon icon="exchange-alt" />
+                  <div>
+                    <strong>{{ kpiTransferts()?.value }} transfert(s) en attente</strong>
+                    <span>Nécessitent une validation par le responsable de service</span>
+                  </div>
+                  <fa-icon icon="chevron-right" class="alert-item__arrow" />
+                </a>
+              }
+              @if ((kpiEnMaintenance()?.value ?? 0) > 0) {
+                <a routerLink="/actif" class="alert-item alert-item--orange">
+                  <fa-icon icon="tools" />
+                  <div>
+                    <strong>{{ kpiEnMaintenance()?.value }} actif(s) en maintenance</strong>
+                    <span>Équipements temporairement indisponibles</span>
+                  </div>
+                  <fa-icon icon="chevron-right" class="alert-item__arrow" />
+                </a>
+              }
+              @if ((kpiInterventions()?.value ?? 0) > 0) {
+                <a routerLink="/maintenance" class="alert-item alert-item--purple">
+                  <fa-icon icon="wrench" />
+                  <div>
+                    <strong>{{ kpiInterventions()?.value }} intervention(s) ouverte(s)</strong>
+                    <span>Interventions en cours ou non clôturées</span>
+                  </div>
+                  <fa-icon icon="chevron-right" class="alert-item__arrow" />
+                </a>
+              }
+            </div>
+          </section>
+        }
+      } @else {
+        <!-- Vue Agent -->
+        <section class="dash__card">
+          <div class="dash__card-header">
+            <fa-icon icon="info-circle" />
+            <h2>Mes accès</h2>
+          </div>
+          <div class="quick-actions">
+            <a routerLink="/actif" class="quick-action">
+              <fa-icon icon="desktop" />
+              <span>Mes actifs</span>
+            </a>
+            <a routerLink="/affectation" class="quick-action">
+              <fa-icon icon="list" />
+              <span>Mes affectations</span>
+            </a>
+            <a routerLink="/transfert" class="quick-action">
+              <fa-icon icon="exchange-alt" />
+              <span>Mes demandes</span>
+            </a>
+            <a routerLink="/maintenance" class="quick-action">
+              <fa-icon icon="tools" />
+              <span>Signaler une panne</span>
+            </a>
+          </div>
+        </section>
+      }
+    }
+  </div>
+} @else {
+  <!-- Page de connexion -->
+  <div class="dash-login">
+    <div class="dash-login__card">
+      <div class="dash-login__icon">
+        <fa-icon icon="shield-alt" />
+      </div>
+      <h1>Gestion des Actifs Informatiques</h1>
+      <p>Direction Générale des Impôts</p>
+      <button class="btn-primary-dash btn-primary-dash--lg" (click)="login()">
+        <fa-icon icon="sign-in-alt" />
+        Se connecter
+      </button>
     </div>
-  }
-</div>
+  </div>
+}

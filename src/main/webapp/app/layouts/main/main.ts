@@ -1,4 +1,4 @@
-import { Component, DOCUMENT, OnInit, Renderer2, RendererFactory2, inject } from '@angular/core';
+import { Component, DOCUMENT, OnInit, Renderer2, RendererFactory2, inject, computed } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
@@ -8,12 +8,14 @@ import { AppPageTitleStrategy } from 'app/app-page-title-strategy';
 import { AccountService } from 'app/core/auth';
 import Footer from '../footer/footer';
 import PageRibbon from '../profiles/page-ribbon';
+import Sidebar from '../sidebar/sidebar';
+import { SidebarStateService } from '../sidebar/sidebar-state.service';
 
 @Component({
   selector: 'jhi-main',
   templateUrl: './main.html',
   providers: [AppPageTitleStrategy],
-  imports: [RouterOutlet, Footer, PageRibbon],
+  imports: [RouterOutlet, Footer, PageRibbon, Sidebar],
 })
 export default class Main implements OnInit {
   private readonly renderer: Renderer2;
@@ -25,6 +27,10 @@ export default class Main implements OnInit {
   private readonly document = inject(DOCUMENT);
   private readonly translateService = inject(TranslateService);
   private readonly rootRenderer = inject(RendererFactory2);
+  private readonly sidebarState = inject(SidebarStateService);
+
+  readonly isAuthenticated = computed(() => this.accountService.account() !== null);
+  readonly isSidebarCollapsed = this.sidebarState.collapsed;
 
   constructor() {
     this.htmlElement = this.document.documentElement;
@@ -32,7 +38,6 @@ export default class Main implements OnInit {
   }
 
   ngOnInit(): void {
-    // try to log in automatically
     this.accountService.identity().subscribe();
 
     this.translateService.onLangChange.subscribe((langChangeEvent: LangChangeEvent) => {

@@ -1,13 +1,23 @@
 <jhi-page-ribbon />
 
-<div>
-  <router-outlet name="navbar" />
-</div>
-
-<div class="container-fluid">
-  <div class="card jh-card">
-    <router-outlet />
+@if (isAuthenticated()) {
+  <div class="app-layout">
+    <jhi-sidebar />
+    <div class="app-content" [class.app-content--expanded]="isSidebarCollapsed()">
+      <main class="app-main">
+        <router-outlet />
+      </main>
+      <jhi-footer />
+    </div>
   </div>
-
-  <jhi-footer />
-</div>
+} @else {
+  <div>
+    <router-outlet name="navbar" />
+  </div>
+  <div class="container-fluid">
+    <div class="card jh-card">
+      <router-outlet />
+    </div>
+    <jhi-footer />
+  </div>
+}

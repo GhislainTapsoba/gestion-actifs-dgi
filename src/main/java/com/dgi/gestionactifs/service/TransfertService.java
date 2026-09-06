@@ -1,4 +1,4 @@
-package com.dgi.gestionactifs.service;
+﻿package com.dgi.gestionactifs.service;
 
 import com.dgi.gestionactifs.service.dto.TransfertDTO;
 import java.util.Optional;
@@ -45,4 +45,19 @@ public interface TransfertService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    /**
+     * Valide un transfert en attente.
+     * @param id l'id du transfert.
+     * @return le transfert mis a jour.
+     */
+    TransfertDTO valider(Long id);
+
+    /**
+     * Rejette un transfert en attente avec un commentaire obligatoire.
+     * @param id l'id du transfert.
+     * @param commentaireRejet le motif du rejet, obligatoire.
+     * @return le transfert mis a jour.
+     */
+    TransfertDTO rejeter(Long id, String commentaireRejet);
 }

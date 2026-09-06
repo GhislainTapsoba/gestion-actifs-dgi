@@ -1,0 +1,752 @@
+/* ==========================================================================
+   DGI — Styles professionnels globaux
+   Couvre : tables, formulaires, détails, modales, pagination, badges, login, footer
+   ========================================================================== */
+
+// ── Tokens ──────────────────────────────────────────────────────────────────
+$c-primary: #2563eb;
+$c-primary-dark: #1d4ed8;
+$c-danger: #dc2626;
+$c-success: #16a34a;
+$c-warning: #d97706;
+$c-info: #0891b2;
+$c-purple: #7c3aed;
+
+$c-text: #0f172a;
+$c-muted: #64748b;
+$c-border: #e2e8f0;
+$c-bg: #f8fafc;
+$c-white: #ffffff;
+
+$radius-sm: 6px;
+$radius: 10px;
+$radius-lg: 14px;
+
+$shadow-sm:
+  0 1px 3px rgba(0, 0, 0, 0.06),
+  0 1px 2px rgba(0, 0, 0, 0.04);
+$shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+
+// ── Reset body ───────────────────────────────────────────────────────────────
+body {
+  background: $c-bg;
+  color: $c-text;
+  font-size: 0.9rem;
+}
+
+// ── Footer ───────────────────────────────────────────────────────────────────
+.footer {
+  padding: 1rem 1.75rem;
+  font-size: 0.78rem;
+  color: $c-muted;
+  border-top: 1px solid $c-border;
+  background: $c-white;
+  text-align: center;
+
+  p {
+    margin: 0;
+  }
+}
+
+// ── Page login ───────────────────────────────────────────────────────────────
+// Ciblé via la structure du template login.html
+.container-fluid > .card.jh-card > div > .d-flex.justify-content-center {
+  min-height: 80vh;
+  align-items: center;
+
+  > div {
+    background: $c-white;
+    border: 1px solid $c-border;
+    border-radius: $radius-lg;
+    padding: 2.5rem 2rem;
+    box-shadow: $shadow;
+    width: 100%;
+
+    h1 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: $c-text;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .form-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: $c-text;
+    }
+
+    .form-control {
+      border-radius: $radius-sm;
+      border-color: $c-border;
+      font-size: 0.875rem;
+      padding: 0.55rem 0.75rem;
+
+      &:focus {
+        border-color: $c-primary;
+        box-shadow: 0 0 0 3px rgba($c-primary, 0.12);
+      }
+    }
+
+    .btn-primary {
+      width: 100%;
+      margin-top: 1rem;
+      padding: 0.65rem;
+      font-weight: 600;
+      border-radius: $radius-sm;
+      background: $c-primary;
+      border-color: $c-primary;
+
+      &:hover {
+        background: $c-primary-dark;
+        border-color: $c-primary-dark;
+      }
+    }
+
+    .alert-warning {
+      background: #fffbeb;
+      border-color: #fde68a;
+      color: #92400e;
+      border-radius: $radius-sm;
+      font-size: 0.82rem;
+      margin-top: 0.75rem;
+
+      a {
+        color: $c-primary;
+        font-weight: 600;
+      }
+    }
+
+    .alert-danger {
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: $c-danger;
+      border-radius: $radius-sm;
+      font-size: 0.82rem;
+    }
+  }
+}
+
+// ── Zone contenu principal (sidebar layout) ──────────────────────────────────
+.app-content {
+  // ── Page heading (h2 + boutons) ────────────────────────────────────────────
+  #page-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 1.25rem 1.75rem;
+    background: $c-white;
+    border-bottom: 1px solid $c-border;
+    font-size: 1rem;
+    font-weight: 700;
+    color: $c-text;
+    margin: 0;
+
+    span[jhiTranslate] {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .d-flex {
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+  }
+
+  // ── Alertes JHipster ──────────────────────────────────────────────────────
+  jhi-alert-error,
+  jhi-alert {
+    display: block;
+    padding: 0 1.75rem;
+  }
+
+  // ── Filtre ────────────────────────────────────────────────────────────────
+  jhi-filter {
+    display: block;
+    padding: 0.75rem 1.75rem;
+    background: $c-white;
+    border-bottom: 1px solid $c-border;
+
+    .input-group {
+      max-width: 380px;
+
+      .form-control {
+        border-radius: $radius-sm 0 0 $radius-sm;
+        font-size: 0.85rem;
+        border-color: $c-border;
+        &:focus {
+          border-color: $c-primary;
+          box-shadow: 0 0 0 3px rgba($c-primary, 0.1);
+        }
+      }
+      .btn {
+        border-radius: 0 $radius-sm $radius-sm 0;
+      }
+    }
+  }
+
+  // ── Message aucun résultat ────────────────────────────────────────────────
+  #no-result {
+    margin: 1.25rem 1.75rem;
+    border-radius: $radius;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
+    font-size: 0.85rem;
+    padding: 1rem 1.25rem;
+  }
+
+  // ── Conteneur table ───────────────────────────────────────────────────────
+  .table-responsive.table-entities {
+    margin: 1.25rem 1.75rem;
+    border: 1px solid $c-border;
+    border-radius: $radius;
+    overflow: hidden;
+    box-shadow: $shadow-sm;
+    background: $c-white;
+  }
+
+  // ── Table ─────────────────────────────────────────────────────────────────
+  .table {
+    margin: 0;
+    font-size: 0.855rem;
+    color: $c-text;
+
+    &.table-striped > tbody > tr:nth-of-type(odd) > * {
+      background-color: #f8fafc;
+      --bs-table-accent-bg: #f8fafc;
+    }
+
+    thead {
+      background: #f1f5f9;
+      border-bottom: 2px solid $c-border;
+
+      th {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: $c-muted;
+        padding: 0.7rem 1rem;
+        border: none;
+        white-space: nowrap;
+
+        .d-flex {
+          align-items: center;
+          gap: 0.25rem;
+        }
+        fa-icon {
+          opacity: 0.35;
+          font-size: 0.65rem;
+        }
+      }
+    }
+
+    tbody tr {
+      border-bottom: 1px solid $c-border;
+      transition: background 0.1s;
+
+      &:last-child {
+        border-bottom: none;
+      }
+      &:hover {
+        background: #eff6ff !important;
+        --bs-table-accent-bg: #eff6ff !important;
+      }
+
+      td {
+        padding: 0.7rem 1rem;
+        vertical-align: middle;
+        color: $c-text;
+
+        a {
+          color: $c-primary;
+          font-weight: 500;
+          text-decoration: none;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      td.text-end {
+        padding-right: 1rem;
+      }
+    }
+  }
+
+  // ── Badges de statut dans les tables ─────────────────────────────────────
+  // Appliqués via JS sur les cellules td contenant les valeurs de statut
+  // On cible les td qui contiennent uniquement du texte de statut connu
+  td:has(> span[jhiTranslate*='StatutTransfert']),
+  td[jhiTranslate*='StatutTransfert'] {
+    span,
+    &::after {
+      display: none;
+    }
+  }
+
+  // Badges via attribut jhiTranslate sur td
+  td[jhiTranslate$='.EN_ATTENTE'],
+  td[jhiTranslate$='.EN_SERVICE'],
+  td[jhiTranslate$='.VALIDE'],
+  td[jhiTranslate$='.CLOTUREE'],
+  td[jhiTranslate$='.EN_MAINTENANCE'],
+  td[jhiTranslate$='.EN_COURS'],
+  td[jhiTranslate$='.OUVERTE'],
+  td[jhiTranslate$='.REJETE'],
+  td[jhiTranslate$='.REFORME'],
+  td[jhiTranslate$='.PERDU_VOLE'],
+  td[jhiTranslate$='.PREVENTIVE'],
+  td[jhiTranslate$='.CORRECTIVE'],
+  td[jhiTranslate$='.POSTE_TRAVAIL'],
+  td[jhiTranslate$='.IMPRIMANTE'],
+  td[jhiTranslate$='.SERVEUR'],
+  td[jhiTranslate$='.RESEAU'],
+  td[jhiTranslate$='.PERIPHERIQUE'] {
+    span {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.6rem;
+      border-radius: 99px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+  }
+
+  // Couleurs par statut
+  td[jhiTranslate$='.EN_SERVICE'] span,
+  td[jhiTranslate$='.VALIDE'] span,
+  td[jhiTranslate$='.CLOTUREE'] span {
+    background: #dcfce7;
+    color: #15803d;
+  }
+  td[jhiTranslate$='.EN_ATTENTE'] span,
+  td[jhiTranslate$='.EN_COURS'] span,
+  td[jhiTranslate$='.PREVENTIVE'] span {
+    background: #fef9c3;
+    color: #854d0e;
+  }
+  td[jhiTranslate$='.EN_MAINTENANCE'] span,
+  td[jhiTranslate$='.OUVERTE'] span,
+  td[jhiTranslate$='.CORRECTIVE'] span {
+    background: #ffedd5;
+    color: #9a3412;
+  }
+  td[jhiTranslate$='.REJETE'] span,
+  td[jhiTranslate$='.REFORME'] span,
+  td[jhiTranslate$='.PERDU_VOLE'] span {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+  td[jhiTranslate$='.POSTE_TRAVAIL'] span,
+  td[jhiTranslate$='.SERVEUR'] span {
+    background: #ede9fe;
+    color: #5b21b6;
+  }
+  td[jhiTranslate$='.IMPRIMANTE'] span,
+  td[jhiTranslate$='.RESEAU'] span,
+  td[jhiTranslate$='.PERIPHERIQUE'] span {
+    background: #e0f2fe;
+    color: #0369a1;
+  }
+
+  // ── Boutons dans btn-group (tables) ───────────────────────────────────────
+  .btn-group {
+    display: flex;
+    gap: 0.2rem;
+    flex-wrap: nowrap;
+
+    .btn-sm {
+      padding: 0.28rem 0.55rem;
+      font-size: 0.75rem;
+      border-radius: $radius-sm;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+      white-space: nowrap;
+
+      span {
+        display: none;
+      }
+
+      @media (min-width: 992px) {
+        span {
+          display: inline;
+        }
+      }
+
+      &.btn-info {
+        background: #e0f2fe;
+        color: #0369a1;
+        border-color: #bae6fd;
+        &:hover {
+          background: #bae6fd;
+        }
+      }
+      &.btn-primary {
+        background: #dbeafe;
+        color: $c-primary;
+        border-color: #bfdbfe;
+        &:hover {
+          background: #bfdbfe;
+        }
+      }
+      &.btn-danger {
+        background: #fee2e2;
+        color: $c-danger;
+        border-color: #fecaca;
+        &:hover {
+          background: #fecaca;
+        }
+      }
+    }
+  }
+
+  // ── Boutons de page (hors btn-group) ─────────────────────────────────────
+  #page-heading .btn,
+  .btn:not(.btn-sm):not(.btn-link):not(.page-link) {
+    border-radius: $radius-sm;
+    font-size: 0.855rem;
+    font-weight: 600;
+    padding: 0.48rem 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.15s;
+
+    &.btn-primary {
+      background: $c-primary;
+      border-color: $c-primary;
+      color: #fff;
+      &:hover {
+        background: $c-primary-dark;
+        border-color: $c-primary-dark;
+      }
+    }
+    &.btn-info {
+      background: #e0f2fe;
+      border-color: #bae6fd;
+      color: #0369a1;
+      &:hover {
+        background: #bae6fd;
+      }
+    }
+    &.btn-secondary {
+      background: #f1f5f9;
+      border-color: $c-border;
+      color: $c-muted;
+      &:hover {
+        background: #e2e8f0;
+      }
+    }
+    &.btn-danger {
+      background: $c-danger;
+      border-color: $c-danger;
+      color: #fff;
+      &:hover {
+        background: #b91c1c;
+        border-color: #b91c1c;
+      }
+    }
+    &.btn-success {
+      background: $c-success;
+      border-color: $c-success;
+      color: #fff;
+      &:hover {
+        background: #15803d;
+      }
+    }
+    &.btn-warning {
+      background: $c-warning;
+      border-color: $c-warning;
+      color: #fff;
+      &:hover {
+        background: #b45309;
+      }
+    }
+  }
+
+  // ── Pagination ────────────────────────────────────────────────────────────
+  .d-flex.justify-content-center {
+    margin: 1rem 0;
+
+    ngb-pagination {
+      .page-link {
+        border-radius: $radius-sm;
+        margin: 0 2px;
+        font-size: 0.82rem;
+        color: $c-primary;
+        border-color: $c-border;
+        padding: 0.35rem 0.65rem;
+        &:hover {
+          background: #eff6ff;
+        }
+      }
+      .page-item.active .page-link {
+        background: $c-primary;
+        border-color: $c-primary;
+        color: #fff;
+      }
+      .page-item.disabled .page-link {
+        color: $c-muted;
+      }
+    }
+  }
+
+  jhi-item-count {
+    font-size: 0.78rem;
+    color: $c-muted;
+    display: block;
+    text-align: center;
+    margin-bottom: 0.25rem;
+  }
+
+  // ── Formulaires (create / edit) ───────────────────────────────────────────
+  .d-flex.justify-content-center {
+    padding: 1.25rem 1.75rem;
+
+    > .col-8 {
+      width: 100%;
+      max-width: 700px;
+      padding: 0;
+    }
+  }
+
+  form[name='editForm'] {
+    background: $c-white;
+    border: 1px solid $c-border;
+    border-radius: $radius;
+    padding: 2rem;
+    box-shadow: $shadow-sm;
+
+    h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: $c-text;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid $c-border;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: $c-text;
+      margin-bottom: 0.3rem;
+    }
+
+    .form-control,
+    select.form-control {
+      border: 1px solid $c-border;
+      border-radius: $radius-sm;
+      font-size: 0.875rem;
+      padding: 0.5rem 0.75rem;
+      color: $c-text;
+      background: #fff;
+      transition:
+        border-color 0.15s,
+        box-shadow 0.15s;
+
+      &:focus {
+        border-color: $c-primary;
+        box-shadow: 0 0 0 3px rgba($c-primary, 0.1);
+        outline: none;
+      }
+      &[readonly] {
+        background: $c-bg;
+        color: $c-muted;
+      }
+    }
+
+    .input-group {
+      .form-control {
+        border-radius: $radius-sm 0 0 $radius-sm;
+        border-right: none;
+      }
+      .btn-secondary {
+        border-radius: 0 $radius-sm $radius-sm 0;
+        border: 1px solid $c-border;
+        border-left: none;
+        background: #f1f5f9;
+        color: $c-muted;
+        padding: 0.5rem 0.75rem;
+        &:hover {
+          background: #e2e8f0;
+        }
+      }
+    }
+
+    .form-text.text-danger {
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+    }
+
+    // Boutons bas de formulaire
+    > div:last-child {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid $c-border;
+    }
+  }
+
+  // ── Page de détail ────────────────────────────────────────────────────────
+  .d-flex.justify-content-center > .col-8 > div,
+  .d-flex.justify-content-center > div > div {
+    background: $c-white;
+    border: 1px solid $c-border;
+    border-radius: $radius;
+    padding: 2rem;
+    box-shadow: $shadow-sm;
+
+    h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: $c-text;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid $c-border;
+    }
+
+    hr {
+      display: none;
+    }
+
+    // Boutons retour/éditer
+    > .btn {
+      margin-top: 1.25rem;
+      margin-right: 0.5rem;
+    }
+  }
+
+  // Grille dt/dd
+  .row-md.jh-entity-details {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    font-size: 0.875rem;
+
+    dt {
+      padding: 0.6rem 0.75rem 0.6rem 0;
+      color: $c-muted;
+      font-weight: 600;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+    }
+
+    dd {
+      padding: 0.6rem 0;
+      color: $c-text;
+      border-bottom: 1px solid #f1f5f9;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      a {
+        color: $c-primary;
+        font-weight: 500;
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+// ── Modales de suppression ────────────────────────────────────────────────────
+.modal-content {
+  border: none;
+  border-radius: $radius;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.modal-header {
+  background: $c-white;
+  border-bottom: 1px solid $c-border;
+  padding: 1.25rem 1.5rem;
+
+  .modal-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: $c-text;
+  }
+}
+
+.modal-body {
+  padding: 1.5rem;
+  font-size: 0.875rem;
+  color: $c-text;
+  background: $c-white;
+
+  p {
+    margin: 0;
+    line-height: 1.6;
+  }
+}
+
+.modal-footer {
+  background: #f8fafc;
+  border-top: 1px solid $c-border;
+  padding: 1rem 1.5rem;
+  gap: 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+// ── Alertes globales ──────────────────────────────────────────────────────────
+.alert {
+  border-radius: $radius-sm;
+  font-size: 0.855rem;
+  padding: 0.75rem 1rem;
+
+  &.alert-danger {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #991b1b;
+  }
+  &.alert-warning {
+    background: #fffbeb;
+    border-color: #fde68a;
+    color: #92400e;
+  }
+  &.alert-success {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #15803d;
+  }
+  &.alert-info {
+    background: #f0f9ff;
+    border-color: #bae6fd;
+    color: #0369a1;
+  }
+}
+
+// ── Scrollbar globale ─────────────────────────────────────────────────────────
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

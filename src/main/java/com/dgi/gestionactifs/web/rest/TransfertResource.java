@@ -185,6 +185,13 @@ public class TransfertResource {
                 .map(affectation -> affectation.getActif().getId())
                 .distinct()
                 .toList();
+            if (actifIds.isEmpty()) {
+                HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(
+                    ServletUriComponentsBuilder.fromCurrentRequest(),
+                    Page.empty(pageable)
+                );
+                return ResponseEntity.ok().headers(headers).body(List.of());
+            }
             LongFilter actifIdFilter = new LongFilter();
             actifIdFilter.setIn(actifIds);
             criteria.setActifId(actifIdFilter);
@@ -216,6 +223,9 @@ public class TransfertResource {
                 .map(affectation -> affectation.getActif().getId())
                 .distinct()
                 .toList();
+            if (actifIds.isEmpty()) {
+                return ResponseEntity.ok().body(0L);
+            }
             LongFilter actifIdFilter = new LongFilter();
             actifIdFilter.setIn(actifIds);
             criteria.setActifId(actifIdFilter);

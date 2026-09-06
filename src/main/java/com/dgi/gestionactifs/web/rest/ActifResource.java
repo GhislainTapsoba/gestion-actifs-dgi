@@ -184,6 +184,13 @@ public class ActifResource {
                 .map(affectation -> affectation.getActif().getId())
                 .distinct()
                 .toList();
+            if (actifIds.isEmpty()) {
+                HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(
+                    ServletUriComponentsBuilder.fromCurrentRequest(),
+                    Page.empty(pageable)
+                );
+                return ResponseEntity.ok().headers(headers).body(List.of());
+            }
             LongFilter idFilter = new LongFilter();
             idFilter.setIn(actifIds);
             criteria.setId(idFilter);
@@ -215,6 +222,9 @@ public class ActifResource {
                 .map(affectation -> affectation.getActif().getId())
                 .distinct()
                 .toList();
+            if (actifIds.isEmpty()) {
+                return ResponseEntity.ok().body(0L);
+            }
             LongFilter idFilter = new LongFilter();
             idFilter.setIn(actifIds);
             criteria.setId(idFilter);
