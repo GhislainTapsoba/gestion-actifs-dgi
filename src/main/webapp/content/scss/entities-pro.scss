@@ -198,6 +198,55 @@ body {
     padding: 1rem 1.25rem;
   }
 
+  // ── Conteneur page utilisateurs admin ─────────────────────────────────────
+  .user-management-shell {
+    display: block;
+    width: 100%;
+  }
+
+  .user-management-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 1.25rem 1.75rem 0.75rem;
+    padding: 1.1rem 1.25rem;
+    background: linear-gradient(135deg, rgba($c-primary, 0.06), rgba($c-primary, 0.01));
+    border: 1px solid $c-border;
+    border-radius: $radius;
+    box-shadow: $shadow-sm;
+  }
+
+  .user-management-title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .user-management-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $c-primary;
+    font-weight: 700;
+  }
+
+  .user-management-page-title {
+    margin: 0;
+    font-size: clamp(1.5rem, 2vw, 2rem);
+    font-weight: 700;
+    color: $c-text;
+  }
+
+  .user-management-actions {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .user-management-table-card {
+    margin-top: 0;
+  }
+
   // ── Conteneur table ───────────────────────────────────────────────────────
   .table-responsive.table-entities {
     margin: 1.25rem 1.75rem;
