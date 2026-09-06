@@ -89,6 +89,24 @@
           }
         </div>
 
+        @if (!userManagement || !userManagement.id) {
+          @let passwordRef = editForm.get('password')!;
+          <div class="mb-3">
+            <label class="form-label" for="field_password">Mot de passe</label>
+            <input type="password" class="form-control" name="password" id="field_password" data-cy="password" formControlName="password" />
+            @if (passwordRef.invalid && (passwordRef.dirty || passwordRef.touched)) {
+              <div>
+                @if (passwordRef.errors?.minlength) {
+                  <small class="form-text text-danger">Le mot de passe doit comporter au moins 4 caractères.</small>
+                }
+                @if (passwordRef.errors?.maxlength) {
+                  <small class="form-text text-danger">Le mot de passe ne doit pas dépasser 100 caractères.</small>
+                }
+              </div>
+            }
+          </div>
+        }
+
         @if (editForm.controls.activated.value !== null) {
           <div class="mb-3 form-check">
             <input

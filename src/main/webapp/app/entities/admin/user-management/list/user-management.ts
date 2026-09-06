@@ -97,6 +97,16 @@ export class UserManagement {
     this.userManagementService.update({ ...userManagement, activated: isActivated }).subscribe(() => this.load());
   }
 
+  resetPassword(userManagement: IUserManagement): void {
+    const newPassword = window.prompt('Saisir le nouveau mot de passe pour ' + userManagement.login + ' :');
+    if (!newPassword || newPassword.trim().length === 0) {
+      return;
+    }
+    this.userManagementService.resetPassword(userManagement.login, newPassword).subscribe(() => {
+      window.alert('Le mot de passe a été réinitialisé pour ' + userManagement.login);
+    });
+  }
+
   load(): void {
     this.queryBackend();
   }

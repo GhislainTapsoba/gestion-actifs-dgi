@@ -9,7 +9,9 @@ import com.dgi.gestionactifs.service.UserService;
 import com.dgi.gestionactifs.service.dto.AdminUserDTO;
 import com.dgi.gestionactifs.web.rest.errors.BadRequestAlertException;
 import com.dgi.gestionactifs.web.rest.errors.EmailAlreadyUsedException;
+import com.dgi.gestionactifs.web.rest.errors.InvalidPasswordException;
 import com.dgi.gestionactifs.web.rest.errors.LoginAlreadyUsedException;
+import com.dgi.gestionactifs.web.rest.vm.PasswordResetVM;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import java.net.URI;
@@ -203,6 +205,26 @@ public class UserResource {
         userService.deleteUser(login);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createAlert(applicationName, "userManagement.deleted", login))
+            .build();
+    }
+
+    @PostMapping("/users/{login}/reset-password")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<Void> resetPassword(
+        @PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login,
+        @Valid @RequestBody PasswordResetVM passwordResetVM
+    ) {
+        LOG.debug("REST request to reset password for User: {}", login);
+        if (
+            passwordResetVM.getNewPassword() == null ||
+            passwordResetVM.getNewPassword().length() < PasswordResetVM.PASSWORD_MIN_LENGTH ||
+            passwordResetVM.getNewPassword().length() > PasswordResetVM.PASSWORD_MAX_LENGTH
+        ) {
+            throw new InvalidPasswordException();
+        }
+        userService.resetPasswordForUser(login, passwordResetVM.getNewPassword());
+        return ResponseEntity.noContent()
+            .headers(HeaderUtil.createAlert(applicationName, "userManagement.passwordReset", login))
             .build();
     }
 }

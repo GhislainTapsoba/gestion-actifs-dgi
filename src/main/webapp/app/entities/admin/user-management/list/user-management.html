@@ -134,6 +134,17 @@
                   </a>
 
                   <button
+                    type="button"
+                    (click)="resetPassword(userManagement)"
+                    class="btn btn-warning btn-sm"
+                    [disabled]="!currentAccount() || currentAccount()?.login === userManagement.login"
+                    data-cy="entityResetPasswordButton"
+                  >
+                    <fa-icon icon="key" />
+                    <span class="d-none d-md-inline">Mot de passe</span>
+                  </button>
+
+                  <button
                     type="submit"
                     (click)="delete(userManagement)"
                     class="btn btn-danger btn-sm"

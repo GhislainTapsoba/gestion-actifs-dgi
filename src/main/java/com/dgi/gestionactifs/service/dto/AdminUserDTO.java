@@ -38,6 +38,9 @@ public class AdminUserDTO implements Serializable {
     @Size(max = 256)
     private String imageUrl;
 
+    @Size(min = 4, max = 100)
+    private String password;
+
     private boolean activated = false;
 
     @Size(min = 2, max = 10)
@@ -119,6 +122,14 @@ public class AdminUserDTO implements Serializable {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public boolean isActivated() {

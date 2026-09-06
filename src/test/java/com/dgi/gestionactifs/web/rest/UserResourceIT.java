@@ -24,6 +24,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,6 +79,9 @@ class UserResourceIT {
     @Autowired
     private MockMvc restUserMockMvc;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private User user;
 
     private Long numberOfUsers;
@@ -123,6 +127,7 @@ class UserResourceIT {
         userService.deleteUser(UPDATED_LOGIN);
         userService.deleteUser(user.getLogin());
         userService.deleteUser("anotherlogin");
+        userService.deleteUser("newuserwithpassword");
         assertThat(userRepository.count()).isEqualTo(numberOfUsers);
         numberOfUsers = null;
         cacheManager
@@ -165,6 +170,30 @@ class UserResourceIT {
         assertThat(convertedUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
         assertThat(convertedUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
         assertThat(convertedUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
+    }
+
+    @Test
+    @Transactional
+    void createUserWithPassword() throws Exception {
+        String password = "Azerty123!";
+
+        AdminUserDTO userDTO = new AdminUserDTO();
+        userDTO.setLogin("newuserwithpassword");
+        userDTO.setFirstName(DEFAULT_FIRSTNAME);
+        userDTO.setLastName(DEFAULT_LASTNAME);
+        userDTO.setEmail("newuserwithpassword@localhost");
+        userDTO.setActivated(true);
+        userDTO.setImageUrl(DEFAULT_IMAGEURL);
+        userDTO.setLangKey(DEFAULT_LANGKEY);
+        userDTO.setAuthorities(Set.of(AuthoritiesConstants.USER));
+        userDTO.setPassword(password);
+
+        restUserMockMvc
+            .perform(post("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(userDTO)))
+            .andExpect(status().isCreated());
+
+        User createdUser = userRepository.findOneByLogin("newuserwithpassword").orElseThrow();
+        assertThat(passwordEncoder.matches(password, createdUser.getPassword())).isTrue();
     }
 
     @Test

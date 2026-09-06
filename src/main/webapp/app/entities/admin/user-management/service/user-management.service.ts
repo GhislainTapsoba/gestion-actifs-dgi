@@ -91,6 +91,10 @@ export class UserManagementService extends UserManagementsService {
     return this.http.delete<undefined>(`${this.resourceUrl}/${encodeURIComponent(login)}`);
   }
 
+  resetPassword(login: string, newPassword: string): Observable<undefined> {
+    return this.http.post<undefined>(`${this.resourceUrl}/${encodeURIComponent(login)}/reset-password`, { newPassword });
+  }
+
   getUserManagementIdentifier(userManagement: Pick<IUserManagement, 'login'>): string {
     return userManagement.login;
   }

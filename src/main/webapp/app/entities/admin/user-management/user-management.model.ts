@@ -8,6 +8,7 @@ export interface IUserManagement {
   firstName?: string | null;
   lastName?: string | null;
   email?: string | null;
+  password?: string | null;
   activated?: boolean | null;
   langKey?: (typeof LANGUAGES)[number] | null;
   imageUrl?: string | null;

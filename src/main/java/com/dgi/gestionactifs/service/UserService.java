@@ -153,7 +153,9 @@ public class UserService {
         } else {
             user.setLangKey(userDTO.getLangKey());
         }
-        String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+        String rawPassword =
+            userDTO.getPassword() != null && !userDTO.getPassword().isBlank() ? userDTO.getPassword() : RandomUtil.generatePassword();
+        String encryptedPassword = passwordEncoder.encode(rawPassword);
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
@@ -260,6 +262,18 @@ public class UserService {
                 this.clearUserCaches(user);
                 LOG.debug("Changed password for User: {}", user);
             });
+    }
+
+    @Transactional
+    public void resetPasswordForUser(String login, String newPassword) {
+        userRepository.findOneByLogin(login).ifPresent(user -> {
+            String encryptedPassword = passwordEncoder.encode(newPassword);
+            user.setPassword(encryptedPassword);
+            user.setResetKey(RandomUtil.generateResetKey());
+            user.setResetDate(Instant.now());
+            this.clearUserCaches(user);
+            LOG.debug("Reset password for User: {}", user);
+        });
     }
 
     @Transactional(readOnly = true)
