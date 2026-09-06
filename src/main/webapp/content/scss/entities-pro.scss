@@ -247,8 +247,41 @@ body {
     margin-top: 0;
   }
 
+  // ── Conteneurs génériques pour les autres pages du projet ───────────────
+  .jh-card,
+  .card {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .app-content .card-header {
+    background: linear-gradient(135deg, rgba($c-primary, 0.06), rgba($c-primary, 0.01));
+    border: 1px solid $c-border;
+    border-radius: $radius;
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 1.75rem 0.5rem;
+    color: $c-text;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    box-shadow: $shadow-sm;
+  }
+
+  .app-content .card-body {
+    background: $c-white;
+    border: 1px solid $c-border;
+    border-radius: $radius;
+    margin: 0 1.75rem 1rem;
+    padding: 1.25rem;
+    box-shadow: $shadow-sm;
+  }
+
   // ── Conteneur table ───────────────────────────────────────────────────────
-  .table-responsive.table-entities {
+  .table-responsive.table-entities,
+  .table-responsive:not(.table-entities) {
     margin: 1.25rem 1.75rem;
     border: 1px solid $c-border;
     border-radius: $radius;
@@ -306,9 +339,18 @@ body {
       }
 
       td {
+        display: table-cell;
         padding: 0.7rem 1rem;
         vertical-align: middle;
         color: $c-text;
+        opacity: 1;
+        visibility: visible;
+        background: transparent;
+
+        > * {
+          color: inherit;
+          opacity: 1;
+        }
 
         a {
           color: $c-primary;
