@@ -285,13 +285,21 @@ body {
     margin: 1.25rem 1.75rem;
     border: 1px solid $c-border;
     border-radius: $radius;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
     box-shadow: $shadow-sm;
     background: $c-white;
   }
 
+  .user-management-table-card {
+    min-width: 0;
+  }
+
   // ── Table ─────────────────────────────────────────────────────────────────
   .table {
+    width: 100%;
+    min-width: 1180px;
     margin: 0;
     font-size: 0.855rem;
     color: $c-text;
@@ -346,6 +354,8 @@ body {
         opacity: 1;
         visibility: visible;
         background: transparent;
+        white-space: normal;
+        word-break: break-word;
 
         > * {
           color: inherit;
