@@ -1,16 +1,14 @@
 import { AfterViewInit, Component, ElementRef, OnInit, inject, signal, viewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-
-import { TranslatePipe } from '@ngx-translate/core';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AccountService } from 'app/core/auth';
 import { LoginService } from 'app/login/login.service';
-import { TranslateDirective } from 'app/shared/language';
 
 @Component({
   selector: 'jhi-login',
-  imports: [TranslateDirective, TranslatePipe, ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, FontAwesomeModule],
   templateUrl: './login.html',
 })
 export default class Login implements OnInit, AfterViewInit {
