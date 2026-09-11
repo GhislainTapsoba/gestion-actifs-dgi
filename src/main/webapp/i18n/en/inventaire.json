@@ -1,0 +1,26 @@
+{
+  "gestionActifsDgiApp": {
+    "inventaire": {
+      "home": {
+        "title": "Inventaires",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Inventaire",
+        "createOrEditLabel": "Create or edit a Inventaire",
+        "notFound": "No Inventaires found"
+      },
+      "created": "A new Inventaire is created with identifier {{ param }}",
+      "updated": "A Inventaire is updated with identifier {{ param }}",
+      "deleted": "A Inventaire is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Inventaire {{ id }}?"
+      },
+      "detail": {
+        "title": "Inventaire"
+      },
+      "id": "ID",
+      "nomFichier": "Nom Fichier",
+      "dateImport": "Date Import",
+      "actif": "Actif"
+    }
+  }
+}

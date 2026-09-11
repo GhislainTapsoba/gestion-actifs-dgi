@@ -1,0 +1,160 @@
+<div>
+  <h2 id="page-heading" data-cy="HistoriqueActionHeading">
+    <span jhiTranslate="gestionActifsDgiApp.historiqueAction.home.title">HistoriqueActions</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading()">
+        <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined" />
+        <span jhiTranslate="gestionActifsDgiApp.historiqueAction.home.refreshListLabel">Actualiser la liste</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-historique-action"
+        [routerLink]="['/historique-action/new']"
+      >
+        <fa-icon icon="plus" />
+        <span jhiTranslate="gestionActifsDgiApp.historiqueAction.home.createLabel">Créer un nouveau Historique Action</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  <jhi-filter [filters]="filters" />
+
+  @if (historiqueActions().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="gestionActifsDgiApp.historiqueAction.home.notFound">Aucun Historique Action trouvé</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dateAction">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.historiqueAction.dateAction">Date Action</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="typeAction">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.historiqueAction.typeAction">Type Action</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="entiteCiblee">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.historiqueAction.entiteCiblee">Entite Ciblee</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="ancienneValeur">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.historiqueAction.ancienneValeur">Ancienne Valeur</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="nouvelleValeur">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.historiqueAction.nouvelleValeur">Nouvelle Valeur</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="utilisateur.id">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.historiqueAction.utilisateur">Utilisateur</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (historiqueAction of historiqueActions(); track trackId(historiqueAction)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/historique-action', historiqueAction.id, 'view']">{{ historiqueAction.id }}</a>
+              </td>
+              <td>{{ historiqueAction.dateAction | formatMediumDatetime }}</td>
+              <td [jhiTranslate]="'gestionActifsDgiApp.TypeMouvement.' + (historiqueAction.typeAction ?? 'null')">
+                {{
+                  {
+                    null: '',
+                    CREATION: 'CREATION',
+                    MODIFICATION: 'MODIFICATION',
+                    SUPPRESSION: 'SUPPRESSION',
+                    AFFECTATION: 'AFFECTATION',
+                    TRANSFERT: 'TRANSFERT',
+                    MAINTENANCE: 'MAINTENANCE',
+                  }[historiqueAction.typeAction ?? 'null']
+                }}
+              </td>
+              <td>{{ historiqueAction.entiteCiblee }}</td>
+              <td>{{ historiqueAction.ancienneValeur }}</td>
+              <td>{{ historiqueAction.nouvelleValeur }}</td>
+              <td>
+                {{ historiqueAction.utilisateur?.id }}
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a
+                    [routerLink]="['/historique-action', historiqueAction.id, 'view']"
+                    class="btn btn-info btn-sm"
+                    data-cy="entityDetailsButton"
+                  >
+                    <fa-icon icon="eye" />
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Voir</span>
+                  </a>
+
+                  <a
+                    [routerLink]="['/historique-action', historiqueAction.id, 'edit']"
+                    class="btn btn-primary btn-sm"
+                    data-cy="entityEditButton"
+                  >
+                    <fa-icon icon="pencil-alt" />
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editer</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(historiqueAction)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times" />
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Supprimer</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (historiqueActions().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page(), totalItems: totalItems(), itemsPerPage: itemsPerPage() }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems()"
+          [page]="page()"
+          [pageSize]="itemsPerPage()"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        />
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,80 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (bordereau(); as bordereauRef) {
+      <div>
+        <h2 data-cy="bordereauDetailsHeading"><span jhiTranslate="gestionActifsDgiApp.bordereau.detail.title">Bordereau</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ bordereauRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.bordereau.numero">Numero</span></dt>
+          <dd>
+            <span>{{ bordereauRef.numero }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.bordereau.dateEmission">Date Emission</span></dt>
+          <dd>
+            <span>{{ bordereauRef.dateEmission | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.bordereau.typeBordereau">Type Bordereau</span></dt>
+          <dd>
+            <span [jhiTranslate]="'gestionActifsDgiApp.TypeBordereau.' + (bordereauRef.typeBordereau ?? 'null')">{{
+              { null: '', AFFECTATION: 'AFFECTATION', TRANSFERT: 'TRANSFERT' }[bordereauRef.typeBordereau ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.bordereau.statutValidation">Statut Validation</span></dt>
+          <dd>
+            <span [jhiTranslate]="'gestionActifsDgiApp.StatutBordereau.' + (bordereauRef.statutValidation ?? 'null')">{{
+              { null: '', EN_ATTENTE: 'EN_ATTENTE', VALIDE: 'VALIDE', REJETE: 'REJETE' }[bordereauRef.statutValidation ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.bordereau.dateValidation">Date Validation</span></dt>
+          <dd>
+            <span>{{ bordereauRef.dateValidation | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.bordereau.transfert">Transfert</span></dt>
+          <dd>
+            @if (bordereau()!.transfert) {
+              <div>
+                <a [routerLink]="['/transfert', bordereau()!.transfert?.id, 'view']">{{ bordereauRef.transfert?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.bordereau.affectation">Affectation</span></dt>
+          <dd>
+            @if (bordereau()!.affectation) {
+              <div>
+                <a [routerLink]="['/affectation', bordereau()!.affectation?.id, 'view']">{{ bordereauRef.affectation?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.bordereau.emetteur">Emetteur</span></dt>
+          <dd>
+            <span>{{ bordereauRef.emetteur?.id }}</span>
+          </dd>
+        </dl>
+
+        <div class="d-flex gap-2 flex-wrap mt-3">
+          <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+            <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+          </button>
+
+          <button type="button" class="btn btn-success" (click)="imprimer()">
+            <fa-icon icon="print" />&nbsp;<span>Imprimer Bordereau Officiel</span>
+          </button>
+
+          <button type="button" [routerLink]="['/bordereau', bordereauRef.id, 'edit']" class="btn btn-primary">
+            <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

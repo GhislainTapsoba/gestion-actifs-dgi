@@ -1,0 +1,26 @@
+{
+  "gestionActifsDgiApp": {
+    "recensement": {
+      "home": {
+        "title": "Recensements",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Recensement",
+        "createOrEditLabel": "Create or edit a Recensement",
+        "notFound": "No Recensements found"
+      },
+      "created": "A new Recensement is created with identifier {{ param }}",
+      "updated": "A Recensement is updated with identifier {{ param }}",
+      "deleted": "A Recensement is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Recensement {{ id }}?"
+      },
+      "detail": {
+        "title": "Recensement"
+      },
+      "id": "ID",
+      "dateDebut": "Date Debut",
+      "dateFin": "Date Fin",
+      "statut": "Statut"
+    }
+  }
+}

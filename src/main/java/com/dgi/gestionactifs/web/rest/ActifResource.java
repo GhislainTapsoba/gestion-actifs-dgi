@@ -1,8 +1,6 @@
-﻿package com.dgi.gestionactifs.web.rest;
+package com.dgi.gestionactifs.web.rest;
 
 import com.dgi.gestionactifs.repository.ActifRepository;
-import com.dgi.gestionactifs.repository.AffectationRepository;
-import com.dgi.gestionactifs.security.SecurityUtils;
 import com.dgi.gestionactifs.service.ActifQueryService;
 import com.dgi.gestionactifs.service.ActifService;
 import com.dgi.gestionactifs.service.criteria.ActifCriteria;
@@ -22,10 +20,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -50,18 +46,10 @@ public class ActifResource {
 
     private final ActifQueryService actifQueryService;
 
-    private final AffectationRepository affectationRepository;
-
-    public ActifResource(
-        ActifService actifService,
-        ActifRepository actifRepository,
-        ActifQueryService actifQueryService,
-        AffectationRepository affectationRepository
-    ) {
+    public ActifResource(ActifService actifService, ActifRepository actifRepository, ActifQueryService actifQueryService) {
         this.actifService = actifService;
         this.actifRepository = actifRepository;
         this.actifQueryService = actifQueryService;
-        this.affectationRepository = affectationRepository;
     }
 
     /**
@@ -71,7 +59,6 @@ public class ActifResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new actifDTO, or with status {@code 400 (Bad Request)} if the actif has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TECHNICIEN')")
     @PostMapping("")
     public ResponseEntity<ActifDTO> createActif(@Valid @RequestBody ActifDTO actifDTO) throws URISyntaxException {
         LOG.debug("REST request to save Actif : {}", actifDTO);
@@ -94,7 +81,6 @@ public class ActifResource {
      * or with status {@code 500 (Internal Server Error)} if the actifDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TECHNICIEN')")
     @PutMapping("/{id}")
     public ResponseEntity<ActifDTO> updateActif(
         @PathVariable(value = "id", required = false) final Long id,
@@ -161,40 +147,12 @@ public class ActifResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of Actifs in body.
      */
-    @PreAuthorize(
-        "hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_RESPONSABLE') or hasAuthority('ROLE_AGENT')"
-    )
     @GetMapping("")
     public ResponseEntity<List<ActifDTO>> getAllActifs(
         ActifCriteria criteria,
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
         LOG.debug("REST request to get Actifs by criteria: {}", criteria);
-
-        boolean isAgentOnly =
-            SecurityUtils.hasCurrentUserThisAuthority("ROLE_AGENT") &&
-            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_ADMIN") &&
-            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_TECHNICIEN") &&
-            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_RESPONSABLE");
-
-        if (isAgentOnly) {
-            List<Long> actifIds = affectationRepository
-                .findByUtilisateur_LoginAndDateRestitutionIsNull(SecurityUtils.getCurrentUserLogin().orElse(""))
-                .stream()
-                .map(affectation -> affectation.getActif().getId())
-                .distinct()
-                .toList();
-            if (actifIds.isEmpty()) {
-                HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(
-                    ServletUriComponentsBuilder.fromCurrentRequest(),
-                    Page.empty(pageable)
-                );
-                return ResponseEntity.ok().headers(headers).body(List.of());
-            }
-            LongFilter idFilter = new LongFilter();
-            idFilter.setIn(actifIds);
-            criteria.setId(idFilter);
-        }
 
         Page<ActifDTO> page = actifQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -210,25 +168,6 @@ public class ActifResource {
     @GetMapping("/count")
     public ResponseEntity<Long> countActifs(ActifCriteria criteria) {
         LOG.debug("REST request to count Actifs by criteria: {}", criteria);
-        boolean isAgentOnlyCount =
-            SecurityUtils.hasCurrentUserThisAuthority("ROLE_AGENT") &&
-            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_ADMIN") &&
-            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_TECHNICIEN") &&
-            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_RESPONSABLE");
-        if (isAgentOnlyCount) {
-            List<Long> actifIds = affectationRepository
-                .findByUtilisateur_LoginAndDateRestitutionIsNull(SecurityUtils.getCurrentUserLogin().orElse(""))
-                .stream()
-                .map(affectation -> affectation.getActif().getId())
-                .distinct()
-                .toList();
-            if (actifIds.isEmpty()) {
-                return ResponseEntity.ok().body(0L);
-            }
-            LongFilter idFilter = new LongFilter();
-            idFilter.setIn(actifIds);
-            criteria.setId(idFilter);
-        }
         return ResponseEntity.ok().body(actifQueryService.countByCriteria(criteria));
     }
 
@@ -238,9 +177,6 @@ public class ActifResource {
      * @param id the id of the actifDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the actifDTO, or with status {@code 404 (Not Found)}.
      */
-    @PreAuthorize(
-        "hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_RESPONSABLE') or hasAuthority('ROLE_AGENT')"
-    )
     @GetMapping("/{id}")
     public ResponseEntity<ActifDTO> getActif(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Actif : {}", id);
@@ -254,7 +190,6 @@ public class ActifResource {
      * @param id the id of the actifDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteActif(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Actif : {}", id);

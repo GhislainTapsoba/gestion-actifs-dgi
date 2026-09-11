@@ -1,0 +1,10 @@
+{
+  "gestionActifsDgiApp": {
+    "StatutPanne": {
+      "null": "",
+      "SIGNALEE": "SIGNALEE",
+      "EN_COURS": "EN_COURS",
+      "RESOLUE": "RESOLUE"
+    }
+  }
+}

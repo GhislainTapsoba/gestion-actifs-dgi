@@ -1,0 +1,26 @@
+{
+  "gestionActifsDgiApp": {
+    "transfertActif": {
+      "home": {
+        "title": "TransfertActifs",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Transfert Actif",
+        "createOrEditLabel": "Créer ou éditer un Transfert Actif",
+        "notFound": "Aucun Transfert Actif trouvé"
+      },
+      "created": "Un nouveau Transfert Actif a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Transfert Actif avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Transfert Actif avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Transfert Actif {{ id }} ?"
+      },
+      "detail": {
+        "title": "Transfert Actif"
+      },
+      "id": "ID",
+      "observation": "Observation",
+      "transfert": "Transfert",
+      "actif": "Actif"
+    }
+  }
+}

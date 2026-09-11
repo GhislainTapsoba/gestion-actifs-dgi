@@ -20,13 +20,14 @@ describe('Transfert Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            dateDemande: expect.any(Object),
+            dateTransfert: expect.any(Object),
             statut: expect.any(Object),
             commentaireRejet: expect.any(Object),
             dateTraitement: expect.any(Object),
+            serviceOrigine: expect.any(Object),
+            serviceDestinataire: expect.any(Object),
             demandeur: expect.any(Object),
             validateur: expect.any(Object),
-            actif: expect.any(Object),
           }),
         );
       });
@@ -37,13 +38,14 @@ describe('Transfert Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            dateDemande: expect.any(Object),
+            dateTransfert: expect.any(Object),
             statut: expect.any(Object),
             commentaireRejet: expect.any(Object),
             dateTraitement: expect.any(Object),
+            serviceOrigine: expect.any(Object),
+            serviceDestinataire: expect.any(Object),
             demandeur: expect.any(Object),
             validateur: expect.any(Object),
-            actif: expect.any(Object),
           }),
         );
       });

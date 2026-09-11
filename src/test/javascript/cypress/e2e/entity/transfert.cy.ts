@@ -14,10 +14,10 @@ describe('Transfert e2e test', () => {
   const transfertPageUrl = '/transfert';
   let username: string;
   let password: string;
-  const transfertSample = { dateDemande: '2026-09-02', statut: 'EN_ATTENTE' };
+  const transfertSample = { dateTransfert: '2026-09-02', statut: 'EN_ATTENTE' };
 
   let transfert;
-  let actif;
+  let serviceDgi;
 
   before(() => {
     cy.credentials().then(credentials => {
@@ -33,17 +33,10 @@ describe('Transfert e2e test', () => {
     // create an instance at the required relationship entity:
     cy.authenticatedRequest({
       method: 'POST',
-      url: '/api/actifs',
-      body: {
-        identifiantUnique: 'au défaut de un peu gens',
-        codeBarreQR: 'pff à partir de de sorte que',
-        type: 'POSTE_TRAVAIL',
-        etat: 'EN_MAINTENANCE',
-        localisation: 'résoudre',
-        dateAcquisition: '2026-09-02',
-      },
+      url: '/api/service-dgis',
+      body: { nomService: 'parcourir à la merci', chefService: 'électorat de par coupable' },
     }).then(({ body }) => {
-      actif = body;
+      serviceDgi = body;
     });
   });
 
@@ -55,14 +48,14 @@ describe('Transfert e2e test', () => {
 
   beforeEach(() => {
     // Simulate relationships api for better performance and reproducibility.
+    cy.intercept('GET', '/api/service-dgis', {
+      statusCode: 200,
+      body: [serviceDgi],
+    });
+
     cy.intercept('GET', '/api/users', {
       statusCode: 200,
       body: [],
-    });
-
-    cy.intercept('GET', '/api/actifs', {
-      statusCode: 200,
-      body: [actif],
     });
   });
 
@@ -78,12 +71,12 @@ describe('Transfert e2e test', () => {
   });
 
   afterEach(() => {
-    if (actif) {
+    if (serviceDgi) {
       cy.authenticatedRequest({
         method: 'DELETE',
-        url: `/api/actifs/${actif.id}`,
+        url: `/api/service-dgis/${serviceDgi.id}`,
       }).then(() => {
-        actif = undefined;
+        serviceDgi = undefined;
       });
     }
   });
@@ -134,7 +127,8 @@ describe('Transfert e2e test', () => {
           url: '/api/transferts',
           body: {
             ...transfertSample,
-            actif,
+            serviceOrigine: serviceDgi,
+            serviceDestinataire: serviceDgi,
           },
         }).then(({ body }) => {
           transfert = body;
@@ -216,9 +210,9 @@ describe('Transfert e2e test', () => {
     });
 
     it('should create an instance of Transfert', () => {
-      cy.get(`[data-cy="dateDemande"]`).type('2026-09-02');
-      cy.get(`[data-cy="dateDemande"]`).blur();
-      cy.get(`[data-cy="dateDemande"]`).should('have.value', '2026-09-02');
+      cy.get(`[data-cy="dateTransfert"]`).type('2026-09-02');
+      cy.get(`[data-cy="dateTransfert"]`).blur();
+      cy.get(`[data-cy="dateTransfert"]`).should('have.value', '2026-09-02');
 
       cy.get(`[data-cy="statut"]`).select('REJETE');
 
@@ -229,7 +223,8 @@ describe('Transfert e2e test', () => {
       cy.get(`[data-cy="dateTraitement"]`).blur();
       cy.get(`[data-cy="dateTraitement"]`).should('have.value', '2026-09-02');
 
-      cy.get(`[data-cy="actif"]`).select(1);
+      cy.get(`[data-cy="serviceOrigine"]`).select(1);
+      cy.get(`[data-cy="serviceDestinataire"]`).select(1);
 
       cy.get(entityCreateSaveButtonSelector).click();
 

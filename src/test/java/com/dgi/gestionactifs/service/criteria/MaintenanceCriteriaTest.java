@@ -76,8 +76,8 @@ class MaintenanceCriteriaTest {
         maintenanceCriteria.datePanne();
         maintenanceCriteria.statut();
         maintenanceCriteria.dateCloture();
-        maintenanceCriteria.technicienId();
         maintenanceCriteria.actifId();
+        maintenanceCriteria.technicienId();
         maintenanceCriteria.distinct();
     }
 
@@ -89,8 +89,8 @@ class MaintenanceCriteriaTest {
                 condition.apply(criteria.getDatePanne()) &&
                 condition.apply(criteria.getStatut()) &&
                 condition.apply(criteria.getDateCloture()) &&
-                condition.apply(criteria.getTechnicienId()) &&
                 condition.apply(criteria.getActifId()) &&
+                condition.apply(criteria.getTechnicienId()) &&
                 condition.apply(criteria.getDistinct()),
             "every filter matches"
         );
@@ -104,8 +104,8 @@ class MaintenanceCriteriaTest {
                 condition.apply(criteria.getDatePanne(), copy.getDatePanne()) &&
                 condition.apply(criteria.getStatut(), copy.getStatut()) &&
                 condition.apply(criteria.getDateCloture(), copy.getDateCloture()) &&
-                condition.apply(criteria.getTechnicienId(), copy.getTechnicienId()) &&
                 condition.apply(criteria.getActifId(), copy.getActifId()) &&
+                condition.apply(criteria.getTechnicienId(), copy.getTechnicienId()) &&
                 condition.apply(criteria.getDistinct(), copy.getDistinct()),
             "every filter matches"
         );

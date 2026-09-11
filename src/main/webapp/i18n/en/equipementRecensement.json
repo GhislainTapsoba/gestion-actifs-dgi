@@ -1,0 +1,29 @@
+{
+  "gestionActifsDgiApp": {
+    "equipementRecensement": {
+      "home": {
+        "title": "Equipement Recensements",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Equipement Recensement",
+        "createOrEditLabel": "Create or edit a Equipement Recensement",
+        "notFound": "No Equipement Recensements found"
+      },
+      "created": "A new Equipement Recensement is created with identifier {{ param }}",
+      "updated": "A Equipement Recensement is updated with identifier {{ param }}",
+      "deleted": "A Equipement Recensement is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Equipement Recensement {{ id }}?"
+      },
+      "detail": {
+        "title": "Equipement Recensement"
+      },
+      "id": "ID",
+      "etatConstate": "Etat Constate",
+      "dateConstat": "Date Constat",
+      "emplacementConstate": "Emplacement Constate",
+      "anomalieConstatee": "Anomalie Constatee",
+      "recensement": "Recensement",
+      "actif": "Actif"
+    }
+  }
+}

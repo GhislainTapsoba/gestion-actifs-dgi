@@ -16,9 +16,18 @@ public class ActifDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private String identifiantUnique;
+    private String codeInventaire;
 
-    private String codeBarreQR;
+    @NotNull
+    private String designation;
+
+    private String marque;
+
+    private String modele;
+
+    private String numeroSerie;
+
+    private String codeBarre;
 
     @NotNull
     private TypeActif type;
@@ -30,6 +39,11 @@ public class ActifDTO implements Serializable {
 
     private LocalDate dateAcquisition;
 
+    private Double valeurAcquisition;
+
+    @NotNull
+    private CategorieMaterielDTO categorie;
+
     public Long getId() {
         return id;
     }
@@ -38,20 +52,52 @@ public class ActifDTO implements Serializable {
         this.id = id;
     }
 
-    public String getIdentifiantUnique() {
-        return identifiantUnique;
+    public String getCodeInventaire() {
+        return codeInventaire;
     }
 
-    public void setIdentifiantUnique(String identifiantUnique) {
-        this.identifiantUnique = identifiantUnique;
+    public void setCodeInventaire(String codeInventaire) {
+        this.codeInventaire = codeInventaire;
     }
 
-    public String getCodeBarreQR() {
-        return codeBarreQR;
+    public String getDesignation() {
+        return designation;
     }
 
-    public void setCodeBarreQR(String codeBarreQR) {
-        this.codeBarreQR = codeBarreQR;
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
+
+    public String getMarque() {
+        return marque;
+    }
+
+    public void setMarque(String marque) {
+        this.marque = marque;
+    }
+
+    public String getModele() {
+        return modele;
+    }
+
+    public void setModele(String modele) {
+        this.modele = modele;
+    }
+
+    public String getNumeroSerie() {
+        return numeroSerie;
+    }
+
+    public void setNumeroSerie(String numeroSerie) {
+        this.numeroSerie = numeroSerie;
+    }
+
+    public String getCodeBarre() {
+        return codeBarre;
+    }
+
+    public void setCodeBarre(String codeBarre) {
+        this.codeBarre = codeBarre;
     }
 
     public TypeActif getType() {
@@ -86,6 +132,22 @@ public class ActifDTO implements Serializable {
         this.dateAcquisition = dateAcquisition;
     }
 
+    public Double getValeurAcquisition() {
+        return valeurAcquisition;
+    }
+
+    public void setValeurAcquisition(Double valeurAcquisition) {
+        this.valeurAcquisition = valeurAcquisition;
+    }
+
+    public CategorieMaterielDTO getCategorie() {
+        return categorie;
+    }
+
+    public void setCategorie(CategorieMaterielDTO categorie) {
+        this.categorie = categorie;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -112,12 +174,18 @@ public class ActifDTO implements Serializable {
     public String toString() {
         return "ActifDTO{" +
             "id=" + getId() +
-            ", identifiantUnique='" + getIdentifiantUnique() + "'" +
-            ", codeBarreQR='" + getCodeBarreQR() + "'" +
+            ", codeInventaire='" + getCodeInventaire() + "'" +
+            ", designation='" + getDesignation() + "'" +
+            ", marque='" + getMarque() + "'" +
+            ", modele='" + getModele() + "'" +
+            ", numeroSerie='" + getNumeroSerie() + "'" +
+            ", codeBarre='" + getCodeBarre() + "'" +
             ", type='" + getType() + "'" +
             ", etat='" + getEtat() + "'" +
             ", localisation='" + getLocalisation() + "'" +
             ", dateAcquisition='" + getDateAcquisition() + "'" +
+            ", valeurAcquisition=" + getValeurAcquisition() +
+            ", categorie=" + getCategorie() +
             "}";
     }
 }

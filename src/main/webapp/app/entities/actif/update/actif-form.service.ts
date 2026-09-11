@@ -18,12 +18,18 @@ type ActifFormDefaults = Pick<NewActif, 'id'>;
 
 type ActifFormGroupContent = {
   id: FormControl<IActif['id'] | NewActif['id']>;
-  identifiantUnique: FormControl<IActif['identifiantUnique']>;
-  codeBarreQR: FormControl<IActif['codeBarreQR']>;
+  codeInventaire: FormControl<IActif['codeInventaire']>;
+  designation: FormControl<IActif['designation']>;
+  marque: FormControl<IActif['marque']>;
+  modele: FormControl<IActif['modele']>;
+  numeroSerie: FormControl<IActif['numeroSerie']>;
+  codeBarre: FormControl<IActif['codeBarre']>;
   type: FormControl<IActif['type']>;
   etat: FormControl<IActif['etat']>;
   localisation: FormControl<IActif['localisation']>;
   dateAcquisition: FormControl<IActif['dateAcquisition']>;
+  valeurAcquisition: FormControl<IActif['valeurAcquisition']>;
+  categorie: FormControl<IActif['categorie']>;
 };
 
 export type ActifFormGroup = FormGroup<ActifFormGroupContent>;
@@ -44,10 +50,16 @@ export class ActifFormService {
           validators: [Validators.required],
         },
       ),
-      identifiantUnique: new FormControl(actifRawValue.identifiantUnique, {
+      codeInventaire: new FormControl(actifRawValue.codeInventaire, {
         validators: [Validators.required],
       }),
-      codeBarreQR: new FormControl(actifRawValue.codeBarreQR),
+      designation: new FormControl(actifRawValue.designation, {
+        validators: [Validators.required],
+      }),
+      marque: new FormControl(actifRawValue.marque),
+      modele: new FormControl(actifRawValue.modele),
+      numeroSerie: new FormControl(actifRawValue.numeroSerie),
+      codeBarre: new FormControl(actifRawValue.codeBarre),
       type: new FormControl(actifRawValue.type, {
         validators: [Validators.required],
       }),
@@ -56,6 +68,10 @@ export class ActifFormService {
       }),
       localisation: new FormControl(actifRawValue.localisation),
       dateAcquisition: new FormControl(actifRawValue.dateAcquisition),
+      valeurAcquisition: new FormControl(actifRawValue.valeurAcquisition),
+      categorie: new FormControl(actifRawValue.categorie, {
+        validators: [Validators.required],
+      }),
     });
   }
 

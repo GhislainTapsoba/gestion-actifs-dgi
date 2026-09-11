@@ -1,0 +1,25 @@
+{
+  "gestionActifsDgiApp": {
+    "serviceDgi": {
+      "home": {
+        "title": "Service Dgis",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Service Dgi",
+        "createOrEditLabel": "Create or edit a Service Dgi",
+        "notFound": "No Service Dgis found"
+      },
+      "created": "A new Service Dgi is created with identifier {{ param }}",
+      "updated": "A Service Dgi is updated with identifier {{ param }}",
+      "deleted": "A Service Dgi is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Service Dgi {{ id }}?"
+      },
+      "detail": {
+        "title": "Service Dgi"
+      },
+      "id": "ID",
+      "nomService": "Nom Service",
+      "chefService": "Chef Service"
+    }
+  }
+}

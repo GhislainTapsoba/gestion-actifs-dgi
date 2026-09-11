@@ -1,7 +1,6 @@
 package com.dgi.gestionactifs.domain;
 
 import com.dgi.gestionactifs.domain.enumeration.StatutTransfert;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serial;
@@ -29,8 +28,8 @@ public class Transfert implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "date_demande", nullable = false)
-    private LocalDate dateDemande;
+    @Column(name = "date_transfert", nullable = false)
+    private LocalDate dateTransfert;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -43,16 +42,19 @@ public class Transfert implements Serializable {
     @Column(name = "date_traitement")
     private LocalDate dateTraitement;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    private ServiceDgi serviceOrigine;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    private ServiceDgi serviceDestinataire;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private User demandeur;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User validateur;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties(value = { "affectations", "transferts", "maintenances" }, allowSetters = true)
-    private Actif actif;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -69,17 +71,17 @@ public class Transfert implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getDateDemande() {
-        return this.dateDemande;
+    public LocalDate getDateTransfert() {
+        return this.dateTransfert;
     }
 
-    public Transfert dateDemande(LocalDate dateDemande) {
-        this.setDateDemande(dateDemande);
+    public Transfert dateTransfert(LocalDate dateTransfert) {
+        this.setDateTransfert(dateTransfert);
         return this;
     }
 
-    public void setDateDemande(LocalDate dateDemande) {
-        this.dateDemande = dateDemande;
+    public void setDateTransfert(LocalDate dateTransfert) {
+        this.dateTransfert = dateTransfert;
     }
 
     public StatutTransfert getStatut() {
@@ -121,6 +123,32 @@ public class Transfert implements Serializable {
         this.dateTraitement = dateTraitement;
     }
 
+    public ServiceDgi getServiceOrigine() {
+        return this.serviceOrigine;
+    }
+
+    public void setServiceOrigine(ServiceDgi serviceDgi) {
+        this.serviceOrigine = serviceDgi;
+    }
+
+    public Transfert serviceOrigine(ServiceDgi serviceDgi) {
+        this.setServiceOrigine(serviceDgi);
+        return this;
+    }
+
+    public ServiceDgi getServiceDestinataire() {
+        return this.serviceDestinataire;
+    }
+
+    public void setServiceDestinataire(ServiceDgi serviceDgi) {
+        this.serviceDestinataire = serviceDgi;
+    }
+
+    public Transfert serviceDestinataire(ServiceDgi serviceDgi) {
+        this.setServiceDestinataire(serviceDgi);
+        return this;
+    }
+
     public User getDemandeur() {
         return this.demandeur;
     }
@@ -144,19 +172,6 @@ public class Transfert implements Serializable {
 
     public Transfert validateur(User user) {
         this.setValidateur(user);
-        return this;
-    }
-
-    public Actif getActif() {
-        return this.actif;
-    }
-
-    public void setActif(Actif actif) {
-        this.actif = actif;
-    }
-
-    public Transfert actif(Actif actif) {
-        this.setActif(actif);
         return this;
     }
 
@@ -184,7 +199,7 @@ public class Transfert implements Serializable {
     public String toString() {
         return "Transfert{" +
             "id=" + getId() +
-            ", dateDemande='" + getDateDemande() + "'" +
+            ", dateTransfert='" + getDateTransfert() + "'" +
             ", statut='" + getStatut() + "'" +
             ", commentaireRejet='" + getCommentaireRejet() + "'" +
             ", dateTraitement='" + getDateTraitement() + "'" +

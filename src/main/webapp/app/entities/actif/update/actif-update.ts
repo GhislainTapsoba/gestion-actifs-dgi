@@ -1,3 +1,4 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -5,8 +6,10 @@ import { ActivatedRoute } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap/datepicker';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Observable, finalize } from 'rxjs';
+import { Observable, finalize, map } from 'rxjs';
 
+import { ICategorieMateriel } from 'app/entities/categorie-materiel/categorie-materiel.model';
+import { CategorieMaterielService } from 'app/entities/categorie-materiel/service/categorie-materiel.service';
 import { StatutActif } from 'app/entities/enumerations/statut-actif.model';
 import { TypeActif } from 'app/entities/enumerations/type-actif.model';
 import { AlertError } from 'app/shared/alert';
@@ -27,12 +30,18 @@ export class ActifUpdate implements OnInit {
   typeActifValues = Object.keys(TypeActif);
   statutActifValues = Object.keys(StatutActif);
 
+  categorieMaterielsSharedCollection = signal<ICategorieMateriel[]>([]);
+
   protected actifService = inject(ActifService);
   protected actifFormService = inject(ActifFormService);
+  protected categorieMaterielService = inject(CategorieMaterielService);
   protected activatedRoute = inject(ActivatedRoute);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: ActifFormGroup = this.actifFormService.createActifFormGroup();
+
+  compareCategorieMateriel = (o1: ICategorieMateriel | null, o2: ICategorieMateriel | null): boolean =>
+    this.categorieMaterielService.compareCategorieMateriel(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ actif }) => {
@@ -40,6 +49,8 @@ export class ActifUpdate implements OnInit {
       if (actif) {
         this.updateForm(actif);
       }
+
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -79,5 +90,24 @@ export class ActifUpdate implements OnInit {
   protected updateForm(actif: IActif): void {
     this.actif = actif;
     this.actifFormService.resetForm(this.editForm, actif);
+
+    this.categorieMaterielsSharedCollection.update(categorieMateriels =>
+      this.categorieMaterielService.addCategorieMaterielToCollectionIfMissing<ICategorieMateriel>(categorieMateriels, actif.categorie),
+    );
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.categorieMaterielService
+      .query()
+      .pipe(map((res: HttpResponse<ICategorieMateriel[]>) => res.body ?? []))
+      .pipe(
+        map((categorieMateriels: ICategorieMateriel[]) =>
+          this.categorieMaterielService.addCategorieMaterielToCollectionIfMissing<ICategorieMateriel>(
+            categorieMateriels,
+            this.actif?.categorie,
+          ),
+        ),
+      )
+      .subscribe((categorieMateriels: ICategorieMateriel[]) => this.categorieMaterielsSharedCollection.set(categorieMateriels));
   }
 }

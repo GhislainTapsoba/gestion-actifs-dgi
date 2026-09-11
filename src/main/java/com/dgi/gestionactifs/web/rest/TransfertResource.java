@@ -1,8 +1,6 @@
-﻿package com.dgi.gestionactifs.web.rest;
+package com.dgi.gestionactifs.web.rest;
 
-import com.dgi.gestionactifs.repository.AffectationRepository;
 import com.dgi.gestionactifs.repository.TransfertRepository;
-import com.dgi.gestionactifs.security.SecurityUtils;
 import com.dgi.gestionactifs.service.TransfertQueryService;
 import com.dgi.gestionactifs.service.TransfertService;
 import com.dgi.gestionactifs.service.criteria.TransfertCriteria;
@@ -26,7 +24,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -51,18 +48,14 @@ public class TransfertResource {
 
     private final TransfertQueryService transfertQueryService;
 
-    private final AffectationRepository affectationRepository;
-
     public TransfertResource(
         TransfertService transfertService,
         TransfertRepository transfertRepository,
-        TransfertQueryService transfertQueryService,
-        AffectationRepository affectationRepository
+        TransfertQueryService transfertQueryService
     ) {
         this.transfertService = transfertService;
         this.transfertRepository = transfertRepository;
         this.transfertQueryService = transfertQueryService;
-        this.affectationRepository = affectationRepository;
     }
 
     /**
@@ -72,7 +65,6 @@ public class TransfertResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new transfertDTO, or with status {@code 400 (Bad Request)} if the transfert has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PreAuthorize("hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_AGENT')")
     @PostMapping("")
     public ResponseEntity<TransfertDTO> createTransfert(@Valid @RequestBody TransfertDTO transfertDTO) throws URISyntaxException {
         LOG.debug("REST request to save Transfert : {}", transfertDTO);
@@ -95,7 +87,6 @@ public class TransfertResource {
      * or with status {@code 500 (Internal Server Error)} if the transfertDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PreAuthorize("hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_RESPONSABLE')")
     @PutMapping("/{id}")
     public ResponseEntity<TransfertDTO> updateTransfert(
         @PathVariable(value = "id", required = false) final Long id,
@@ -162,40 +153,12 @@ public class TransfertResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of Transferts in body.
      */
-    @PreAuthorize(
-        "hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_RESPONSABLE') or hasAuthority('ROLE_AGENT')"
-    )
     @GetMapping("")
     public ResponseEntity<List<TransfertDTO>> getAllTransferts(
         TransfertCriteria criteria,
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
         LOG.debug("REST request to get Transferts by criteria: {}", criteria);
-
-        boolean isAgentOnly =
-            SecurityUtils.hasCurrentUserThisAuthority("ROLE_AGENT") &&
-            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_ADMIN") &&
-            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_TECHNICIEN") &&
-            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_RESPONSABLE");
-
-        if (isAgentOnly) {
-            List<Long> actifIds = affectationRepository
-                .findByUtilisateur_LoginAndDateRestitutionIsNull(SecurityUtils.getCurrentUserLogin().orElse(""))
-                .stream()
-                .map(affectation -> affectation.getActif().getId())
-                .distinct()
-                .toList();
-            if (actifIds.isEmpty()) {
-                HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(
-                    ServletUriComponentsBuilder.fromCurrentRequest(),
-                    Page.empty(pageable)
-                );
-                return ResponseEntity.ok().headers(headers).body(List.of());
-            }
-            LongFilter actifIdFilter = new LongFilter();
-            actifIdFilter.setIn(actifIds);
-            criteria.setActifId(actifIdFilter);
-        }
 
         Page<TransfertDTO> page = transfertQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -211,25 +174,6 @@ public class TransfertResource {
     @GetMapping("/count")
     public ResponseEntity<Long> countTransferts(TransfertCriteria criteria) {
         LOG.debug("REST request to count Transferts by criteria: {}", criteria);
-        boolean isAgentOnlyCount =
-            SecurityUtils.hasCurrentUserThisAuthority("ROLE_AGENT") &&
-            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_ADMIN") &&
-            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_TECHNICIEN") &&
-            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_RESPONSABLE");
-        if (isAgentOnlyCount) {
-            List<Long> actifIds = affectationRepository
-                .findByUtilisateur_LoginAndDateRestitutionIsNull(SecurityUtils.getCurrentUserLogin().orElse(""))
-                .stream()
-                .map(affectation -> affectation.getActif().getId())
-                .distinct()
-                .toList();
-            if (actifIds.isEmpty()) {
-                return ResponseEntity.ok().body(0L);
-            }
-            LongFilter actifIdFilter = new LongFilter();
-            actifIdFilter.setIn(actifIds);
-            criteria.setActifId(actifIdFilter);
-        }
         return ResponseEntity.ok().body(transfertQueryService.countByCriteria(criteria));
     }
 
@@ -239,9 +183,6 @@ public class TransfertResource {
      * @param id the id of the transfertDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the transfertDTO, or with status {@code 404 (Not Found)}.
      */
-    @PreAuthorize(
-        "hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_RESPONSABLE') or hasAuthority('ROLE_AGENT')"
-    )
     @GetMapping("/{id}")
     public ResponseEntity<TransfertDTO> getTransfert(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Transfert : {}", id);
@@ -255,7 +196,6 @@ public class TransfertResource {
      * @param id the id of the transfertDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTransfert(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Transfert : {}", id);
@@ -268,29 +208,34 @@ public class TransfertResource {
     /**
      * {@code PATCH  /transferts/:id/valider} : valide un transfert en attente.
      *
-     * @param id l'id du transfert a valider.
-     * @return le transfert mis a jour.
+     * @param id l'id du transfert à valider.
+     * @return le transfert mis à jour.
      */
-    @PreAuthorize("hasAuthority('ROLE_RESPONSABLE')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE')")
     @PatchMapping("/{id}/valider")
     public ResponseEntity<TransfertDTO> validerTransfert(@PathVariable Long id) {
         LOG.debug("REST request to valider Transfert : {}", id);
         TransfertDTO result = transfertService.valider(id);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .body(result);
     }
 
     /**
      * {@code PATCH  /transferts/:id/rejeter} : rejette un transfert en attente.
      *
-     * @param id l'id du transfert a rejeter.
-     * @param body doit contenir la cle "commentaireRejet" (obligatoire).
-     * @return le transfert mis a jour.
+     * @param id l'id du transfert à rejeter.
+     * @param body contient la clé "commentaireRejet".
+     * @return le transfert mis à jour.
      */
-    @PreAuthorize("hasAuthority('ROLE_RESPONSABLE')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE')")
     @PatchMapping("/{id}/rejeter")
-    public ResponseEntity<TransfertDTO> rejeterTransfert(@PathVariable Long id, @RequestBody Map<String, String> body) {
+    public ResponseEntity<TransfertDTO> rejeterTransfert(@PathVariable Long id, @RequestBody(required = false) Map<String, String> body) {
         LOG.debug("REST request to rejeter Transfert : {}", id);
-        TransfertDTO result = transfertService.rejeter(id, body.get("commentaireRejet"));
-        return ResponseEntity.ok(result);
+        String commentaire = body != null ? body.get("commentaireRejet") : null;
+        TransfertDTO result = transfertService.rejeter(id, commentaire);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, id.toString()))
+            .body(result);
     }
 }

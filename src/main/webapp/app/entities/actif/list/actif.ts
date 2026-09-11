@@ -6,7 +6,6 @@ import { ActivatedRoute, Data, ParamMap, Router, RouterLink } from '@angular/rou
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap/modal';
 import { NgbPagination } from '@ng-bootstrap/ng-bootstrap/pagination';
-import { TranslatePipe } from '@ngx-translate/core';
 import { combineLatest, filter, map, tap } from 'rxjs';
 
 import { DEFAULT_SORT_DATA, ITEMS_PER_PAGE, ITEM_DELETED_EVENT, PAGE_HEADER, SORT, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config';
@@ -31,7 +30,6 @@ import { ActifService } from '../service/actif.service';
     SortDirective,
     SortByDirective,
     TranslateDirective,
-    TranslatePipe,
     FormatMediumDatePipe,
     Filter,
     NgbPagination,

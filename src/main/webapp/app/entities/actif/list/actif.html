@@ -41,15 +41,39 @@
                 <fa-icon class="p-1" icon="sort" />
               </div>
             </th>
-            <th scope="col" jhiSortBy="identifiantUnique">
+            <th scope="col" jhiSortBy="codeInventaire">
               <div class="d-flex">
-                <span jhiTranslate="gestionActifsDgiApp.actif.identifiantUnique">Identifiant Unique</span>
+                <span jhiTranslate="gestionActifsDgiApp.actif.codeInventaire">Code Inventaire</span>
                 <fa-icon class="p-1" icon="sort" />
               </div>
             </th>
-            <th scope="col" jhiSortBy="codeBarreQR">
+            <th scope="col" jhiSortBy="designation">
               <div class="d-flex">
-                <span jhiTranslate="gestionActifsDgiApp.actif.codeBarreQR">Code Barre QR</span>
+                <span jhiTranslate="gestionActifsDgiApp.actif.designation">Designation</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="marque">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.actif.marque">Marque</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="modele">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.actif.modele">Modele</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="numeroSerie">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.actif.numeroSerie">Numero Serie</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="codeBarre">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.actif.codeBarre">Code Barre</span>
                 <fa-icon class="p-1" icon="sort" />
               </div>
             </th>
@@ -77,6 +101,18 @@
                 <fa-icon class="p-1" icon="sort" />
               </div>
             </th>
+            <th scope="col" jhiSortBy="valeurAcquisition">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.actif.valeurAcquisition">Valeur Acquisition</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="categorie.id">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.actif.categorie">Categorie</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
             <th scope="col"></th>
           </tr>
         </thead>
@@ -86,8 +122,12 @@
               <td>
                 <a [routerLink]="['/actif', actif.id, 'view']">{{ actif.id }}</a>
               </td>
-              <td>{{ actif.identifiantUnique }}</td>
-              <td>{{ actif.codeBarreQR }}</td>
+              <td>{{ actif.codeInventaire }}</td>
+              <td>{{ actif.designation }}</td>
+              <td>{{ actif.marque }}</td>
+              <td>{{ actif.modele }}</td>
+              <td>{{ actif.numeroSerie }}</td>
+              <td>{{ actif.codeBarre }}</td>
               <td [jhiTranslate]="'gestionActifsDgiApp.TypeActif.' + (actif.type ?? 'null')">
                 {{
                   {
@@ -109,53 +149,16 @@
               </td>
               <td>{{ actif.localisation }}</td>
               <td>{{ actif.dateAcquisition | formatMediumDate }}</td>
+              <td>{{ actif.valeurAcquisition }}</td>
+              <td>
+                @if (actif.categorie) {
+                  <div>
+                    <a [routerLink]="['/categorie-materiel', actif.categorie.id, 'view']">{{ actif.categorie.id }}</a>
+                  </div>
+                }
+              </td>
               <td class="text-end">
                 <div class="btn-group">
-                  <button
-                    type="submit"
-                    [routerLink]="['/affectation']"
-                    [queryParams]="{ 'filter[actifId.in]': actif.id }"
-                    class="btn btn-info btn-sm"
-                    data-cy="filterOtherEntityButton"
-                  >
-                    <fa-icon icon="eye" />
-                    <span
-                      class="d-none d-md-inline"
-                      jhiTranslate="entity.action.show"
-                      [translateValues]="{ otherEntity: ('gestionActifsDgiApp.actif.affectation' | translate) }"
-                      >Afficher Affectation</span
-                    >
-                  </button>
-                  <button
-                    type="submit"
-                    [routerLink]="['/transfert']"
-                    [queryParams]="{ 'filter[actifId.in]': actif.id }"
-                    class="btn btn-info btn-sm"
-                    data-cy="filterOtherEntityButton"
-                  >
-                    <fa-icon icon="eye" />
-                    <span
-                      class="d-none d-md-inline"
-                      jhiTranslate="entity.action.show"
-                      [translateValues]="{ otherEntity: ('gestionActifsDgiApp.actif.transfert' | translate) }"
-                      >Afficher Transfert</span
-                    >
-                  </button>
-                  <button
-                    type="submit"
-                    [routerLink]="['/maintenance']"
-                    [queryParams]="{ 'filter[actifId.in]': actif.id }"
-                    class="btn btn-info btn-sm"
-                    data-cy="filterOtherEntityButton"
-                  >
-                    <fa-icon icon="eye" />
-                    <span
-                      class="d-none d-md-inline"
-                      jhiTranslate="entity.action.show"
-                      [translateValues]="{ otherEntity: ('gestionActifsDgiApp.actif.maintenance' | translate) }"
-                      >Afficher Maintenance</span
-                    >
-                  </button>
                   <a [routerLink]="['/actif', actif.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                     <fa-icon icon="eye" />
                     <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Voir</span>

@@ -18,13 +18,14 @@ type TransfertFormDefaults = Pick<NewTransfert, 'id'>;
 
 type TransfertFormGroupContent = {
   id: FormControl<ITransfert['id'] | NewTransfert['id']>;
-  dateDemande: FormControl<ITransfert['dateDemande']>;
+  dateTransfert: FormControl<ITransfert['dateTransfert']>;
   statut: FormControl<ITransfert['statut']>;
   commentaireRejet: FormControl<ITransfert['commentaireRejet']>;
   dateTraitement: FormControl<ITransfert['dateTraitement']>;
+  serviceOrigine: FormControl<ITransfert['serviceOrigine']>;
+  serviceDestinataire: FormControl<ITransfert['serviceDestinataire']>;
   demandeur: FormControl<ITransfert['demandeur']>;
   validateur: FormControl<ITransfert['validateur']>;
-  actif: FormControl<ITransfert['actif']>;
 };
 
 export type TransfertFormGroup = FormGroup<TransfertFormGroupContent>;
@@ -45,7 +46,7 @@ export class TransfertFormService {
           validators: [Validators.required],
         },
       ),
-      dateDemande: new FormControl(transfertRawValue.dateDemande, {
+      dateTransfert: new FormControl(transfertRawValue.dateTransfert, {
         validators: [Validators.required],
       }),
       statut: new FormControl(transfertRawValue.statut, {
@@ -53,11 +54,14 @@ export class TransfertFormService {
       }),
       commentaireRejet: new FormControl(transfertRawValue.commentaireRejet),
       dateTraitement: new FormControl(transfertRawValue.dateTraitement),
-      demandeur: new FormControl(transfertRawValue.demandeur),
-      validateur: new FormControl(transfertRawValue.validateur),
-      actif: new FormControl(transfertRawValue.actif, {
+      serviceOrigine: new FormControl(transfertRawValue.serviceOrigine, {
         validators: [Validators.required],
       }),
+      serviceDestinataire: new FormControl(transfertRawValue.serviceDestinataire, {
+        validators: [Validators.required],
+      }),
+      demandeur: new FormControl(transfertRawValue.demandeur),
+      validateur: new FormControl(transfertRawValue.validateur),
     });
   }
 

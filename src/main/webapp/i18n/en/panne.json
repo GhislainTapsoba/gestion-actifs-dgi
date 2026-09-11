@@ -1,0 +1,27 @@
+{
+  "gestionActifsDgiApp": {
+    "panne": {
+      "home": {
+        "title": "Pannes",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Panne",
+        "createOrEditLabel": "Create or edit a Panne",
+        "notFound": "No Pannes found"
+      },
+      "created": "A new Panne is created with identifier {{ param }}",
+      "updated": "A Panne is updated with identifier {{ param }}",
+      "deleted": "A Panne is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Panne {{ id }}?"
+      },
+      "detail": {
+        "title": "Panne"
+      },
+      "id": "ID",
+      "description": "Description",
+      "dateDeclaration": "Date Declaration",
+      "statutPanne": "Statut Panne",
+      "actif": "Actif"
+    }
+  }
+}

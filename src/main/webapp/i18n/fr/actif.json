@@ -18,15 +18,18 @@
         "title": "Actif"
       },
       "id": "ID",
-      "identifiantUnique": "Identifiant Unique",
-      "codeBarreQR": "Code Barre QR",
+      "codeInventaire": "Code Inventaire",
+      "designation": "Designation",
+      "marque": "Marque",
+      "modele": "Modele",
+      "numeroSerie": "Numero Serie",
+      "codeBarre": "Code Barre",
       "type": "Type",
       "etat": "Etat",
       "localisation": "Localisation",
       "dateAcquisition": "Date Acquisition",
-      "affectation": "Affectation",
-      "transfert": "Transfert",
-      "maintenance": "Maintenance"
+      "valeurAcquisition": "Valeur Acquisition",
+      "categorie": "Categorie"
     }
   }
 }

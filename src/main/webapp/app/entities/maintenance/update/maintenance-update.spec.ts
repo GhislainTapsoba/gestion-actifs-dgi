@@ -23,8 +23,8 @@ describe('Maintenance Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let maintenanceFormService: MaintenanceFormService;
   let maintenanceService: MaintenanceService;
-  let userService: UserService;
   let actifService: ActifService;
+  let userService: UserService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -44,35 +44,13 @@ describe('Maintenance Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     maintenanceFormService = TestBed.inject(MaintenanceFormService);
     maintenanceService = TestBed.inject(MaintenanceService);
-    userService = TestBed.inject(UserService);
     actifService = TestBed.inject(ActifService);
+    userService = TestBed.inject(UserService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('should call User query and add missing value', () => {
-      const maintenance: IMaintenance = { id: 576 };
-      const technicien: IUser = { id: 3944 };
-      maintenance.technicien = technicien;
-
-      const userCollection: IUser[] = [{ id: 3944 }];
-      vi.spyOn(userService, 'query').mockReturnValue(of(new HttpResponse({ body: userCollection })));
-      const additionalUsers = [technicien];
-      const expectedCollection: IUser[] = [...additionalUsers, ...userCollection];
-      vi.spyOn(userService, 'addUserToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-      activatedRoute.data = of({ maintenance });
-      comp.ngOnInit();
-
-      expect(userService.query).toHaveBeenCalled();
-      expect(userService.addUserToCollectionIfMissing).toHaveBeenCalledWith(
-        userCollection,
-        ...additionalUsers.map(i => expect.objectContaining(i) as typeof i),
-      );
-      expect(comp.usersSharedCollection()).toEqual(expectedCollection);
-    });
-
     it('should call Actif query and add missing value', () => {
       const maintenance: IMaintenance = { id: 576 };
       const actif: IActif = { id: 3500 };
@@ -95,18 +73,40 @@ describe('Maintenance Management Update Component', () => {
       expect(comp.actifsSharedCollection()).toEqual(expectedCollection);
     });
 
-    it('should update editForm', () => {
+    it('should call User query and add missing value', () => {
       const maintenance: IMaintenance = { id: 576 };
       const technicien: IUser = { id: 3944 };
       maintenance.technicien = technicien;
-      const actif: IActif = { id: 3500 };
-      maintenance.actif = actif;
+
+      const userCollection: IUser[] = [{ id: 3944 }];
+      vi.spyOn(userService, 'query').mockReturnValue(of(new HttpResponse({ body: userCollection })));
+      const additionalUsers = [technicien];
+      const expectedCollection: IUser[] = [...additionalUsers, ...userCollection];
+      vi.spyOn(userService, 'addUserToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ maintenance });
       comp.ngOnInit();
 
-      expect(comp.usersSharedCollection()).toContainEqual(technicien);
+      expect(userService.query).toHaveBeenCalled();
+      expect(userService.addUserToCollectionIfMissing).toHaveBeenCalledWith(
+        userCollection,
+        ...additionalUsers.map(i => expect.objectContaining(i) as typeof i),
+      );
+      expect(comp.usersSharedCollection()).toEqual(expectedCollection);
+    });
+
+    it('should update editForm', () => {
+      const maintenance: IMaintenance = { id: 576 };
+      const actif: IActif = { id: 3500 };
+      maintenance.actif = actif;
+      const technicien: IUser = { id: 3944 };
+      maintenance.technicien = technicien;
+
+      activatedRoute.data = of({ maintenance });
+      comp.ngOnInit();
+
       expect(comp.actifsSharedCollection()).toContainEqual(actif);
+      expect(comp.usersSharedCollection()).toContainEqual(technicien);
       expect(comp.maintenance).toEqual(maintenance);
     });
   });
@@ -180,16 +180,6 @@ describe('Maintenance Management Update Component', () => {
   });
 
   describe('Compare relationships', () => {
-    describe('compareUser', () => {
-      it('should forward to userService', () => {
-        const entity = { id: 3944 };
-        const entity2 = { id: 6275 };
-        vi.spyOn(userService, 'compareUser');
-        comp.compareUser(entity, entity2);
-        expect(userService.compareUser).toHaveBeenCalledWith(entity, entity2);
-      });
-    });
-
     describe('compareActif', () => {
       it('should forward to actifService', () => {
         const entity = { id: 3500 };
@@ -197,6 +187,16 @@ describe('Maintenance Management Update Component', () => {
         vi.spyOn(actifService, 'compareActif');
         comp.compareActif(entity, entity2);
         expect(actifService.compareActif).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
+    describe('compareUser', () => {
+      it('should forward to userService', () => {
+        const entity = { id: 3944 };
+        const entity2 = { id: 6275 };
+        vi.spyOn(userService, 'compareUser');
+        comp.compareUser(entity, entity2);
+        expect(userService.compareUser).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

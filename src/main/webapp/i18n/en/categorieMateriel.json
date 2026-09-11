@@ -1,0 +1,25 @@
+{
+  "gestionActifsDgiApp": {
+    "categorieMateriel": {
+      "home": {
+        "title": "Categorie Materiels",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Categorie Materiel",
+        "createOrEditLabel": "Create or edit a Categorie Materiel",
+        "notFound": "No Categorie Materiels found"
+      },
+      "created": "A new Categorie Materiel is created with identifier {{ param }}",
+      "updated": "A Categorie Materiel is updated with identifier {{ param }}",
+      "deleted": "A Categorie Materiel is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Categorie Materiel {{ id }}?"
+      },
+      "detail": {
+        "title": "Categorie Materiel"
+      },
+      "id": "ID",
+      "libelle": "Libelle",
+      "description": "Description"
+    }
+  }
+}

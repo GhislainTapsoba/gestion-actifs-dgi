@@ -1,0 +1,168 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-equipement-recensement-heading"
+        data-cy="EquipementRecensementCreateUpdateHeading"
+        jhiTranslate="gestionActifsDgiApp.equipementRecensement.home.createOrEditLabel"
+      >
+        Créer ou éditer un Equipement Recensement
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="global.field.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let etatConstateRef = editForm.get('etatConstate')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_etatConstate" jhiTranslate="gestionActifsDgiApp.equipementRecensement.etatConstate"
+            >Etat Constate</label
+          >
+          <select class="form-control" name="etatConstate" formControlName="etatConstate" id="field_etatConstate" data-cy="etatConstate">
+            <option [ngValue]="null">{{ 'gestionActifsDgiApp.EtatMateriel.null' | translate }}</option>
+            @for (etatMateriel of etatMaterielValues; track $index) {
+              <option [value]="etatMateriel">{{ 'gestionActifsDgiApp.EtatMateriel.' + etatMateriel | translate }}</option>
+            }
+          </select>
+          @if (etatConstateRef.invalid && (etatConstateRef.dirty || etatConstateRef.touched)) {
+            <div>
+              @if (etatConstateRef.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let dateConstatRef = editForm.get('dateConstat')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_dateConstat" jhiTranslate="gestionActifsDgiApp.equipementRecensement.dateConstat"
+            >Date Constat</label
+          >
+          <div class="input-group">
+            <input
+              id="field_dateConstat"
+              data-cy="dateConstat"
+              type="text"
+              class="form-control"
+              name="dateConstat"
+              ngbDatepicker
+              #dateConstatDp="ngbDatepicker"
+              formControlName="dateConstat"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dateConstatDp.toggle()"><fa-icon icon="calendar-alt" /></button>
+          </div>
+          @if (dateConstatRef.invalid && (dateConstatRef.dirty || dateConstatRef.touched)) {
+            <div>
+              @if (dateConstatRef.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label
+            class="form-label"
+            for="field_emplacementConstate"
+            jhiTranslate="gestionActifsDgiApp.equipementRecensement.emplacementConstate"
+            >Emplacement Constate</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="emplacementConstate"
+            id="field_emplacementConstate"
+            data-cy="emplacementConstate"
+            formControlName="emplacementConstate"
+          />
+        </div>
+
+        <div class="mb-3 form-check">
+          <input
+            type="checkbox"
+            class="form-check-input"
+            name="anomalieConstatee"
+            id="field_anomalieConstatee"
+            data-cy="anomalieConstatee"
+            formControlName="anomalieConstatee"
+          />
+          <label
+            class="form-check-label"
+            for="field_anomalieConstatee"
+            jhiTranslate="gestionActifsDgiApp.equipementRecensement.anomalieConstatee"
+            >Anomalie Constatee</label
+          >
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_recensement" jhiTranslate="gestionActifsDgiApp.equipementRecensement.recensement"
+            >Recensement</label
+          >
+          <select
+            class="form-control"
+            id="field_recensement"
+            data-cy="recensement"
+            name="recensement"
+            formControlName="recensement"
+            [compareWith]="compareRecensement"
+          >
+            @if (!editForm.get('recensement')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (recensementOption of recensementsSharedCollection(); track $index) {
+              <option [ngValue]="recensementOption">{{ recensementOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['recensement'])!.invalid && (editForm.get(['recensement'])!.dirty || editForm.get(['recensement'])!.touched)) {
+          <div>
+            @if (editForm.get(['recensement'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+            }
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_actif" jhiTranslate="gestionActifsDgiApp.equipementRecensement.actif">Actif</label>
+          <select class="form-control" id="field_actif" data-cy="actif" name="actif" formControlName="actif" [compareWith]="compareActif">
+            @if (!editForm.get('actif')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (actifOption of actifsSharedCollection(); track $index) {
+              <option [ngValue]="actifOption">{{ actifOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['actif'])!.invalid && (editForm.get(['actif'])!.dirty || editForm.get(['actif'])!.touched)) {
+          <div>
+            @if (editForm.get(['actif'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban" />&nbsp;<span jhiTranslate="entity.action.cancel">Annuler</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving()"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save" />&nbsp;<span jhiTranslate="entity.action.save">Sauvegarder</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -14,7 +14,20 @@
         "transfert": "Transfert",
         "maintenance": "Maintenance",
         "fournisseur": "Fournisseur",
-        "contrat": "Contrat"
+        "contrat": "Contrat",
+        "categorieMateriel": "Categorie Materiel",
+        "serviceDgi": "Service Dgi",
+        "agent": "Agent",
+        "affectationActif": "Affectation Actif",
+        "transfertActif": "Transfert Actif",
+        "bordereau": "Bordereau",
+        "planningMaintenance": "Planning Maintenance",
+        "intervention": "Intervention",
+        "panne": "Panne",
+        "recensement": "Recensement",
+        "equipementRecensement": "Equipement Recensement",
+        "inventaire": "Inventaire",
+        "historiqueAction": "Historique Action"
       },
       "account": {
         "main": "Account",

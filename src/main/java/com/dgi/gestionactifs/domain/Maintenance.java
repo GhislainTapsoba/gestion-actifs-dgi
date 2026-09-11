@@ -49,13 +49,13 @@ public class Maintenance implements Serializable {
     @Column(name = "date_cloture")
     private LocalDate dateCloture;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User technicien;
-
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "affectations", "transferts", "maintenances" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "categorie" }, allowSetters = true)
     private Actif actif;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User technicien;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -137,19 +137,6 @@ public class Maintenance implements Serializable {
         this.dateCloture = dateCloture;
     }
 
-    public User getTechnicien() {
-        return this.technicien;
-    }
-
-    public void setTechnicien(User user) {
-        this.technicien = user;
-    }
-
-    public Maintenance technicien(User user) {
-        this.setTechnicien(user);
-        return this;
-    }
-
     public Actif getActif() {
         return this.actif;
     }
@@ -160,6 +147,19 @@ public class Maintenance implements Serializable {
 
     public Maintenance actif(Actif actif) {
         this.setActif(actif);
+        return this;
+    }
+
+    public User getTechnicien() {
+        return this.technicien;
+    }
+
+    public void setTechnicien(User user) {
+        this.technicien = user;
+    }
+
+    public Maintenance technicien(User user) {
+        this.setTechnicien(user);
         return this;
     }
 

@@ -23,8 +23,8 @@ type MaintenanceFormGroupContent = {
   statut: FormControl<IMaintenance['statut']>;
   compteRendu: FormControl<IMaintenance['compteRendu']>;
   dateCloture: FormControl<IMaintenance['dateCloture']>;
-  technicien: FormControl<IMaintenance['technicien']>;
   actif: FormControl<IMaintenance['actif']>;
+  technicien: FormControl<IMaintenance['technicien']>;
 };
 
 export type MaintenanceFormGroup = FormGroup<MaintenanceFormGroupContent>;
@@ -54,10 +54,10 @@ export class MaintenanceFormService {
       }),
       compteRendu: new FormControl(maintenanceRawValue.compteRendu),
       dateCloture: new FormControl(maintenanceRawValue.dateCloture),
-      technicien: new FormControl(maintenanceRawValue.technicien),
       actif: new FormControl(maintenanceRawValue.actif, {
         validators: [Validators.required],
       }),
+      technicien: new FormControl(maintenanceRawValue.technicien),
     });
   }
 

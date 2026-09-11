@@ -22,8 +22,8 @@ type ContratFormGroupContent = {
   reference: FormControl<IContrat['reference']>;
   dateDebut: FormControl<IContrat['dateDebut']>;
   dateFin: FormControl<IContrat['dateFin']>;
-  actif: FormControl<IContrat['actif']>;
   fournisseur: FormControl<IContrat['fournisseur']>;
+  actif: FormControl<IContrat['actif']>;
 };
 
 export type ContratFormGroup = FormGroup<ContratFormGroupContent>;
@@ -52,10 +52,10 @@ export class ContratFormService {
       dateFin: new FormControl(contratRawValue.dateFin, {
         validators: [Validators.required],
       }),
-      actif: new FormControl(contratRawValue.actif),
       fournisseur: new FormControl(contratRawValue.fournisseur, {
         validators: [Validators.required],
       }),
+      actif: new FormControl(contratRawValue.actif),
     });
   }
 

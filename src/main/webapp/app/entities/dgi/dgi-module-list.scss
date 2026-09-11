@@ -1,0 +1,68 @@
+.dgi-module {
+  padding: 1.5rem 0.5rem 2rem;
+}
+
+.dgi-module__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.04);
+}
+
+.dgi-module__eyebrow {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(124, 58, 237, 0.08);
+  color: #6d28d9;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dgi-module__header h1 {
+  margin: 0;
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.dgi-module__header p {
+  margin: 0.35rem 0 0;
+  color: #64748b;
+}
+
+.dgi-module__actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.dgi-module__table-wrap {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.04);
+}
+
+.table thead th {
+  background: rgba(248, 250, 252, 1);
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #475569;
+}
+
+.table td,
+.table th {
+  padding: 0.9rem 1rem;
+}

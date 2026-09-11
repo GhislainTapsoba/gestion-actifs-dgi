@@ -1,0 +1,209 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-bordereau-heading"
+        data-cy="BordereauCreateUpdateHeading"
+        jhiTranslate="gestionActifsDgiApp.bordereau.home.createOrEditLabel"
+      >
+        Créer ou éditer un Bordereau
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="global.field.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let numeroRef = editForm.get('numero')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_numero" jhiTranslate="gestionActifsDgiApp.bordereau.numero">Numero</label>
+          <input type="text" class="form-control" name="numero" id="field_numero" data-cy="numero" formControlName="numero" />
+          @if (numeroRef.invalid && (numeroRef.dirty || numeroRef.touched)) {
+            <div>
+              @if (numeroRef.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let dateEmissionRef = editForm.get('dateEmission')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_dateEmission" jhiTranslate="gestionActifsDgiApp.bordereau.dateEmission">Date Emission</label>
+          <div class="input-group">
+            <input
+              id="field_dateEmission"
+              data-cy="dateEmission"
+              type="text"
+              class="form-control"
+              name="dateEmission"
+              ngbDatepicker
+              #dateEmissionDp="ngbDatepicker"
+              formControlName="dateEmission"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dateEmissionDp.toggle()"><fa-icon icon="calendar-alt" /></button>
+          </div>
+          @if (dateEmissionRef.invalid && (dateEmissionRef.dirty || dateEmissionRef.touched)) {
+            <div>
+              @if (dateEmissionRef.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let typeBordereauRef = editForm.get('typeBordereau')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_typeBordereau" jhiTranslate="gestionActifsDgiApp.bordereau.typeBordereau"
+            >Type Bordereau</label
+          >
+          <select
+            class="form-control"
+            name="typeBordereau"
+            formControlName="typeBordereau"
+            id="field_typeBordereau"
+            data-cy="typeBordereau"
+          >
+            <option [ngValue]="null">{{ 'gestionActifsDgiApp.TypeBordereau.null' | translate }}</option>
+            @for (typeBordereau of typeBordereauValues; track $index) {
+              <option [value]="typeBordereau">{{ 'gestionActifsDgiApp.TypeBordereau.' + typeBordereau | translate }}</option>
+            }
+          </select>
+          @if (typeBordereauRef.invalid && (typeBordereauRef.dirty || typeBordereauRef.touched)) {
+            <div>
+              @if (typeBordereauRef.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let statutValidationRef = editForm.get('statutValidation')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_statutValidation" jhiTranslate="gestionActifsDgiApp.bordereau.statutValidation"
+            >Statut Validation</label
+          >
+          <select
+            class="form-control"
+            name="statutValidation"
+            formControlName="statutValidation"
+            id="field_statutValidation"
+            data-cy="statutValidation"
+          >
+            <option [ngValue]="null">{{ 'gestionActifsDgiApp.StatutBordereau.null' | translate }}</option>
+            @for (statutBordereau of statutBordereauValues; track $index) {
+              <option [value]="statutBordereau">{{ 'gestionActifsDgiApp.StatutBordereau.' + statutBordereau | translate }}</option>
+            }
+          </select>
+          @if (statutValidationRef.invalid && (statutValidationRef.dirty || statutValidationRef.touched)) {
+            <div>
+              @if (statutValidationRef.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_dateValidation" jhiTranslate="gestionActifsDgiApp.bordereau.dateValidation"
+            >Date Validation</label
+          >
+          <div class="input-group">
+            <input
+              id="field_dateValidation"
+              data-cy="dateValidation"
+              type="text"
+              class="form-control"
+              name="dateValidation"
+              ngbDatepicker
+              #dateValidationDp="ngbDatepicker"
+              formControlName="dateValidation"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dateValidationDp.toggle()"><fa-icon icon="calendar-alt" /></button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_transfert" jhiTranslate="gestionActifsDgiApp.bordereau.transfert">Transfert</label>
+          <select
+            class="form-control"
+            id="field_transfert"
+            data-cy="transfert"
+            name="transfert"
+            formControlName="transfert"
+            [compareWith]="compareTransfert"
+          >
+            <option [ngValue]="null"></option>
+            @for (transfertOption of transfertsSharedCollection(); track $index) {
+              <option [ngValue]="transfertOption">{{ transfertOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_affectation" jhiTranslate="gestionActifsDgiApp.bordereau.affectation">Affectation</label>
+          <select
+            class="form-control"
+            id="field_affectation"
+            data-cy="affectation"
+            name="affectation"
+            formControlName="affectation"
+            [compareWith]="compareAffectation"
+          >
+            <option [ngValue]="null"></option>
+            @for (affectationOption of affectationsSharedCollection(); track $index) {
+              <option [ngValue]="affectationOption">{{ affectationOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_emetteur" jhiTranslate="gestionActifsDgiApp.bordereau.emetteur">Emetteur</label>
+          <select
+            class="form-control"
+            id="field_emetteur"
+            data-cy="emetteur"
+            name="emetteur"
+            formControlName="emetteur"
+            [compareWith]="compareUser"
+          >
+            @if (!editForm.get('emetteur')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (userOption of usersSharedCollection(); track $index) {
+              <option [ngValue]="userOption">{{ userOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['emetteur'])!.invalid && (editForm.get(['emetteur'])!.dirty || editForm.get(['emetteur'])!.touched)) {
+          <div>
+            @if (editForm.get(['emetteur'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban" />&nbsp;<span jhiTranslate="entity.action.cancel">Annuler</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving()"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save" />&nbsp;<span jhiTranslate="entity.action.save">Sauvegarder</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -8,11 +8,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.dgi.gestionactifs.IntegrationTest;
-import com.dgi.gestionactifs.domain.Actif;
 import com.dgi.gestionactifs.domain.Affectation;
-import com.dgi.gestionactifs.domain.User;
+import com.dgi.gestionactifs.domain.Agent;
 import com.dgi.gestionactifs.repository.AffectationRepository;
-import com.dgi.gestionactifs.repository.UserRepository;
 import com.dgi.gestionactifs.service.dto.AffectationDTO;
 import com.dgi.gestionactifs.service.mapper.AffectationMapper;
 import jakarta.persistence.EntityManager;
@@ -42,12 +40,12 @@ class AffectationResourceIT {
     private static final LocalDate UPDATED_DATE_AFFECTATION = LocalDate.parse("2026-09-02");
     private static final LocalDate SMALLER_DATE_AFFECTATION = LocalDate.ofEpochDay(-1L);
 
+    private static final String DEFAULT_MOTIF = "AAAAAAAAAA";
+    private static final String UPDATED_MOTIF = "BBBBBBBBBB";
+
     private static final LocalDate DEFAULT_DATE_RESTITUTION = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DATE_RESTITUTION = LocalDate.parse("2026-09-02");
     private static final LocalDate SMALLER_DATE_RESTITUTION = LocalDate.ofEpochDay(-1L);
-
-    private static final String DEFAULT_NUMERO_BORDEREAU = "AAAAAAAAAA";
-    private static final String UPDATED_NUMERO_BORDEREAU = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/affectations";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -60,9 +58,6 @@ class AffectationResourceIT {
 
     @Autowired
     private AffectationRepository affectationRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private AffectationMapper affectationMapper;
@@ -86,18 +81,18 @@ class AffectationResourceIT {
     public static Affectation createEntity(EntityManager em) {
         Affectation affectation = new Affectation()
             .dateAffectation(DEFAULT_DATE_AFFECTATION)
-            .dateRestitution(DEFAULT_DATE_RESTITUTION)
-            .numeroBordereau(DEFAULT_NUMERO_BORDEREAU);
+            .motif(DEFAULT_MOTIF)
+            .dateRestitution(DEFAULT_DATE_RESTITUTION);
         // Add required entity
-        Actif actif;
-        if (TestUtil.findAll(em, Actif.class).isEmpty()) {
-            actif = ActifResourceIT.createEntity();
-            em.persist(actif);
+        Agent agent;
+        if (TestUtil.findAll(em, Agent.class).isEmpty()) {
+            agent = AgentResourceIT.createEntity(em);
+            em.persist(agent);
             em.flush();
         } else {
-            actif = TestUtil.findAll(em, Actif.class).get(0);
+            agent = TestUtil.findAll(em, Agent.class).get(0);
         }
-        affectation.setActif(actif);
+        affectation.setAgent(agent);
         return affectation;
     }
 
@@ -110,18 +105,18 @@ class AffectationResourceIT {
     public static Affectation createUpdatedEntity(EntityManager em) {
         Affectation updatedAffectation = new Affectation()
             .dateAffectation(UPDATED_DATE_AFFECTATION)
-            .dateRestitution(UPDATED_DATE_RESTITUTION)
-            .numeroBordereau(UPDATED_NUMERO_BORDEREAU);
+            .motif(UPDATED_MOTIF)
+            .dateRestitution(UPDATED_DATE_RESTITUTION);
         // Add required entity
-        Actif actif;
-        if (TestUtil.findAll(em, Actif.class).isEmpty()) {
-            actif = ActifResourceIT.createUpdatedEntity();
-            em.persist(actif);
+        Agent agent;
+        if (TestUtil.findAll(em, Agent.class).isEmpty()) {
+            agent = AgentResourceIT.createUpdatedEntity(em);
+            em.persist(agent);
             em.flush();
         } else {
-            actif = TestUtil.findAll(em, Actif.class).get(0);
+            agent = TestUtil.findAll(em, Agent.class).get(0);
         }
-        updatedAffectation.setActif(actif);
+        updatedAffectation.setAgent(agent);
         return updatedAffectation;
     }
 
@@ -210,8 +205,8 @@ class AffectationResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(affectation.getId().intValue())))
             .andExpect(jsonPath("$.[*].dateAffectation").value(hasItem(DEFAULT_DATE_AFFECTATION.toString())))
-            .andExpect(jsonPath("$.[*].dateRestitution").value(hasItem(DEFAULT_DATE_RESTITUTION.toString())))
-            .andExpect(jsonPath("$.[*].numeroBordereau").value(hasItem(DEFAULT_NUMERO_BORDEREAU)));
+            .andExpect(jsonPath("$.[*].motif").value(hasItem(DEFAULT_MOTIF)))
+            .andExpect(jsonPath("$.[*].dateRestitution").value(hasItem(DEFAULT_DATE_RESTITUTION.toString())));
     }
 
     @Test
@@ -227,8 +222,8 @@ class AffectationResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(affectation.getId().intValue()))
             .andExpect(jsonPath("$.dateAffectation").value(DEFAULT_DATE_AFFECTATION.toString()))
-            .andExpect(jsonPath("$.dateRestitution").value(DEFAULT_DATE_RESTITUTION.toString()))
-            .andExpect(jsonPath("$.numeroBordereau").value(DEFAULT_NUMERO_BORDEREAU));
+            .andExpect(jsonPath("$.motif").value(DEFAULT_MOTIF))
+            .andExpect(jsonPath("$.dateRestitution").value(DEFAULT_DATE_RESTITUTION.toString()));
     }
 
     @Test
@@ -336,6 +331,56 @@ class AffectationResourceIT {
 
     @Test
     @Transactional
+    void getAllAffectationsByMotifIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedAffectation = affectationRepository.saveAndFlush(affectation);
+
+        // Get all the affectationList where motif equals to
+        defaultAffectationFiltering("motif.equals=" + DEFAULT_MOTIF, "motif.equals=" + UPDATED_MOTIF);
+    }
+
+    @Test
+    @Transactional
+    void getAllAffectationsByMotifIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedAffectation = affectationRepository.saveAndFlush(affectation);
+
+        // Get all the affectationList where motif in
+        defaultAffectationFiltering("motif.in=" + DEFAULT_MOTIF + "," + UPDATED_MOTIF, "motif.in=" + UPDATED_MOTIF);
+    }
+
+    @Test
+    @Transactional
+    void getAllAffectationsByMotifIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedAffectation = affectationRepository.saveAndFlush(affectation);
+
+        // Get all the affectationList where motif is not null
+        defaultAffectationFiltering("motif.specified=true", "motif.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllAffectationsByMotifContainsSomething() throws Exception {
+        // Initialize the database
+        insertedAffectation = affectationRepository.saveAndFlush(affectation);
+
+        // Get all the affectationList where motif contains
+        defaultAffectationFiltering("motif.contains=" + DEFAULT_MOTIF, "motif.contains=" + UPDATED_MOTIF);
+    }
+
+    @Test
+    @Transactional
+    void getAllAffectationsByMotifNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedAffectation = affectationRepository.saveAndFlush(affectation);
+
+        // Get all the affectationList where motif does not contain
+        defaultAffectationFiltering("motif.doesNotContain=" + UPDATED_MOTIF, "motif.doesNotContain=" + DEFAULT_MOTIF);
+    }
+
+    @Test
+    @Transactional
     void getAllAffectationsByDateRestitutionIsEqualToSomething() throws Exception {
         // Initialize the database
         insertedAffectation = affectationRepository.saveAndFlush(affectation);
@@ -424,108 +469,24 @@ class AffectationResourceIT {
 
     @Test
     @Transactional
-    void getAllAffectationsByNumeroBordereauIsEqualToSomething() throws Exception {
-        // Initialize the database
-        insertedAffectation = affectationRepository.saveAndFlush(affectation);
-
-        // Get all the affectationList where numeroBordereau equals to
-        defaultAffectationFiltering(
-            "numeroBordereau.equals=" + DEFAULT_NUMERO_BORDEREAU,
-            "numeroBordereau.equals=" + UPDATED_NUMERO_BORDEREAU
-        );
-    }
-
-    @Test
-    @Transactional
-    void getAllAffectationsByNumeroBordereauIsInShouldWork() throws Exception {
-        // Initialize the database
-        insertedAffectation = affectationRepository.saveAndFlush(affectation);
-
-        // Get all the affectationList where numeroBordereau in
-        defaultAffectationFiltering(
-            "numeroBordereau.in=" + DEFAULT_NUMERO_BORDEREAU + "," + UPDATED_NUMERO_BORDEREAU,
-            "numeroBordereau.in=" + UPDATED_NUMERO_BORDEREAU
-        );
-    }
-
-    @Test
-    @Transactional
-    void getAllAffectationsByNumeroBordereauIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        insertedAffectation = affectationRepository.saveAndFlush(affectation);
-
-        // Get all the affectationList where numeroBordereau is not null
-        defaultAffectationFiltering("numeroBordereau.specified=true", "numeroBordereau.specified=false");
-    }
-
-    @Test
-    @Transactional
-    void getAllAffectationsByNumeroBordereauContainsSomething() throws Exception {
-        // Initialize the database
-        insertedAffectation = affectationRepository.saveAndFlush(affectation);
-
-        // Get all the affectationList where numeroBordereau contains
-        defaultAffectationFiltering(
-            "numeroBordereau.contains=" + DEFAULT_NUMERO_BORDEREAU,
-            "numeroBordereau.contains=" + UPDATED_NUMERO_BORDEREAU
-        );
-    }
-
-    @Test
-    @Transactional
-    void getAllAffectationsByNumeroBordereauNotContainsSomething() throws Exception {
-        // Initialize the database
-        insertedAffectation = affectationRepository.saveAndFlush(affectation);
-
-        // Get all the affectationList where numeroBordereau does not contain
-        defaultAffectationFiltering(
-            "numeroBordereau.doesNotContain=" + UPDATED_NUMERO_BORDEREAU,
-            "numeroBordereau.doesNotContain=" + DEFAULT_NUMERO_BORDEREAU
-        );
-    }
-
-    @Test
-    @Transactional
-    void getAllAffectationsByUtilisateurIsEqualToSomething() throws Exception {
-        User utilisateur;
-        if (TestUtil.findAll(em, User.class).isEmpty()) {
+    void getAllAffectationsByAgentIsEqualToSomething() throws Exception {
+        Agent agent;
+        if (TestUtil.findAll(em, Agent.class).isEmpty()) {
             affectationRepository.saveAndFlush(affectation);
-            utilisateur = UserResourceIT.createEntity();
+            agent = AgentResourceIT.createEntity(em);
         } else {
-            utilisateur = TestUtil.findAll(em, User.class).get(0);
+            agent = TestUtil.findAll(em, Agent.class).get(0);
         }
-        em.persist(utilisateur);
+        em.persist(agent);
         em.flush();
-        affectation.setUtilisateur(utilisateur);
+        affectation.setAgent(agent);
         affectationRepository.saveAndFlush(affectation);
-        Long utilisateurId = utilisateur.getId();
-        // Get all the affectationList where utilisateur equals to utilisateurId
-        defaultAffectationShouldBeFound("utilisateurId.equals=" + utilisateurId);
+        Long agentId = agent.getId();
+        // Get all the affectationList where agent equals to agentId
+        defaultAffectationShouldBeFound("agentId.equals=" + agentId);
 
-        // Get all the affectationList where utilisateur equals to (utilisateurId + 1)
-        defaultAffectationShouldNotBeFound("utilisateurId.equals=" + (utilisateurId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllAffectationsByActifIsEqualToSomething() throws Exception {
-        Actif actif;
-        if (TestUtil.findAll(em, Actif.class).isEmpty()) {
-            affectationRepository.saveAndFlush(affectation);
-            actif = ActifResourceIT.createEntity();
-        } else {
-            actif = TestUtil.findAll(em, Actif.class).get(0);
-        }
-        em.persist(actif);
-        em.flush();
-        affectation.setActif(actif);
-        affectationRepository.saveAndFlush(affectation);
-        Long actifId = actif.getId();
-        // Get all the affectationList where actif equals to actifId
-        defaultAffectationShouldBeFound("actifId.equals=" + actifId);
-
-        // Get all the affectationList where actif equals to (actifId + 1)
-        defaultAffectationShouldNotBeFound("actifId.equals=" + (actifId + 1));
+        // Get all the affectationList where agent equals to (agentId + 1)
+        defaultAffectationShouldNotBeFound("agentId.equals=" + (agentId + 1));
     }
 
     private void defaultAffectationFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
@@ -543,8 +504,8 @@ class AffectationResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(affectation.getId().intValue())))
             .andExpect(jsonPath("$.[*].dateAffectation").value(hasItem(DEFAULT_DATE_AFFECTATION.toString())))
-            .andExpect(jsonPath("$.[*].dateRestitution").value(hasItem(DEFAULT_DATE_RESTITUTION.toString())))
-            .andExpect(jsonPath("$.[*].numeroBordereau").value(hasItem(DEFAULT_NUMERO_BORDEREAU)));
+            .andExpect(jsonPath("$.[*].motif").value(hasItem(DEFAULT_MOTIF)))
+            .andExpect(jsonPath("$.[*].dateRestitution").value(hasItem(DEFAULT_DATE_RESTITUTION.toString())));
 
         // Check, that the count call also returns 1
         restAffectationMockMvc
@@ -592,10 +553,7 @@ class AffectationResourceIT {
         Affectation updatedAffectation = affectationRepository.findById(affectation.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedAffectation are not directly saved in db
         em.detach(updatedAffectation);
-        updatedAffectation
-            .dateAffectation(UPDATED_DATE_AFFECTATION)
-            .dateRestitution(UPDATED_DATE_RESTITUTION)
-            .numeroBordereau(UPDATED_NUMERO_BORDEREAU);
+        updatedAffectation.dateAffectation(UPDATED_DATE_AFFECTATION).motif(UPDATED_MOTIF).dateRestitution(UPDATED_DATE_RESTITUTION);
         AffectationDTO affectationDTO = affectationMapper.toDto(updatedAffectation);
 
         restAffectationMockMvc
@@ -714,10 +672,7 @@ class AffectationResourceIT {
         Affectation partialUpdatedAffectation = new Affectation();
         partialUpdatedAffectation.setId(affectation.getId());
 
-        partialUpdatedAffectation
-            .dateAffectation(UPDATED_DATE_AFFECTATION)
-            .dateRestitution(UPDATED_DATE_RESTITUTION)
-            .numeroBordereau(UPDATED_NUMERO_BORDEREAU);
+        partialUpdatedAffectation.dateAffectation(UPDATED_DATE_AFFECTATION).motif(UPDATED_MOTIF).dateRestitution(UPDATED_DATE_RESTITUTION);
 
         restAffectationMockMvc
             .perform(

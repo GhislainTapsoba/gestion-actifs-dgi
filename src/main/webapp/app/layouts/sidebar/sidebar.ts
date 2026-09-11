@@ -27,14 +27,29 @@ export default class Sidebar {
   private readonly loginService = inject(LoginService);
   private readonly router = inject(Router);
 
-  readonly navItems: NavItem[] = [
+  readonly mainItems: NavItem[] = [
     { label: 'Tableau de bord', icon: 'home', route: '/', exact: true },
     { label: 'Inventaire', icon: 'desktop', route: '/actif' },
+    { label: 'Catégories', icon: 'tags', route: '/categorie-materiel', roles: ['ROLE_ADMIN', 'ROLE_TECHNICIEN'] },
     { label: 'Affectations', icon: 'users', route: '/affectation' },
     { label: 'Transferts', icon: 'exchange-alt', route: '/transfert' },
     { label: 'Maintenance', icon: 'tools', route: '/maintenance' },
+  ];
+
+  readonly incidentItems: NavItem[] = [
+    { label: 'Pannes', icon: 'exclamation-triangle', route: '/panne' },
+    { label: 'Interventions', icon: 'wrench', route: '/intervention' },
+    { label: 'Plannings', icon: 'calendar-alt', route: '/planning-maintenance', roles: ['ROLE_ADMIN', 'ROLE_TECHNICIEN'] },
+    { label: 'Recensements', icon: 'clipboard-list', route: '/recensement', roles: ['ROLE_ADMIN', 'ROLE_TECHNICIEN'] },
+  ];
+
+  readonly gestionItems: NavItem[] = [
+    { label: 'Agents', icon: 'user-tie', route: '/agent', roles: ['ROLE_ADMIN', 'ROLE_TECHNICIEN', 'ROLE_RESPONSABLE'] },
+    { label: 'Services DGI', icon: 'building', route: '/service-dgi', roles: ['ROLE_ADMIN', 'ROLE_TECHNICIEN', 'ROLE_RESPONSABLE'] },
+    { label: 'Bordereaux', icon: 'file-invoice', route: '/bordereau', roles: ['ROLE_ADMIN', 'ROLE_TECHNICIEN', 'ROLE_RESPONSABLE'] },
     { label: 'Fournisseurs', icon: 'truck', route: '/fournisseur', roles: ['ROLE_ADMIN', 'ROLE_TECHNICIEN'] },
     { label: 'Contrats', icon: 'file-contract', route: '/contrat', roles: ['ROLE_ADMIN', 'ROLE_TECHNICIEN'] },
+    { label: 'Historique', icon: 'history', route: '/historique-action', roles: ['ROLE_ADMIN'] },
   ];
 
   readonly adminItems: NavItem[] = [

@@ -21,10 +21,9 @@ describe('Affectation Form Service', () => {
           expect.objectContaining({
             id: expect.any(Object),
             dateAffectation: expect.any(Object),
+            motif: expect.any(Object),
             dateRestitution: expect.any(Object),
-            numeroBordereau: expect.any(Object),
-            utilisateur: expect.any(Object),
-            actif: expect.any(Object),
+            agent: expect.any(Object),
           }),
         );
       });
@@ -36,10 +35,9 @@ describe('Affectation Form Service', () => {
           expect.objectContaining({
             id: expect.any(Object),
             dateAffectation: expect.any(Object),
+            motif: expect.any(Object),
             dateRestitution: expect.any(Object),
-            numeroBordereau: expect.any(Object),
-            utilisateur: expect.any(Object),
-            actif: expect.any(Object),
+            agent: expect.any(Object),
           }),
         );
       });

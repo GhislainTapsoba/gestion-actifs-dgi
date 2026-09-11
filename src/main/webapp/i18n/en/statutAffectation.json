@@ -1,0 +1,9 @@
+{
+  "gestionActifsDgiApp": {
+    "StatutAffectation": {
+      "null": "",
+      "ACTIVE": "ACTIVE",
+      "CLOTUREE": "CLOTUREE"
+    }
+  }
+}

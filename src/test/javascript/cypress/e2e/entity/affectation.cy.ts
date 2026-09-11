@@ -14,10 +14,10 @@ describe('Affectation e2e test', () => {
   const affectationPageUrl = '/affectation';
   let username: string;
   let password: string;
-  const affectationSample = { dateAffectation: '2026-09-01' };
+  // const affectationSample = {"dateAffectation":"2026-09-02"};
 
   let affectation;
-  let actif;
+  // let agent;
 
   before(() => {
     cy.credentials().then(credentials => {
@@ -29,23 +29,18 @@ describe('Affectation e2e test', () => {
     cy.login(username, password);
   });
 
+  /* Disabled due to incompatibility
   beforeEach(() => {
     // create an instance at the required relationship entity:
     cy.authenticatedRequest({
       method: 'POST',
-      url: '/api/actifs',
-      body: {
-        identifiantUnique: 'venir',
-        codeBarreQR: 'au point que glouglou grandement',
-        type: 'SERVEUR',
-        etat: 'REFORME',
-        localisation: 'horrible plouf au-dehors',
-        dateAcquisition: '2026-09-02',
-      },
+      url: '/api/agents',
+      body: {"nom":"foule grâce à","prenom":"par installer"},
     }).then(({ body }) => {
-      actif = body;
+      agent = body;
     });
   });
+   */
 
   beforeEach(() => {
     cy.intercept('GET', '/api/affectations+(?*|)').as('entitiesRequest');
@@ -53,18 +48,16 @@ describe('Affectation e2e test', () => {
     cy.intercept('DELETE', '/api/affectations/*').as('deleteEntityRequest');
   });
 
+  /* Disabled due to incompatibility
   beforeEach(() => {
     // Simulate relationships api for better performance and reproducibility.
-    cy.intercept('GET', '/api/users', {
+    cy.intercept('GET', '/api/agents', {
       statusCode: 200,
-      body: [],
+      body: [agent],
     });
 
-    cy.intercept('GET', '/api/actifs', {
-      statusCode: 200,
-      body: [actif],
-    });
   });
+   */
 
   afterEach(() => {
     if (affectation) {
@@ -77,16 +70,18 @@ describe('Affectation e2e test', () => {
     }
   });
 
+  /* Disabled due to incompatibility
   afterEach(() => {
-    if (actif) {
+    if (agent) {
       cy.authenticatedRequest({
         method: 'DELETE',
-        url: `/api/actifs/${actif.id}`,
+        url: `/api/agents/${agent.id}`,
       }).then(() => {
-        actif = undefined;
+        agent = undefined;
       });
     }
   });
+   */
 
   it('Affectations menu should load Affectations page', () => {
     cy.visit('/');
@@ -128,13 +123,14 @@ describe('Affectation e2e test', () => {
     });
 
     describe('with existing value', () => {
+      /* Disabled due to incompatibility
       beforeEach(() => {
         cy.authenticatedRequest({
           method: 'POST',
           url: '/api/affectations',
           body: {
             ...affectationSample,
-            actif,
+            agent: agent,
           },
         }).then(({ body }) => {
           affectation = body;
@@ -151,13 +147,24 @@ describe('Affectation e2e test', () => {
                 link: '<http://localhost/api/affectations?page=0&size=20>; rel="last",<http://localhost/api/affectations?page=0&size=20>; rel="first"',
               },
               body: [affectation],
-            },
+            }
           ).as('entitiesRequestInternal');
         });
 
         cy.visit(affectationPageUrl);
 
         cy.wait('@entitiesRequestInternal');
+      });
+       */
+
+      beforeEach(function () {
+        cy.visit(affectationPageUrl);
+
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          if (response?.body.length === 0) {
+            this.skip();
+          }
+        });
       });
 
       it('detail button click should load details Affectation page', () => {
@@ -191,7 +198,8 @@ describe('Affectation e2e test', () => {
         cy.location('pathname').should('eq', affectationPageUrl);
       });
 
-      it('last delete button click should delete instance of Affectation', () => {
+      // Reason: cannot create a required entity with relationship with required relationships.
+      it.skip('last delete button click should delete instance of Affectation', () => {
         cy.get(entityDeleteButtonSelector).last().click();
         cy.getEntityDeleteDialogHeading('affectation').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
@@ -215,19 +223,20 @@ describe('Affectation e2e test', () => {
       cy.getEntityCreateUpdateHeading('Affectation');
     });
 
-    it('should create an instance of Affectation', () => {
+    // Reason: cannot create a required entity with relationship with required relationships.
+    it.skip('should create an instance of Affectation', () => {
       cy.get(`[data-cy="dateAffectation"]`).type('2026-09-02');
       cy.get(`[data-cy="dateAffectation"]`).blur();
       cy.get(`[data-cy="dateAffectation"]`).should('have.value', '2026-09-02');
+
+      cy.get(`[data-cy="motif"]`).type('du moment que dans la mesure où habiter');
+      cy.get(`[data-cy="motif"]`).should('have.value', 'du moment que dans la mesure où habiter');
 
       cy.get(`[data-cy="dateRestitution"]`).type('2026-09-02');
       cy.get(`[data-cy="dateRestitution"]`).blur();
       cy.get(`[data-cy="dateRestitution"]`).should('have.value', '2026-09-02');
 
-      cy.get(`[data-cy="numeroBordereau"]`).type('oh');
-      cy.get(`[data-cy="numeroBordereau"]`).should('have.value', 'oh');
-
-      cy.get(`[data-cy="actif"]`).select(1);
+      cy.get(`[data-cy="agent"]`).select(1);
 
       cy.get(entityCreateSaveButtonSelector).click();
 

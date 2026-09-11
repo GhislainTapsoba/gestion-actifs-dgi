@@ -1,0 +1,27 @@
+{
+  "gestionActifsDgiApp": {
+    "panne": {
+      "home": {
+        "title": "Pannes",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Panne",
+        "createOrEditLabel": "Créer ou éditer un Panne",
+        "notFound": "Aucun Panne trouvé"
+      },
+      "created": "Un nouveau Panne a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Panne avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Panne avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Panne {{ id }} ?"
+      },
+      "detail": {
+        "title": "Panne"
+      },
+      "id": "ID",
+      "description": "Description",
+      "dateDeclaration": "Date Declaration",
+      "statutPanne": "Statut Panne",
+      "actif": "Actif"
+    }
+  }
+}

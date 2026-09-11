@@ -24,8 +24,8 @@ describe('Contrat Form Service', () => {
             reference: expect.any(Object),
             dateDebut: expect.any(Object),
             dateFin: expect.any(Object),
-            actif: expect.any(Object),
             fournisseur: expect.any(Object),
+            actif: expect.any(Object),
           }),
         );
       });
@@ -40,8 +40,8 @@ describe('Contrat Form Service', () => {
             reference: expect.any(Object),
             dateDebut: expect.any(Object),
             dateFin: expect.any(Object),
-            actif: expect.any(Object),
             fournisseur: expect.any(Object),
+            actif: expect.any(Object),
           }),
         );
       });

@@ -1,0 +1,38 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (serviceDgi(); as serviceDgiRef) {
+      <div>
+        <h2 data-cy="serviceDgiDetailsHeading"><span jhiTranslate="gestionActifsDgiApp.serviceDgi.detail.title">Service Dgi</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ serviceDgiRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.serviceDgi.nomService">Nom Service</span></dt>
+          <dd>
+            <span>{{ serviceDgiRef.nomService }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.serviceDgi.chefService">Chef Service</span></dt>
+          <dd>
+            <span>{{ serviceDgiRef.chefService }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/service-dgi', serviceDgiRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

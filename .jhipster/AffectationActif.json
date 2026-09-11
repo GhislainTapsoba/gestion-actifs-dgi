@@ -1,0 +1,40 @@
+{
+  "annotations": {
+    "changelogDate": "20260910221032"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "observation",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "statut",
+      "fieldType": "StatutAffectation",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ACTIVE,CLOTUREE"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "AffectationActif",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "affectation",
+      "relationshipName": "affectation",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "actif",
+      "relationshipName": "actif",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

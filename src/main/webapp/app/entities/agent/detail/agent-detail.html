@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (agent(); as agentRef) {
+      <div>
+        <h2 data-cy="agentDetailsHeading"><span jhiTranslate="gestionActifsDgiApp.agent.detail.title">Agent</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ agentRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.agent.nom">Nom</span></dt>
+          <dd>
+            <span>{{ agentRef.nom }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.agent.prenom">Prenom</span></dt>
+          <dd>
+            <span>{{ agentRef.prenom }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.agent.service">Service</span></dt>
+          <dd>
+            @if (agent()!.service) {
+              <div>
+                <a [routerLink]="['/service-dgi', agent()!.service?.id, 'view']">{{ agentRef.service?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.agent.utilisateur">Utilisateur</span></dt>
+          <dd>
+            <span>{{ agentRef.utilisateur?.id }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/agent', agentRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

@@ -35,18 +35,18 @@
   "pagination": "pagination",
   "relationships": [
     {
+      "otherEntityName": "actif",
+      "relationshipName": "actif",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
       "otherEntityName": "user",
       "relationshipName": "technicien",
       "relationshipSide": "left",
       "relationshipType": "many-to-one",
       "relationshipWithBuiltInEntity": true
-    },
-    {
-      "otherEntityName": "actif",
-      "relationshipName": "actif",
-      "relationshipSide": "right",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": "required"
     }
   ],
   "searchEngine": "no",

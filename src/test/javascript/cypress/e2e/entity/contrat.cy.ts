@@ -48,14 +48,14 @@ describe('Contrat e2e test', () => {
 
   beforeEach(() => {
     // Simulate relationships api for better performance and reproducibility.
-    cy.intercept('GET', '/api/actifs', {
-      statusCode: 200,
-      body: [],
-    });
-
     cy.intercept('GET', '/api/fournisseurs', {
       statusCode: 200,
       body: [fournisseur],
+    });
+
+    cy.intercept('GET', '/api/actifs', {
+      statusCode: 200,
+      body: [],
     });
   });
 

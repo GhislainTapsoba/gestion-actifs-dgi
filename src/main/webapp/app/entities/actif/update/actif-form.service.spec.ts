@@ -20,12 +20,18 @@ describe('Actif Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            identifiantUnique: expect.any(Object),
-            codeBarreQR: expect.any(Object),
+            codeInventaire: expect.any(Object),
+            designation: expect.any(Object),
+            marque: expect.any(Object),
+            modele: expect.any(Object),
+            numeroSerie: expect.any(Object),
+            codeBarre: expect.any(Object),
             type: expect.any(Object),
             etat: expect.any(Object),
             localisation: expect.any(Object),
             dateAcquisition: expect.any(Object),
+            valeurAcquisition: expect.any(Object),
+            categorie: expect.any(Object),
           }),
         );
       });
@@ -36,12 +42,18 @@ describe('Actif Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            identifiantUnique: expect.any(Object),
-            codeBarreQR: expect.any(Object),
+            codeInventaire: expect.any(Object),
+            designation: expect.any(Object),
+            marque: expect.any(Object),
+            modele: expect.any(Object),
+            numeroSerie: expect.any(Object),
+            codeBarre: expect.any(Object),
             type: expect.any(Object),
             etat: expect.any(Object),
             localisation: expect.any(Object),
             dateAcquisition: expect.any(Object),
+            valeurAcquisition: expect.any(Object),
+            categorie: expect.any(Object),
           }),
         );
       });

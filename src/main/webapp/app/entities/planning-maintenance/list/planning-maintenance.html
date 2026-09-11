@@ -1,0 +1,136 @@
+<div>
+  <h2 id="page-heading" data-cy="PlanningMaintenanceHeading">
+    <span jhiTranslate="gestionActifsDgiApp.planningMaintenance.home.title">PlanningMaintenances</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading()">
+        <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined" />
+        <span jhiTranslate="gestionActifsDgiApp.planningMaintenance.home.refreshListLabel">Actualiser la liste</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-planning-maintenance"
+        [routerLink]="['/planning-maintenance/new']"
+      >
+        <fa-icon icon="plus" />
+        <span jhiTranslate="gestionActifsDgiApp.planningMaintenance.home.createLabel">Créer un nouveau Planning Maintenance</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  @if (planningMaintenances().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="gestionActifsDgiApp.planningMaintenance.home.notFound">Aucun Planning Maintenance trouvé</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="datePrevue">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.planningMaintenance.datePrevue">Date Prevue</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="periodicite">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.planningMaintenance.periodicite">Periodicite</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="statut">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.planningMaintenance.statut">Statut</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="description">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.planningMaintenance.description">Description</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (planningMaintenance of planningMaintenances(); track trackId(planningMaintenance)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/planning-maintenance', planningMaintenance.id, 'view']">{{ planningMaintenance.id }}</a>
+              </td>
+              <td>{{ planningMaintenance.datePrevue | formatMediumDate }}</td>
+              <td>{{ planningMaintenance.periodicite }}</td>
+              <td [jhiTranslate]="'gestionActifsDgiApp.StatutPlanning.' + (planningMaintenance.statut ?? 'null')">
+                {{
+                  { null: '', PLANIFIER: 'PLANIFIER', EN_COURS: 'EN_COURS', TERMINER: 'TERMINER', ANNULER: 'ANNULER' }[
+                    planningMaintenance.statut ?? 'null'
+                  ]
+                }}
+              </td>
+              <td>{{ planningMaintenance.description }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a
+                    [routerLink]="['/planning-maintenance', planningMaintenance.id, 'view']"
+                    class="btn btn-info btn-sm"
+                    data-cy="entityDetailsButton"
+                  >
+                    <fa-icon icon="eye" />
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Voir</span>
+                  </a>
+
+                  <a
+                    [routerLink]="['/planning-maintenance', planningMaintenance.id, 'edit']"
+                    class="btn btn-primary btn-sm"
+                    data-cy="entityEditButton"
+                  >
+                    <fa-icon icon="pencil-alt" />
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editer</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(planningMaintenance)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times" />
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Supprimer</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (planningMaintenances().length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page(), totalItems: totalItems(), itemsPerPage: itemsPerPage() }" />
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems()"
+          [page]="page()"
+          [pageSize]="itemsPerPage()"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        />
+      </div>
+    </div>
+  }
+</div>

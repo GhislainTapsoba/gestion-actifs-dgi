@@ -1,0 +1,31 @@
+id;etat_constate;date_constat;emplacement_constate;anomalie_constatee;recensement_id;actif_id
+1;EN_SERVICE;2026-09-10;lors de;true;1;1
+2;EN_MAINTENANCE;2026-09-10;personnel où;false;2;2
+3;EN_SERVICE;2026-09-10;hystérique areu areu;false;3;3
+4;EN_MAINTENANCE;2026-09-10;cadre commis;false;4;4
+5;EN_MAINTENANCE;2026-09-10;en decà de quoique;true;5;5
+6;EN_SERVICE;2026-09-09;d’autant que au point que;false;6;6
+7;NEUF;2026-09-10;aussitôt que devant;true;7;7
+8;NEUF;2026-09-10;jeune enfant avex;false;8;8
+9;REFORME;2026-09-10;triste dissocier;true;9;9
+10;EN_PANNE;2026-09-10;à côté de;true;10;10
+11;EN_MAINTENANCE;2026-09-10;fonctionnaire si bien que;true;11;11
+12;NEUF;2026-09-10;mature ensuite;true;12;12
+13;EN_PANNE;2026-09-10;oups équipe magnifique;false;13;13
+14;EN_MAINTENANCE;2026-09-10;sombre;true;14;14
+15;NEUF;2026-09-09;quant à plic quitte à;true;15;15
+16;REFORME;2026-09-10;lorsque;true;16;16
+17;EN_PANNE;2026-09-10;contre;false;17;17
+18;NEUF;2026-09-10;biathlète;false;18;18
+19;EN_SERVICE;2026-09-10;de façon que de façon que;false;19;19
+20;EN_PANNE;2026-09-10;aigre sur apprivoiser;false;20;20
+21;NEUF;2026-09-10;en face de loin de;true;21;21
+22;EN_MAINTENANCE;2026-09-10;extrêmement si;true;22;22
+23;NEUF;2026-09-10;main-d’œuvre;true;23;23
+24;EN_SERVICE;2026-09-10;marron outre d'après;false;24;24
+25;REFORME;2026-09-10;séculaire trop;false;25;25
+26;NEUF;2026-09-10;toujours;false;26;26
+27;EN_SERVICE;2026-09-10;de sorte que en bas de;false;27;27
+28;EN_MAINTENANCE;2026-09-10;contre insolite;true;28;28
+29;EN_SERVICE;2026-09-10;soit contourner en vérité;true;29;29
+30;NEUF;2026-09-10;clac antagoniste;true;30;30

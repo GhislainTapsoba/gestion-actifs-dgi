@@ -22,8 +22,8 @@
       "reference": "Reference",
       "dateDebut": "Date Debut",
       "dateFin": "Date Fin",
-      "actif": "Actif",
-      "fournisseur": "Fournisseur"
+      "fournisseur": "Fournisseur",
+      "actif": "Actif"
     }
   }
 }

@@ -70,9 +70,9 @@ public class MaintenanceCriteria implements Serializable, Criteria {
 
     private LocalDateFilter dateCloture;
 
-    private LongFilter technicienId;
-
     private LongFilter actifId;
+
+    private LongFilter technicienId;
 
     private Boolean distinct;
 
@@ -84,8 +84,8 @@ public class MaintenanceCriteria implements Serializable, Criteria {
         this.datePanne = other.optionalDatePanne().map(LocalDateFilter::copy).orElse(null);
         this.statut = other.optionalStatut().map(StatutMaintenanceFilter::copy).orElse(null);
         this.dateCloture = other.optionalDateCloture().map(LocalDateFilter::copy).orElse(null);
-        this.technicienId = other.optionalTechnicienId().map(LongFilter::copy).orElse(null);
         this.actifId = other.optionalActifId().map(LongFilter::copy).orElse(null);
+        this.technicienId = other.optionalTechnicienId().map(LongFilter::copy).orElse(null);
         this.distinct = other.distinct;
     }
 
@@ -189,25 +189,6 @@ public class MaintenanceCriteria implements Serializable, Criteria {
         this.dateCloture = dateCloture;
     }
 
-    public LongFilter getTechnicienId() {
-        return technicienId;
-    }
-
-    public Optional<LongFilter> optionalTechnicienId() {
-        return Optional.ofNullable(technicienId);
-    }
-
-    public LongFilter technicienId() {
-        if (technicienId == null) {
-            setTechnicienId(new LongFilter());
-        }
-        return technicienId;
-    }
-
-    public void setTechnicienId(LongFilter technicienId) {
-        this.technicienId = technicienId;
-    }
-
     public LongFilter getActifId() {
         return actifId;
     }
@@ -225,6 +206,25 @@ public class MaintenanceCriteria implements Serializable, Criteria {
 
     public void setActifId(LongFilter actifId) {
         this.actifId = actifId;
+    }
+
+    public LongFilter getTechnicienId() {
+        return technicienId;
+    }
+
+    public Optional<LongFilter> optionalTechnicienId() {
+        return Optional.ofNullable(technicienId);
+    }
+
+    public LongFilter technicienId() {
+        if (technicienId == null) {
+            setTechnicienId(new LongFilter());
+        }
+        return technicienId;
+    }
+
+    public void setTechnicienId(LongFilter technicienId) {
+        this.technicienId = technicienId;
     }
 
     public Boolean getDistinct() {
@@ -261,15 +261,15 @@ public class MaintenanceCriteria implements Serializable, Criteria {
             Objects.equals(datePanne, that.datePanne) &&
             Objects.equals(statut, that.statut) &&
             Objects.equals(dateCloture, that.dateCloture) &&
-            Objects.equals(technicienId, that.technicienId) &&
             Objects.equals(actifId, that.actifId) &&
+            Objects.equals(technicienId, that.technicienId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, typeMaintenance, datePanne, statut, dateCloture, technicienId, actifId, distinct);
+        return Objects.hash(id, typeMaintenance, datePanne, statut, dateCloture, actifId, technicienId, distinct);
     }
 
     // prettier-ignore
@@ -281,8 +281,8 @@ public class MaintenanceCriteria implements Serializable, Criteria {
             optionalDatePanne().map(f -> "datePanne=" + f + ", ").orElse("") +
             optionalStatut().map(f -> "statut=" + f + ", ").orElse("") +
             optionalDateCloture().map(f -> "dateCloture=" + f + ", ").orElse("") +
-            optionalTechnicienId().map(f -> "technicienId=" + f + ", ").orElse("") +
             optionalActifId().map(f -> "actifId=" + f + ", ").orElse("") +
+            optionalTechnicienId().map(f -> "technicienId=" + f + ", ").orElse("") +
             optionalDistinct().map(f -> "distinct=" + f + ", ").orElse("") +
         "}";
     }

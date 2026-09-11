@@ -71,9 +71,10 @@ public class TransfertQueryService extends QueryService<Transfert> {
         Specification<Transfert> specification = Specification.unrestricted();
         specification = specification.and((root, query, builder) -> {
             if (Long.class != query.getResultType()) {
+                root.fetch(Transfert_.serviceOrigine, JoinType.LEFT);
+                root.fetch(Transfert_.serviceDestinataire, JoinType.LEFT);
                 root.fetch(Transfert_.demandeur, JoinType.LEFT);
                 root.fetch(Transfert_.validateur, JoinType.LEFT);
-                root.fetch(Transfert_.actif, JoinType.LEFT);
             }
             return null;
         });
@@ -83,13 +84,18 @@ public class TransfertQueryService extends QueryService<Transfert> {
                 Specification.allOf(
                     Boolean.TRUE.equals(criteria.getDistinct()) ? distinct(criteria.getDistinct()) : Specification.unrestricted(),
                     buildRangeSpecification(criteria.getId(), Transfert_.id),
-                    buildRangeSpecification(criteria.getDateDemande(), Transfert_.dateDemande),
+                    buildRangeSpecification(criteria.getDateTransfert(), Transfert_.dateTransfert),
                     buildSpecification(criteria.getStatut(), Transfert_.statut),
                     buildStringSpecification(criteria.getCommentaireRejet(), Transfert_.commentaireRejet),
                     buildRangeSpecification(criteria.getDateTraitement(), Transfert_.dateTraitement),
+                    buildSpecification(criteria.getServiceOrigineId(), root ->
+                        root.join(Transfert_.serviceOrigine, JoinType.LEFT).get(ServiceDgi_.id)
+                    ),
+                    buildSpecification(criteria.getServiceDestinataireId(), root ->
+                        root.join(Transfert_.serviceDestinataire, JoinType.LEFT).get(ServiceDgi_.id)
+                    ),
                     buildSpecification(criteria.getDemandeurId(), root -> root.join(Transfert_.demandeur, JoinType.LEFT).get(User_.id)),
-                    buildSpecification(criteria.getValidateurId(), root -> root.join(Transfert_.validateur, JoinType.LEFT).get(User_.id)),
-                    buildSpecification(criteria.getActifId(), root -> root.join(Transfert_.actif, JoinType.LEFT).get(Actif_.id))
+                    buildSpecification(criteria.getValidateurId(), root -> root.join(Transfert_.validateur, JoinType.LEFT).get(User_.id))
                 )
             );
         }

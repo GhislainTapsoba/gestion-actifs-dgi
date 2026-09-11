@@ -1,5 +1,5 @@
 <aside class="sidebar" [class.sidebar--collapsed]="collapsed()">
-  <!-- Logo / Brand -->
+  <!-- Brand -->
   <div class="sidebar__brand">
     <div class="sidebar__brand-icon">
       <fa-icon icon="shield-alt" />
@@ -15,12 +15,13 @@
     </button>
   </div>
 
-  <!-- Navigation principale -->
+  <!-- Navigation -->
   <nav class="sidebar__nav">
+    <!-- Groupe : Principal -->
     @if (!collapsed()) {
-      <span class="sidebar__section-label">Navigation</span>
+      <span class="sidebar__section-label">Principal</span>
     }
-    @for (item of navItems; track item.route) {
+    @for (item of mainItems; track item.route) {
       @if (isVisible(item)) {
         <a
           class="sidebar__link"
@@ -37,7 +38,41 @@
       }
     }
 
-    <!-- Section Admin -->
+    <!-- Groupe : Incidents -->
+    @if (!collapsed()) {
+      <span class="sidebar__section-label sidebar__section-label--mt">Incidents</span>
+    } @else {
+      <div class="sidebar__divider"></div>
+    }
+    @for (item of incidentItems; track item.route) {
+      @if (isVisible(item)) {
+        <a class="sidebar__link" [routerLink]="item.route" routerLinkActive="sidebar__link--active" [title]="collapsed() ? item.label : ''">
+          <fa-icon [icon]="item.icon" class="sidebar__link-icon" />
+          @if (!collapsed()) {
+            <span class="sidebar__link-label">{{ item.label }}</span>
+          }
+        </a>
+      }
+    }
+
+    <!-- Groupe : Gestion -->
+    @if (!collapsed()) {
+      <span class="sidebar__section-label sidebar__section-label--mt">Gestion</span>
+    } @else {
+      <div class="sidebar__divider"></div>
+    }
+    @for (item of gestionItems; track item.route) {
+      @if (isVisible(item)) {
+        <a class="sidebar__link" [routerLink]="item.route" routerLinkActive="sidebar__link--active" [title]="collapsed() ? item.label : ''">
+          <fa-icon [icon]="item.icon" class="sidebar__link-icon" />
+          @if (!collapsed()) {
+            <span class="sidebar__link-label">{{ item.label }}</span>
+          }
+        </a>
+      }
+    }
+
+    <!-- Groupe : Administration -->
     @if (account()?.authorities?.includes('ROLE_ADMIN')) {
       @if (!collapsed()) {
         <span class="sidebar__section-label sidebar__section-label--mt">Administration</span>
@@ -55,7 +90,7 @@
     }
   </nav>
 
-  <!-- Profil utilisateur -->
+  <!-- Profil -->
   @if (account(); as acc) {
     <div class="sidebar__profile">
       <div class="sidebar__avatar">{{ userInitials }}</div>

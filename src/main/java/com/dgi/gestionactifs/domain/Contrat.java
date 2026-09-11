@@ -43,14 +43,13 @@ public class Contrat implements Serializable {
     @Column(name = "date_fin", nullable = false)
     private LocalDate dateFin;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "affectations", "transferts", "maintenances" }, allowSetters = true)
-    private Actif actif;
-
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "contrats" }, allowSetters = true)
     private Fournisseur fournisseur;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "categorie" }, allowSetters = true)
+    private Actif actif;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -119,19 +118,6 @@ public class Contrat implements Serializable {
         this.dateFin = dateFin;
     }
 
-    public Actif getActif() {
-        return this.actif;
-    }
-
-    public void setActif(Actif actif) {
-        this.actif = actif;
-    }
-
-    public Contrat actif(Actif actif) {
-        this.setActif(actif);
-        return this;
-    }
-
     public Fournisseur getFournisseur() {
         return this.fournisseur;
     }
@@ -142,6 +128,19 @@ public class Contrat implements Serializable {
 
     public Contrat fournisseur(Fournisseur fournisseur) {
         this.setFournisseur(fournisseur);
+        return this;
+    }
+
+    public Actif getActif() {
+        return this.actif;
+    }
+
+    public void setActif(Actif actif) {
+        this.actif = actif;
+    }
+
+    public Contrat actif(Actif actif) {
+        this.setActif(actif);
         return this;
     }
 

@@ -10,7 +10,7 @@ import { RestTransfert, TransfertService } from './transfert.service';
 
 const requireRestSample: RestTransfert = {
   ...sampleWithRequiredData,
-  dateDemande: sampleWithRequiredData.dateDemande?.format(DATE_FORMAT),
+  dateTransfert: sampleWithRequiredData.dateTransfert?.format(DATE_FORMAT),
   dateTraitement: sampleWithRequiredData.dateTraitement?.format(DATE_FORMAT),
 };
 

@@ -1,31 +1,31 @@
-id;identifiant_unique;code_barre_qr;type;etat;localisation;date_acquisition
-1;ronron;où tandis que avoir;SERVEUR;EN_SERVICE;zzzz bzzz mentionner;2026-09-02
-2;rose;areu areu jamais turquoise;SERVEUR;EN_SERVICE;au-dessous de vivre;2026-09-02
-3;étranger secouriste;orange;IMPRIMANTE;EN_MAINTENANCE;volontiers trop assez;2026-09-02
-4;commissionnaire communauté étudiante;plaisanter pis accéder;RESEAU;REFORME;habile;2026-09-01
-5;un peu;gens moyennant pourpre;PERIPHERIQUE;PERDU_VOLE;instituer;2026-09-02
-6;tsoin-tsoin;sauf fonctionnaire lors de;PERIPHERIQUE;PERDU_VOLE;boum au cas où en dedans de;2026-09-02
-7;deçà désormais ici;longtemps prou infiniment;POSTE_TRAVAIL;PERDU_VOLE;du côté de turquoise géométrique;2026-09-01
-8;soudain;miam;IMPRIMANTE;EN_MAINTENANCE;de manière à ce que à peu près;2026-09-02
-9;de façon à ce que énumérer coin-coin;vide presque;POSTE_TRAVAIL;EN_SERVICE;magnifique de façon à poser;2026-09-02
-10;pour;décrocher;SERVEUR;EN_MAINTENANCE;à l'exception de;2026-09-02
-11;en decà de toujours orange;bien que;SERVEUR;EN_SERVICE;y;2026-09-01
-12;dès que suffisamment;détacher sauf;POSTE_TRAVAIL;EN_SERVICE;si bien que soulager;2026-09-02
-13;pour percevoir collègue;boum;SERVEUR;EN_MAINTENANCE;lunatique;2026-09-01
-14;quand moyennant commissionnaire;drelin ouch;PERIPHERIQUE;EN_SERVICE;diplomate meuh;2026-09-02
-15;au-dedans de;euh souple;POSTE_TRAVAIL;EN_SERVICE;de façon que au-dedans de fidèle;2026-09-02
-16;pour rédaction;après;SERVEUR;REFORME;partenaire apprécier oser;2026-09-01
-17;population du Québec gagner;cadre chut;RESEAU;EN_SERVICE;lire admirablement;2026-09-01
-18;mince rédaction;innombrable à condition que membre de l’équipe;POSTE_TRAVAIL;PERDU_VOLE;coac coac de sorte que;2026-09-02
-19;snob biathlète;représenter secours;IMPRIMANTE;PERDU_VOLE;dense permettre;2026-09-01
-20;camarade amorphe;malade déjà après;PERIPHERIQUE;REFORME;céans autoriser tsoin-tsoin;2026-09-02
-21;emmener d’autant que vu que;sale;RESEAU;PERDU_VOLE;pourvu que produire ah;2026-09-02
-22;touchant du moment que;dérouler ha ha du moment que;POSTE_TRAVAIL;EN_SERVICE;environ loufoque;2026-09-02
-23;crac réveiller solliciter;transformer à l'entour de;PERIPHERIQUE;EN_MAINTENANCE;du moment que sale;2026-09-02
-24;jusque brave de crainte que;du fait que autour présidence;POSTE_TRAVAIL;PERDU_VOLE;environ à défaut de;2026-09-02
-25;direction conseil d’administration;en outre de au-dessous y;POSTE_TRAVAIL;EN_MAINTENANCE;menacer hors glouglou;2026-09-02
-26;suivre parfois avant de;tandis que crac;RESEAU;EN_SERVICE;après que miam;2026-09-02
-27;lâche psitt;ici ramper;RESEAU;REFORME;affable de façon que;2026-09-02
-28;dense éclater gigantesque;tandis que;POSTE_TRAVAIL;PERDU_VOLE;pendant que hors oublier;2026-09-02
-29;au point que;vraiment drelin innombrable;IMPRIMANTE;REFORME;coac coac rapide conseil municipal;2026-09-02
-30;tandis que sourire surveiller;debout circulaire;POSTE_TRAVAIL;PERDU_VOLE;trop quant à libérer;2026-09-02
+id;code_inventaire;designation;marque;modele;numero_serie;code_barre;type;etat;localisation;date_acquisition;valeur_acquisition;categorie_id
+1;ronron;où tandis que avoir;estimer psitt;par quoique approximativement;guide;rédaction;RESEAU;PERDU_VOLE;rattacher dessus;2026-09-01;30995.09;1
+2;avouer de marquer;minuscule de manière à ce que foule;sans incognito;délégation turquoise;trop coin-coin habile;approximativement;SERVEUR;PERDU_VOLE;de manière à ce que regrouper;2026-09-02;22429.67;2
+3;debout ramasser police;blême conquérir déplacer;alentour main-d’œuvre ronron;apte;camper;émettre probablement actionnaire;POSTE_TRAVAIL;EN_MAINTENANCE;infiniment comme;2026-09-02;29225.51;3
+4;turquoise géométrique renoncer;renverser rapide;ouch prout assez;groin groin patientèle;triste;revoir magnifique;POSTE_TRAVAIL;EN_MAINTENANCE;bzzz euh compléter;2026-09-02;23098.15;4
+5;pour que;prout;en decà de toujours orange;bien que;timide diplomate;contribuer;POSTE_TRAVAIL;EN_SERVICE;à moins de gestionnaire;2026-09-02;1363.26;5
+6;brave;soulager bûcher;jeune;collègue coupable;réduire;enfiler assez de sorte que;PERIPHERIQUE;PERDU_VOLE;à défaut de toc suivant;2026-09-02;24232.23;6
+7;puisque choir;grandement par;acquérir toc-toc psitt;après;un peu;succéder;POSTE_TRAVAIL;REFORME;rédaction bien;2026-09-02;18499.19;7
+8;quand ? coin-coin;loufoque;croâ de sorte que;jadis;triangulaire;à côté de coupable élever;RESEAU;REFORME;sans que diplomate;2026-09-02;23997.3;8
+9;contre de sorte que;présidence probablement;conseil d’administration cependant;quoique dense;boucher afin de rectorat;voir;SERVEUR;PERDU_VOLE;de sorte que relier;2026-09-02;1763.93;9
+10;prout;participer équipe de recherche a;en dépit de au-dessous de sincère;avant-hier à raison de mal;rectorat;ouf ouille;POSTE_TRAVAIL;EN_MAINTENANCE;à demi;2026-09-02;25362.65;10
+11;avant que;à condition que séculaire;rentrer bien que;conseil municipal sans sortir;bon;sale;RESEAU;PERDU_VOLE;plus autour;2026-09-02;8671.72;11
+12;volontiers en bas de fonctionnaire;à travers tard au-dedans de;direction conseil d’administration;en outre de au-dessous y;ouf;à condition que pourvu que coupable;RESEAU;REFORME;parfois avant de devant;2026-09-02;13724.97;12
+13;de sorte que grandir derechef;hebdomadaire donner;diplomate au point que serviable;où magenta;assurément exclure bouffer;vouh jamais foule;POSTE_TRAVAIL;EN_MAINTENANCE;diététiste au point que dring;2026-09-02;25787.9;13
+14;maigre;dès que;personnel sédentaire direction;tandis que sourire surveiller;debout circulaire;dessous;POSTE_TRAVAIL;EN_MAINTENANCE;faciliter;2026-09-02;21232.68;14
+15;avare de sorte que près;snif blablabla;succéder solitaire aïe;ouin;ouch;beaucoup toujours bof;PERIPHERIQUE;EN_SERVICE;déjà;2026-09-02;20845.78;15
+16;vlan si bien que;actionnaire ferme;à l'égard de;certainement sans boum;du moment que à peine;introduire;SERVEUR;PERDU_VOLE;souffler pendre blablabla;2026-09-02;4282.82;16
+17;miaou;turquoise;sous couleur de calme de façon que;aussitôt que secouriste administrer;égoïste;commis demander glouglou;RESEAU;REFORME;en face de de façon à ce que vlan;2026-09-02;28563.91;17
+18;paf jeune;ouf à l'entour de;sous;rédaction;revoir;orange;RESEAU;REFORME;totalement sincère;2026-09-02;29321.57;18
+19;bzzz miaou;rapide sitôt;vouh;de peur de à partir de;lasser diététiste;tôt présidence incognito;POSTE_TRAVAIL;REFORME;agréable énergique actionnaire;2026-09-01;26782.73;19
+20;miaou camarade;spécialiste à partir de ouch;corps enseignant;selon;secouriste croâ rédaction;jeune enfant;SERVEUR;EN_SERVICE;peut-être coac coac rater;2026-09-02;20756.28;20
+21;alors que sus boulanger;dès que;dessous proche de peut-être;vaste autrement;foule dans la mesure où comparer;en decà de cadre;SERVEUR;REFORME;à demi arranger interrompre;2026-09-01;5293.02;21
+22;de façon à dring au-dessous de;alentour;psitt meuh diététiste;à l'instar de émérite;bang;fonctionnaire;PERIPHERIQUE;PERDU_VOLE;tchou tchouu;2026-09-02;21045.44;22
+23;maigre autant;excuser de;malade quelquefois;contre;malgré;antagoniste sitôt que dring;POSTE_TRAVAIL;REFORME;en dépit de innombrable que;2026-09-02;3261.9;23
+24;là-haut smack puisque;près de;assez insolite;équipe de recherche;mal;hôte hi;POSTE_TRAVAIL;PERDU_VOLE;essayer afin de;2026-09-01;25552.2;24
+25;insérer;communauté étudiante couler fade;avare loin de consoler;dire;écouter hystérique tsoin-tsoin;main-d’œuvre moins;PERIPHERIQUE;PERDU_VOLE;moins;2026-09-02;15815.88;25
+26;porte-parole exposer fonctionnaire;sans que;vite vouh;rêver collaborer orange;intrépide;svelte;SERVEUR;PERDU_VOLE;bof clientèle caractériser;2026-09-02;23006.95;26
+27;distinguer sans que;dehors;quelque;au-dedans de bzzz partenaire;psitt à cause de porte-parole;autant en faveur de;POSTE_TRAVAIL;PERDU_VOLE;vaste;2026-09-02;18813.52;27
+28;géométrique hirsute;jusqu’à ce que membre titulaire ouf;derechef;terriblement;là miaou;de par;POSTE_TRAVAIL;EN_SERVICE;depuis encore;2026-09-02;2010.13;28
+29;délivrer hirsute snif;lorsque;communauté étudiante;fêter;étant donné que lors de;au-dehors coac coac;POSTE_TRAVAIL;REFORME;séculaire responsable;2026-09-02;10476.45;29
+30;deçà lectorat blablabla;habile près de amorphe;insolite en face de au-dessus;situer étant donné que tellement;enfin lors de;à moins de grâce à;SERVEUR;PERDU_VOLE;résister bè affable;2026-09-01;28361.3;30

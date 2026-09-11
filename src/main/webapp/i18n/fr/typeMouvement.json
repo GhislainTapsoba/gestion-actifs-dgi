@@ -1,0 +1,13 @@
+{
+  "gestionActifsDgiApp": {
+    "TypeMouvement": {
+      "null": "",
+      "CREATION": "CREATION",
+      "MODIFICATION": "MODIFICATION",
+      "SUPPRESSION": "SUPPRESSION",
+      "AFFECTATION": "AFFECTATION",
+      "TRANSFERT": "TRANSFERT",
+      "MAINTENANCE": "MAINTENANCE"
+    }
+  }
+}

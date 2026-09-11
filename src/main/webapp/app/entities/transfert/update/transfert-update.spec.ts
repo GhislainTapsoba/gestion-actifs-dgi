@@ -7,8 +7,8 @@ import { ActivatedRoute } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import { Subject, from, of } from 'rxjs';
 
-import { IActif } from 'app/entities/actif/actif.model';
-import { ActifService } from 'app/entities/actif/service/actif.service';
+import { ServiceDgiService } from 'app/entities/service-dgi/service/service-dgi.service';
+import { IServiceDgi } from 'app/entities/service-dgi/service-dgi.model';
 import { UserService } from 'app/entities/user/service/user.service';
 import { IUser } from 'app/entities/user/user.model';
 import { TransfertService } from '../service/transfert.service';
@@ -23,8 +23,8 @@ describe('Transfert Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let transfertFormService: TransfertFormService;
   let transfertService: TransfertService;
+  let serviceDgiService: ServiceDgiService;
   let userService: UserService;
-  let actifService: ActifService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -44,13 +44,37 @@ describe('Transfert Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     transfertFormService = TestBed.inject(TransfertFormService);
     transfertService = TestBed.inject(TransfertService);
+    serviceDgiService = TestBed.inject(ServiceDgiService);
     userService = TestBed.inject(UserService);
-    actifService = TestBed.inject(ActifService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
+    it('should call ServiceDgi query and add missing value', () => {
+      const transfert: ITransfert = { id: 14214 };
+      const serviceOrigine: IServiceDgi = { id: 3925 };
+      transfert.serviceOrigine = serviceOrigine;
+      const serviceDestinataire: IServiceDgi = { id: 3925 };
+      transfert.serviceDestinataire = serviceDestinataire;
+
+      const serviceDgiCollection: IServiceDgi[] = [{ id: 3925 }];
+      vi.spyOn(serviceDgiService, 'query').mockReturnValue(of(new HttpResponse({ body: serviceDgiCollection })));
+      const additionalServiceDgis = [serviceOrigine, serviceDestinataire];
+      const expectedCollection: IServiceDgi[] = [...additionalServiceDgis, ...serviceDgiCollection];
+      vi.spyOn(serviceDgiService, 'addServiceDgiToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ transfert });
+      comp.ngOnInit();
+
+      expect(serviceDgiService.query).toHaveBeenCalled();
+      expect(serviceDgiService.addServiceDgiToCollectionIfMissing).toHaveBeenCalledWith(
+        serviceDgiCollection,
+        ...additionalServiceDgis.map(i => expect.objectContaining(i) as typeof i),
+      );
+      expect(comp.serviceDgisSharedCollection()).toEqual(expectedCollection);
+    });
+
     it('should call User query and add missing value', () => {
       const transfert: ITransfert = { id: 14214 };
       const demandeur: IUser = { id: 3944 };
@@ -75,43 +99,24 @@ describe('Transfert Management Update Component', () => {
       expect(comp.usersSharedCollection()).toEqual(expectedCollection);
     });
 
-    it('should call Actif query and add missing value', () => {
-      const transfert: ITransfert = { id: 14214 };
-      const actif: IActif = { id: 3500 };
-      transfert.actif = actif;
-
-      const actifCollection: IActif[] = [{ id: 3500 }];
-      vi.spyOn(actifService, 'query').mockReturnValue(of(new HttpResponse({ body: actifCollection })));
-      const additionalActifs = [actif];
-      const expectedCollection: IActif[] = [...additionalActifs, ...actifCollection];
-      vi.spyOn(actifService, 'addActifToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-      activatedRoute.data = of({ transfert });
-      comp.ngOnInit();
-
-      expect(actifService.query).toHaveBeenCalled();
-      expect(actifService.addActifToCollectionIfMissing).toHaveBeenCalledWith(
-        actifCollection,
-        ...additionalActifs.map(i => expect.objectContaining(i) as typeof i),
-      );
-      expect(comp.actifsSharedCollection()).toEqual(expectedCollection);
-    });
-
     it('should update editForm', () => {
       const transfert: ITransfert = { id: 14214 };
+      const serviceOrigine: IServiceDgi = { id: 3925 };
+      transfert.serviceOrigine = serviceOrigine;
+      const serviceDestinataire: IServiceDgi = { id: 3925 };
+      transfert.serviceDestinataire = serviceDestinataire;
       const demandeur: IUser = { id: 3944 };
       transfert.demandeur = demandeur;
       const validateur: IUser = { id: 3944 };
       transfert.validateur = validateur;
-      const actif: IActif = { id: 3500 };
-      transfert.actif = actif;
 
       activatedRoute.data = of({ transfert });
       comp.ngOnInit();
 
+      expect(comp.serviceDgisSharedCollection()).toContainEqual(serviceOrigine);
+      expect(comp.serviceDgisSharedCollection()).toContainEqual(serviceDestinataire);
       expect(comp.usersSharedCollection()).toContainEqual(demandeur);
       expect(comp.usersSharedCollection()).toContainEqual(validateur);
-      expect(comp.actifsSharedCollection()).toContainEqual(actif);
       expect(comp.transfert).toEqual(transfert);
     });
   });
@@ -185,6 +190,16 @@ describe('Transfert Management Update Component', () => {
   });
 
   describe('Compare relationships', () => {
+    describe('compareServiceDgi', () => {
+      it('should forward to serviceDgiService', () => {
+        const entity = { id: 3925 };
+        const entity2 = { id: 4731 };
+        vi.spyOn(serviceDgiService, 'compareServiceDgi');
+        comp.compareServiceDgi(entity, entity2);
+        expect(serviceDgiService.compareServiceDgi).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
     describe('compareUser', () => {
       it('should forward to userService', () => {
         const entity = { id: 3944 };
@@ -192,16 +207,6 @@ describe('Transfert Management Update Component', () => {
         vi.spyOn(userService, 'compareUser');
         comp.compareUser(entity, entity2);
         expect(userService.compareUser).toHaveBeenCalledWith(entity, entity2);
-      });
-    });
-
-    describe('compareActif', () => {
-      it('should forward to actifService', () => {
-        const entity = { id: 3500 };
-        const entity2 = { id: 21468 };
-        vi.spyOn(actifService, 'compareActif');
-        comp.compareActif(entity, entity2);
-        expect(actifService.compareActif).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

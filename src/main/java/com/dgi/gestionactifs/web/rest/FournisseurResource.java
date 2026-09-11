@@ -1,4 +1,4 @@
-﻿package com.dgi.gestionactifs.web.rest;
+package com.dgi.gestionactifs.web.rest;
 
 import com.dgi.gestionactifs.repository.FournisseurRepository;
 import com.dgi.gestionactifs.service.FournisseurService;
@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -50,7 +49,6 @@ public class FournisseurResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new fournisseurDTO, or with status {@code 400 (Bad Request)} if the fournisseur has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("")
     public ResponseEntity<FournisseurDTO> createFournisseur(@Valid @RequestBody FournisseurDTO fournisseurDTO) throws URISyntaxException {
         LOG.debug("REST request to save Fournisseur : {}", fournisseurDTO);
@@ -73,7 +71,6 @@ public class FournisseurResource {
      * or with status {@code 500 (Internal Server Error)} if the fournisseurDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<FournisseurDTO> updateFournisseur(
         @PathVariable(value = "id", required = false) final Long id,
@@ -138,7 +135,6 @@ public class FournisseurResource {
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of Fournisseurs in body.
      */
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_RESPONSABLE')")
     @GetMapping("")
     public List<FournisseurDTO> getAllFournisseurs() {
         LOG.debug("REST request to get all Fournisseurs");
@@ -151,7 +147,6 @@ public class FournisseurResource {
      * @param id the id of the fournisseurDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the fournisseurDTO, or with status {@code 404 (Not Found)}.
      */
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_RESPONSABLE')")
     @GetMapping("/{id}")
     public ResponseEntity<FournisseurDTO> getFournisseur(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Fournisseur : {}", id);
@@ -165,7 +160,6 @@ public class FournisseurResource {
      * @param id the id of the fournisseurDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFournisseur(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Fournisseur : {}", id);

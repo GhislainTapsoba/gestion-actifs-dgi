@@ -1,4 +1,4 @@
-﻿package com.dgi.gestionactifs.web.rest;
+package com.dgi.gestionactifs.web.rest;
 
 import com.dgi.gestionactifs.repository.ContratRepository;
 import com.dgi.gestionactifs.service.ContratService;
@@ -18,7 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -55,7 +54,6 @@ public class ContratResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new contratDTO, or with status {@code 400 (Bad Request)} if the contrat has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("")
     public ResponseEntity<ContratDTO> createContrat(@Valid @RequestBody ContratDTO contratDTO) throws URISyntaxException {
         LOG.debug("REST request to save Contrat : {}", contratDTO);
@@ -78,7 +76,6 @@ public class ContratResource {
      * or with status {@code 500 (Internal Server Error)} if the contratDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ContratDTO> updateContrat(
         @PathVariable(value = "id", required = false) final Long id,
@@ -144,7 +141,6 @@ public class ContratResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of Contrats in body.
      */
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_RESPONSABLE')")
     @GetMapping("")
     public ResponseEntity<List<ContratDTO>> getAllContrats(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get a page of Contrats");
@@ -159,7 +155,6 @@ public class ContratResource {
      * @param id the id of the contratDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the contratDTO, or with status {@code 404 (Not Found)}.
      */
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_RESPONSABLE')")
     @GetMapping("/{id}")
     public ResponseEntity<ContratDTO> getContrat(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Contrat : {}", id);
@@ -173,7 +168,6 @@ public class ContratResource {
      * @param id the id of the contratDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteContrat(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Contrat : {}", id);

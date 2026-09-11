@@ -1,0 +1,49 @@
+{
+  "annotations": {
+    "changelogDate": "20260910221039"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "etatConstate",
+      "fieldType": "EtatMateriel",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "NEUF,EN_SERVICE,EN_PANNE,EN_MAINTENANCE,REFORME"
+    },
+    {
+      "fieldName": "dateConstat",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "emplacementConstate",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "anomalieConstatee",
+      "fieldType": "Boolean"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "EquipementRecensement",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "recensement",
+      "relationshipName": "recensement",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "actif",
+      "relationshipName": "actif",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

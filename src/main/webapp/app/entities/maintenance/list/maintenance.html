@@ -71,15 +71,15 @@
                 <fa-icon class="p-1" icon="sort" />
               </div>
             </th>
-            <th scope="col" jhiSortBy="technicien.id">
-              <div class="d-flex">
-                <span jhiTranslate="gestionActifsDgiApp.maintenance.technicien">Technicien</span>
-                <fa-icon class="p-1" icon="sort" />
-              </div>
-            </th>
             <th scope="col" jhiSortBy="actif.id">
               <div class="d-flex">
                 <span jhiTranslate="gestionActifsDgiApp.maintenance.actif">Actif</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="technicien.id">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.maintenance.technicien">Technicien</span>
                 <fa-icon class="p-1" icon="sort" />
               </div>
             </th>
@@ -102,14 +102,14 @@
               <td>{{ maintenance.compteRendu }}</td>
               <td>{{ maintenance.dateCloture | formatMediumDate }}</td>
               <td>
-                {{ maintenance.technicien?.id }}
-              </td>
-              <td>
                 @if (maintenance.actif) {
                   <div>
                     <a [routerLink]="['/actif', maintenance.actif.id, 'view']">{{ maintenance.actif.id }}</a>
                   </div>
                 }
+              </td>
+              <td>
+                {{ maintenance.technicien?.id }}
               </td>
               <td class="text-end">
                 <div class="btn-group">

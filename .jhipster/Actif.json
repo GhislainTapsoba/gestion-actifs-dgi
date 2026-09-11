@@ -6,12 +6,29 @@
   "dto": "mapstruct",
   "fields": [
     {
-      "fieldName": "identifiantUnique",
+      "fieldName": "codeInventaire",
       "fieldType": "String",
       "fieldValidateRules": ["required", "unique"]
     },
     {
-      "fieldName": "codeBarreQR",
+      "fieldName": "designation",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "marque",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "modele",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "numeroSerie",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "codeBarre",
       "fieldType": "String"
     },
     {
@@ -33,6 +50,10 @@
     {
       "fieldName": "dateAcquisition",
       "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "valeurAcquisition",
+      "fieldType": "Double"
     }
   ],
   "jpaMetamodelFiltering": true,
@@ -40,25 +61,11 @@
   "pagination": "pagination",
   "relationships": [
     {
-      "otherEntityName": "affectation",
-      "otherEntityRelationshipName": "actif",
-      "relationshipName": "affectation",
+      "otherEntityName": "categorieMateriel",
+      "relationshipName": "categorie",
       "relationshipSide": "left",
-      "relationshipType": "one-to-many"
-    },
-    {
-      "otherEntityName": "transfert",
-      "otherEntityRelationshipName": "actif",
-      "relationshipName": "transfert",
-      "relationshipSide": "left",
-      "relationshipType": "one-to-many"
-    },
-    {
-      "otherEntityName": "maintenance",
-      "otherEntityRelationshipName": "actif",
-      "relationshipName": "maintenance",
-      "relationshipSide": "left",
-      "relationshipType": "one-to-many"
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
     }
   ],
   "searchEngine": "no",

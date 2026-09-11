@@ -19,10 +19,9 @@ type AffectationFormDefaults = Pick<NewAffectation, 'id'>;
 type AffectationFormGroupContent = {
   id: FormControl<IAffectation['id'] | NewAffectation['id']>;
   dateAffectation: FormControl<IAffectation['dateAffectation']>;
+  motif: FormControl<IAffectation['motif']>;
   dateRestitution: FormControl<IAffectation['dateRestitution']>;
-  numeroBordereau: FormControl<IAffectation['numeroBordereau']>;
-  utilisateur: FormControl<IAffectation['utilisateur']>;
-  actif: FormControl<IAffectation['actif']>;
+  agent: FormControl<IAffectation['agent']>;
 };
 
 export type AffectationFormGroup = FormGroup<AffectationFormGroupContent>;
@@ -46,10 +45,9 @@ export class AffectationFormService {
       dateAffectation: new FormControl(affectationRawValue.dateAffectation, {
         validators: [Validators.required],
       }),
+      motif: new FormControl(affectationRawValue.motif),
       dateRestitution: new FormControl(affectationRawValue.dateRestitution),
-      numeroBordereau: new FormControl(affectationRawValue.numeroBordereau),
-      utilisateur: new FormControl(affectationRawValue.utilisateur),
-      actif: new FormControl(affectationRawValue.actif, {
+      agent: new FormControl(affectationRawValue.agent, {
         validators: [Validators.required],
       }),
     });

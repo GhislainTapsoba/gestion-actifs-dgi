@@ -21,8 +21,7 @@
       "nom": "Nom",
       "contact": "Contact",
       "email": "Email",
-      "telephone": "Telephone",
-      "contrat": "Contrat"
+      "telephone": "Telephone"
     }
   }
 }

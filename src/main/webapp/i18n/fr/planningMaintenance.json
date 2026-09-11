@@ -1,0 +1,28 @@
+{
+  "gestionActifsDgiApp": {
+    "planningMaintenance": {
+      "home": {
+        "title": "PlanningMaintenances",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Planning Maintenance",
+        "createOrEditLabel": "Créer ou éditer un Planning Maintenance",
+        "notFound": "Aucun Planning Maintenance trouvé"
+      },
+      "created": "Un nouveau Planning Maintenance a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Planning Maintenance avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Planning Maintenance avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Planning Maintenance {{ id }} ?"
+      },
+      "detail": {
+        "title": "Planning Maintenance"
+      },
+      "id": "ID",
+      "datePrevue": "Date Prevue",
+      "periodicite": "Periodicite",
+      "statut": "Statut",
+      "description": "Description",
+      "intervention": "Intervention"
+    }
+  }
+}

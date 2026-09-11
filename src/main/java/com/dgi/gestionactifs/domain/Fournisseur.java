@@ -1,12 +1,9 @@
 package com.dgi.gestionactifs.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -40,11 +37,6 @@ public class Fournisseur implements Serializable {
 
     @Column(name = "telephone")
     private String telephone;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "fournisseur")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "actif", "fournisseur" }, allowSetters = true)
-    private Set<Contrat> contrats = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -111,37 +103,6 @@ public class Fournisseur implements Serializable {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
-    }
-
-    public Set<Contrat> getContrats() {
-        return this.contrats;
-    }
-
-    public void setContrats(Set<Contrat> contrats) {
-        if (this.contrats != null) {
-            this.contrats.forEach(i -> i.setFournisseur(null));
-        }
-        if (contrats != null) {
-            contrats.forEach(i -> i.setFournisseur(this));
-        }
-        this.contrats = contrats;
-    }
-
-    public Fournisseur contrats(Set<Contrat> contrats) {
-        this.setContrats(contrats);
-        return this;
-    }
-
-    public Fournisseur addContrat(Contrat contrat) {
-        this.contrats.add(contrat);
-        contrat.setFournisseur(this);
-        return this;
-    }
-
-    public Fournisseur removeContrat(Contrat contrat) {
-        this.contrats.remove(contrat);
-        contrat.setFournisseur(null);
-        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

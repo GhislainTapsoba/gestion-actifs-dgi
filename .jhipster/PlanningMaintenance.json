@@ -1,0 +1,41 @@
+{
+  "annotations": {
+    "changelogDate": "20260910221035"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "datePrevue",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "periodicite",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "statut",
+      "fieldType": "StatutPlanning",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PLANIFIER,EN_COURS,TERMINER,ANNULER"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "name": "PlanningMaintenance",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "intervention",
+      "otherEntityRelationshipName": "planning",
+      "relationshipName": "intervention",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

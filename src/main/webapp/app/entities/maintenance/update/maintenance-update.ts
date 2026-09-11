@@ -33,23 +33,23 @@ export class MaintenanceUpdate implements OnInit {
   typeMaintenanceValues = Object.keys(TypeMaintenance);
   statutMaintenanceValues = Object.keys(StatutMaintenance);
 
-  usersSharedCollection = signal<IUser[]>([]);
   actifsSharedCollection = signal<IActif[]>([]);
+  usersSharedCollection = signal<IUser[]>([]);
 
   protected dataUtils = inject(DataUtils);
   protected eventManager = inject(EventManager);
   protected maintenanceService = inject(MaintenanceService);
   protected maintenanceFormService = inject(MaintenanceFormService);
-  protected userService = inject(UserService);
   protected actifService = inject(ActifService);
+  protected userService = inject(UserService);
   protected activatedRoute = inject(ActivatedRoute);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: MaintenanceFormGroup = this.maintenanceFormService.createMaintenanceFormGroup();
 
-  compareUser = (o1: IUser | null, o2: IUser | null): boolean => this.userService.compareUser(o1, o2);
-
   compareActif = (o1: IActif | null, o2: IActif | null): boolean => this.actifService.compareActif(o1, o2);
+
+  compareUser = (o1: IUser | null, o2: IUser | null): boolean => this.userService.compareUser(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ maintenance }) => {
@@ -116,21 +116,21 @@ export class MaintenanceUpdate implements OnInit {
     this.maintenance = maintenance;
     this.maintenanceFormService.resetForm(this.editForm, maintenance);
 
-    this.usersSharedCollection.update(users => this.userService.addUserToCollectionIfMissing<IUser>(users, maintenance.technicien));
     this.actifsSharedCollection.update(actifs => this.actifService.addActifToCollectionIfMissing<IActif>(actifs, maintenance.actif));
+    this.usersSharedCollection.update(users => this.userService.addUserToCollectionIfMissing<IUser>(users, maintenance.technicien));
   }
 
   protected loadRelationshipsOptions(): void {
-    this.userService
-      .query()
-      .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
-      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing<IUser>(users, this.maintenance?.technicien)))
-      .subscribe((users: IUser[]) => this.usersSharedCollection.set(users));
-
     this.actifService
       .query()
       .pipe(map((res: HttpResponse<IActif[]>) => res.body ?? []))
       .pipe(map((actifs: IActif[]) => this.actifService.addActifToCollectionIfMissing<IActif>(actifs, this.maintenance?.actif)))
       .subscribe((actifs: IActif[]) => this.actifsSharedCollection.set(actifs));
+
+    this.userService
+      .query()
+      .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
+      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing<IUser>(users, this.maintenance?.technicien)))
+      .subscribe((users: IUser[]) => this.usersSharedCollection.set(users));
   }
 }

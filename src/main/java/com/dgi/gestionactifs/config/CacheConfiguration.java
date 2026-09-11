@@ -54,6 +54,21 @@ public class CacheConfiguration {
             createCache(cm, com.dgi.gestionactifs.domain.Fournisseur.class.getName());
             createCache(cm, com.dgi.gestionactifs.domain.Fournisseur.class.getName() + ".contrats");
             createCache(cm, com.dgi.gestionactifs.domain.Contrat.class.getName());
+            createCache(cm, com.dgi.gestionactifs.domain.CategorieMateriel.class.getName());
+            createCache(cm, com.dgi.gestionactifs.domain.ServiceDgi.class.getName());
+            createCache(cm, com.dgi.gestionactifs.domain.Agent.class.getName());
+            createCache(cm, com.dgi.gestionactifs.domain.AffectationActif.class.getName());
+            createCache(cm, com.dgi.gestionactifs.domain.TransfertActif.class.getName());
+            createCache(cm, com.dgi.gestionactifs.domain.Bordereau.class.getName());
+            createCache(cm, com.dgi.gestionactifs.domain.PlanningMaintenance.class.getName());
+            createCache(cm, com.dgi.gestionactifs.domain.PlanningMaintenance.class.getName() + ".interventions");
+            createCache(cm, com.dgi.gestionactifs.domain.Intervention.class.getName());
+            createCache(cm, com.dgi.gestionactifs.domain.Intervention.class.getName() + ".plannings");
+            createCache(cm, com.dgi.gestionactifs.domain.Panne.class.getName());
+            createCache(cm, com.dgi.gestionactifs.domain.Recensement.class.getName());
+            createCache(cm, com.dgi.gestionactifs.domain.EquipementRecensement.class.getName());
+            createCache(cm, com.dgi.gestionactifs.domain.Inventaire.class.getName());
+            createCache(cm, com.dgi.gestionactifs.domain.HistoriqueAction.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

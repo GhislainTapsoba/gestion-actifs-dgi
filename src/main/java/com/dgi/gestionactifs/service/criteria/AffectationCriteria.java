@@ -28,13 +28,11 @@ public class AffectationCriteria implements Serializable, Criteria {
 
     private LocalDateFilter dateAffectation;
 
+    private StringFilter motif;
+
     private LocalDateFilter dateRestitution;
 
-    private StringFilter numeroBordereau;
-
-    private LongFilter utilisateurId;
-
-    private LongFilter actifId;
+    private LongFilter agentId;
 
     private Boolean distinct;
 
@@ -43,10 +41,9 @@ public class AffectationCriteria implements Serializable, Criteria {
     public AffectationCriteria(AffectationCriteria other) {
         this.id = other.optionalId().map(LongFilter::copy).orElse(null);
         this.dateAffectation = other.optionalDateAffectation().map(LocalDateFilter::copy).orElse(null);
+        this.motif = other.optionalMotif().map(StringFilter::copy).orElse(null);
         this.dateRestitution = other.optionalDateRestitution().map(LocalDateFilter::copy).orElse(null);
-        this.numeroBordereau = other.optionalNumeroBordereau().map(StringFilter::copy).orElse(null);
-        this.utilisateurId = other.optionalUtilisateurId().map(LongFilter::copy).orElse(null);
-        this.actifId = other.optionalActifId().map(LongFilter::copy).orElse(null);
+        this.agentId = other.optionalAgentId().map(LongFilter::copy).orElse(null);
         this.distinct = other.distinct;
     }
 
@@ -93,6 +90,25 @@ public class AffectationCriteria implements Serializable, Criteria {
         this.dateAffectation = dateAffectation;
     }
 
+    public StringFilter getMotif() {
+        return motif;
+    }
+
+    public Optional<StringFilter> optionalMotif() {
+        return Optional.ofNullable(motif);
+    }
+
+    public StringFilter motif() {
+        if (motif == null) {
+            setMotif(new StringFilter());
+        }
+        return motif;
+    }
+
+    public void setMotif(StringFilter motif) {
+        this.motif = motif;
+    }
+
     public LocalDateFilter getDateRestitution() {
         return dateRestitution;
     }
@@ -112,61 +128,23 @@ public class AffectationCriteria implements Serializable, Criteria {
         this.dateRestitution = dateRestitution;
     }
 
-    public StringFilter getNumeroBordereau() {
-        return numeroBordereau;
+    public LongFilter getAgentId() {
+        return agentId;
     }
 
-    public Optional<StringFilter> optionalNumeroBordereau() {
-        return Optional.ofNullable(numeroBordereau);
+    public Optional<LongFilter> optionalAgentId() {
+        return Optional.ofNullable(agentId);
     }
 
-    public StringFilter numeroBordereau() {
-        if (numeroBordereau == null) {
-            setNumeroBordereau(new StringFilter());
+    public LongFilter agentId() {
+        if (agentId == null) {
+            setAgentId(new LongFilter());
         }
-        return numeroBordereau;
+        return agentId;
     }
 
-    public void setNumeroBordereau(StringFilter numeroBordereau) {
-        this.numeroBordereau = numeroBordereau;
-    }
-
-    public LongFilter getUtilisateurId() {
-        return utilisateurId;
-    }
-
-    public Optional<LongFilter> optionalUtilisateurId() {
-        return Optional.ofNullable(utilisateurId);
-    }
-
-    public LongFilter utilisateurId() {
-        if (utilisateurId == null) {
-            setUtilisateurId(new LongFilter());
-        }
-        return utilisateurId;
-    }
-
-    public void setUtilisateurId(LongFilter utilisateurId) {
-        this.utilisateurId = utilisateurId;
-    }
-
-    public LongFilter getActifId() {
-        return actifId;
-    }
-
-    public Optional<LongFilter> optionalActifId() {
-        return Optional.ofNullable(actifId);
-    }
-
-    public LongFilter actifId() {
-        if (actifId == null) {
-            setActifId(new LongFilter());
-        }
-        return actifId;
-    }
-
-    public void setActifId(LongFilter actifId) {
-        this.actifId = actifId;
+    public void setAgentId(LongFilter agentId) {
+        this.agentId = agentId;
     }
 
     public Boolean getDistinct() {
@@ -200,17 +178,16 @@ public class AffectationCriteria implements Serializable, Criteria {
         return (
             Objects.equals(id, that.id) &&
             Objects.equals(dateAffectation, that.dateAffectation) &&
+            Objects.equals(motif, that.motif) &&
             Objects.equals(dateRestitution, that.dateRestitution) &&
-            Objects.equals(numeroBordereau, that.numeroBordereau) &&
-            Objects.equals(utilisateurId, that.utilisateurId) &&
-            Objects.equals(actifId, that.actifId) &&
+            Objects.equals(agentId, that.agentId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, dateAffectation, dateRestitution, numeroBordereau, utilisateurId, actifId, distinct);
+        return Objects.hash(id, dateAffectation, motif, dateRestitution, agentId, distinct);
     }
 
     // prettier-ignore
@@ -219,10 +196,9 @@ public class AffectationCriteria implements Serializable, Criteria {
         return "AffectationCriteria{" +
             optionalId().map(f -> "id=" + f + ", ").orElse("") +
             optionalDateAffectation().map(f -> "dateAffectation=" + f + ", ").orElse("") +
+            optionalMotif().map(f -> "motif=" + f + ", ").orElse("") +
             optionalDateRestitution().map(f -> "dateRestitution=" + f + ", ").orElse("") +
-            optionalNumeroBordereau().map(f -> "numeroBordereau=" + f + ", ").orElse("") +
-            optionalUtilisateurId().map(f -> "utilisateurId=" + f + ", ").orElse("") +
-            optionalActifId().map(f -> "actifId=" + f + ", ").orElse("") +
+            optionalAgentId().map(f -> "agentId=" + f + ", ").orElse("") +
             optionalDistinct().map(f -> "distinct=" + f + ", ").orElse("") +
         "}";
     }

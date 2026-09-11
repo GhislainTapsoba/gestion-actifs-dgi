@@ -73,10 +73,9 @@ class AffectationCriteriaTest {
     private static void setAllFilters(AffectationCriteria affectationCriteria) {
         affectationCriteria.id();
         affectationCriteria.dateAffectation();
+        affectationCriteria.motif();
         affectationCriteria.dateRestitution();
-        affectationCriteria.numeroBordereau();
-        affectationCriteria.utilisateurId();
-        affectationCriteria.actifId();
+        affectationCriteria.agentId();
         affectationCriteria.distinct();
     }
 
@@ -85,10 +84,9 @@ class AffectationCriteriaTest {
             criteria ->
                 condition.apply(criteria.getId()) &&
                 condition.apply(criteria.getDateAffectation()) &&
+                condition.apply(criteria.getMotif()) &&
                 condition.apply(criteria.getDateRestitution()) &&
-                condition.apply(criteria.getNumeroBordereau()) &&
-                condition.apply(criteria.getUtilisateurId()) &&
-                condition.apply(criteria.getActifId()) &&
+                condition.apply(criteria.getAgentId()) &&
                 condition.apply(criteria.getDistinct()),
             "every filter matches"
         );
@@ -99,10 +97,9 @@ class AffectationCriteriaTest {
             criteria ->
                 condition.apply(criteria.getId(), copy.getId()) &&
                 condition.apply(criteria.getDateAffectation(), copy.getDateAffectation()) &&
+                condition.apply(criteria.getMotif(), copy.getMotif()) &&
                 condition.apply(criteria.getDateRestitution(), copy.getDateRestitution()) &&
-                condition.apply(criteria.getNumeroBordereau(), copy.getNumeroBordereau()) &&
-                condition.apply(criteria.getUtilisateurId(), copy.getUtilisateurId()) &&
-                condition.apply(criteria.getActifId(), copy.getActifId()) &&
+                condition.apply(criteria.getAgentId(), copy.getAgentId()) &&
                 condition.apply(criteria.getDistinct(), copy.getDistinct()),
             "every filter matches"
         );

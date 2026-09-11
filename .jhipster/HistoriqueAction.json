@@ -1,0 +1,47 @@
+{
+  "annotations": {
+    "changelogDate": "20260910221041"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "dateAction",
+      "fieldType": "ZonedDateTime",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "typeAction",
+      "fieldType": "TypeMouvement",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "CREATION,MODIFICATION,SUPPRESSION,AFFECTATION,TRANSFERT,MAINTENANCE"
+    },
+    {
+      "fieldName": "entiteCiblee",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "ancienneValeur",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nouvelleValeur",
+      "fieldType": "String"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "HistoriqueAction",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "user",
+      "relationshipName": "utilisateur",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required",
+      "relationshipWithBuiltInEntity": true
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

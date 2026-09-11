@@ -1,19 +1,20 @@
-﻿package com.dgi.gestionactifs.service.impl;
+package com.dgi.gestionactifs.service.impl;
 
 import com.dgi.gestionactifs.domain.Transfert;
 import com.dgi.gestionactifs.domain.enumeration.StatutTransfert;
 import com.dgi.gestionactifs.repository.TransfertRepository;
+import com.dgi.gestionactifs.repository.UserRepository;
+import com.dgi.gestionactifs.security.SecurityUtils;
 import com.dgi.gestionactifs.service.TransfertService;
 import com.dgi.gestionactifs.service.dto.TransfertDTO;
 import com.dgi.gestionactifs.service.mapper.TransfertMapper;
+import com.dgi.gestionactifs.web.rest.errors.BadRequestAlertException;
 import java.time.LocalDate;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 /**
  * Service Implementation for managing {@link com.dgi.gestionactifs.domain.Transfert}.
@@ -28,9 +29,12 @@ public class TransfertServiceImpl implements TransfertService {
 
     private final TransfertMapper transfertMapper;
 
-    public TransfertServiceImpl(TransfertRepository transfertRepository, TransfertMapper transfertMapper) {
+    private final UserRepository userRepository;
+
+    public TransfertServiceImpl(TransfertRepository transfertRepository, TransfertMapper transfertMapper, UserRepository userRepository) {
         this.transfertRepository = transfertRepository;
         this.transfertMapper = transfertMapper;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -82,12 +86,13 @@ public class TransfertServiceImpl implements TransfertService {
         LOG.debug("Request to valider Transfert : {}", id);
         Transfert transfert = transfertRepository
             .findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Transfert introuvable"));
+            .orElseThrow(() -> new BadRequestAlertException("Transfert introuvable", "transfert", "idnotfound"));
         if (transfert.getStatut() != StatutTransfert.EN_ATTENTE) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Seul un transfert en attente peut etre valide");
+            throw new BadRequestAlertException("Seul un transfert en attente peut être validé", "transfert", "statutinvalide");
         }
         transfert.setStatut(StatutTransfert.VALIDE);
         transfert.setDateTraitement(LocalDate.now());
+        SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).ifPresent(transfert::setValidateur);
         return transfertMapper.toDto(transfertRepository.save(transfert));
     }
 
@@ -95,17 +100,18 @@ public class TransfertServiceImpl implements TransfertService {
     public TransfertDTO rejeter(Long id, String commentaireRejet) {
         LOG.debug("Request to rejeter Transfert : {}", id);
         if (commentaireRejet == null || commentaireRejet.isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Un commentaire de rejet est obligatoire");
+            throw new BadRequestAlertException("Un commentaire de rejet est obligatoire", "transfert", "commentairerequis");
         }
         Transfert transfert = transfertRepository
             .findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Transfert introuvable"));
+            .orElseThrow(() -> new BadRequestAlertException("Transfert introuvable", "transfert", "idnotfound"));
         if (transfert.getStatut() != StatutTransfert.EN_ATTENTE) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Seul un transfert en attente peut etre rejete");
+            throw new BadRequestAlertException("Seul un transfert en attente peut être rejeté", "transfert", "statutinvalide");
         }
         transfert.setStatut(StatutTransfert.REJETE);
-        transfert.setCommentaireRejet(commentaireRejet);
+        transfert.setCommentaireRejet(commentaireRejet.trim());
         transfert.setDateTraitement(LocalDate.now());
+        SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).ifPresent(transfert::setValidateur);
         return transfertMapper.toDto(transfertRepository.save(transfert));
     }
 }

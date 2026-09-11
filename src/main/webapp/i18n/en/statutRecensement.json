@@ -1,0 +1,10 @@
+{
+  "gestionActifsDgiApp": {
+    "StatutRecensement": {
+      "null": "",
+      "PLANIFIER": "PLANIFIER",
+      "EN_COURS": "EN_COURS",
+      "CLOTUREE": "CLOTUREE"
+    }
+  }
+}

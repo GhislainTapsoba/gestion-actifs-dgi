@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.dgi.gestionactifs.IntegrationTest;
-import com.dgi.gestionactifs.domain.Actif;
+import com.dgi.gestionactifs.domain.ServiceDgi;
 import com.dgi.gestionactifs.domain.Transfert;
 import com.dgi.gestionactifs.domain.User;
 import com.dgi.gestionactifs.domain.enumeration.StatutTransfert;
@@ -39,9 +39,9 @@ import tools.jackson.databind.ObjectMapper;
 @WithMockUser
 class TransfertResourceIT {
 
-    private static final LocalDate DEFAULT_DATE_DEMANDE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATE_DEMANDE = LocalDate.parse("2026-09-02");
-    private static final LocalDate SMALLER_DATE_DEMANDE = LocalDate.ofEpochDay(-1L);
+    private static final LocalDate DEFAULT_DATE_TRANSFERT = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE_TRANSFERT = LocalDate.parse("2026-09-02");
+    private static final LocalDate SMALLER_DATE_TRANSFERT = LocalDate.ofEpochDay(-1L);
 
     private static final StatutTransfert DEFAULT_STATUT = StatutTransfert.EN_ATTENTE;
     private static final StatutTransfert UPDATED_STATUT = StatutTransfert.VALIDE;
@@ -89,20 +89,22 @@ class TransfertResourceIT {
      */
     public static Transfert createEntity(EntityManager em) {
         Transfert transfert = new Transfert()
-            .dateDemande(DEFAULT_DATE_DEMANDE)
+            .dateTransfert(DEFAULT_DATE_TRANSFERT)
             .statut(DEFAULT_STATUT)
             .commentaireRejet(DEFAULT_COMMENTAIRE_REJET)
             .dateTraitement(DEFAULT_DATE_TRAITEMENT);
         // Add required entity
-        Actif actif;
-        if (TestUtil.findAll(em, Actif.class).isEmpty()) {
-            actif = ActifResourceIT.createEntity();
-            em.persist(actif);
+        ServiceDgi serviceDgi;
+        if (TestUtil.findAll(em, ServiceDgi.class).isEmpty()) {
+            serviceDgi = ServiceDgiResourceIT.createEntity();
+            em.persist(serviceDgi);
             em.flush();
         } else {
-            actif = TestUtil.findAll(em, Actif.class).get(0);
+            serviceDgi = TestUtil.findAll(em, ServiceDgi.class).get(0);
         }
-        transfert.setActif(actif);
+        transfert.setServiceOrigine(serviceDgi);
+        // Add required entity
+        transfert.setServiceDestinataire(serviceDgi);
         return transfert;
     }
 
@@ -114,20 +116,22 @@ class TransfertResourceIT {
      */
     public static Transfert createUpdatedEntity(EntityManager em) {
         Transfert updatedTransfert = new Transfert()
-            .dateDemande(UPDATED_DATE_DEMANDE)
+            .dateTransfert(UPDATED_DATE_TRANSFERT)
             .statut(UPDATED_STATUT)
             .commentaireRejet(UPDATED_COMMENTAIRE_REJET)
             .dateTraitement(UPDATED_DATE_TRAITEMENT);
         // Add required entity
-        Actif actif;
-        if (TestUtil.findAll(em, Actif.class).isEmpty()) {
-            actif = ActifResourceIT.createUpdatedEntity();
-            em.persist(actif);
+        ServiceDgi serviceDgi;
+        if (TestUtil.findAll(em, ServiceDgi.class).isEmpty()) {
+            serviceDgi = ServiceDgiResourceIT.createUpdatedEntity();
+            em.persist(serviceDgi);
             em.flush();
         } else {
-            actif = TestUtil.findAll(em, Actif.class).get(0);
+            serviceDgi = TestUtil.findAll(em, ServiceDgi.class).get(0);
         }
-        updatedTransfert.setActif(actif);
+        updatedTransfert.setServiceOrigine(serviceDgi);
+        // Add required entity
+        updatedTransfert.setServiceDestinataire(serviceDgi);
         return updatedTransfert;
     }
 
@@ -188,10 +192,10 @@ class TransfertResourceIT {
 
     @Test
     @Transactional
-    void checkDateDemandeIsRequired() throws Exception {
+    void checkDateTransfertIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
         // set the field null
-        transfert.setDateDemande(null);
+        transfert.setDateTransfert(null);
 
         // Create the Transfert, which fails.
         TransfertDTO transfertDTO = transfertMapper.toDto(transfert);
@@ -232,7 +236,7 @@ class TransfertResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(transfert.getId().intValue())))
-            .andExpect(jsonPath("$.[*].dateDemande").value(hasItem(DEFAULT_DATE_DEMANDE.toString())))
+            .andExpect(jsonPath("$.[*].dateTransfert").value(hasItem(DEFAULT_DATE_TRANSFERT.toString())))
             .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT.toString())))
             .andExpect(jsonPath("$.[*].commentaireRejet").value(hasItem(DEFAULT_COMMENTAIRE_REJET)))
             .andExpect(jsonPath("$.[*].dateTraitement").value(hasItem(DEFAULT_DATE_TRAITEMENT.toString())));
@@ -250,7 +254,7 @@ class TransfertResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(transfert.getId().intValue()))
-            .andExpect(jsonPath("$.dateDemande").value(DEFAULT_DATE_DEMANDE.toString()))
+            .andExpect(jsonPath("$.dateTransfert").value(DEFAULT_DATE_TRANSFERT.toString()))
             .andExpect(jsonPath("$.statut").value(DEFAULT_STATUT.toString()))
             .andExpect(jsonPath("$.commentaireRejet").value(DEFAULT_COMMENTAIRE_REJET))
             .andExpect(jsonPath("$.dateTraitement").value(DEFAULT_DATE_TRAITEMENT.toString()));
@@ -273,81 +277,84 @@ class TransfertResourceIT {
 
     @Test
     @Transactional
-    void getAllTransfertsByDateDemandeIsEqualToSomething() throws Exception {
+    void getAllTransfertsByDateTransfertIsEqualToSomething() throws Exception {
         // Initialize the database
         insertedTransfert = transfertRepository.saveAndFlush(transfert);
 
-        // Get all the transfertList where dateDemande equals to
-        defaultTransfertFiltering("dateDemande.equals=" + DEFAULT_DATE_DEMANDE, "dateDemande.equals=" + UPDATED_DATE_DEMANDE);
+        // Get all the transfertList where dateTransfert equals to
+        defaultTransfertFiltering("dateTransfert.equals=" + DEFAULT_DATE_TRANSFERT, "dateTransfert.equals=" + UPDATED_DATE_TRANSFERT);
     }
 
     @Test
     @Transactional
-    void getAllTransfertsByDateDemandeIsInShouldWork() throws Exception {
+    void getAllTransfertsByDateTransfertIsInShouldWork() throws Exception {
         // Initialize the database
         insertedTransfert = transfertRepository.saveAndFlush(transfert);
 
-        // Get all the transfertList where dateDemande in
+        // Get all the transfertList where dateTransfert in
         defaultTransfertFiltering(
-            "dateDemande.in=" + DEFAULT_DATE_DEMANDE + "," + UPDATED_DATE_DEMANDE,
-            "dateDemande.in=" + UPDATED_DATE_DEMANDE
+            "dateTransfert.in=" + DEFAULT_DATE_TRANSFERT + "," + UPDATED_DATE_TRANSFERT,
+            "dateTransfert.in=" + UPDATED_DATE_TRANSFERT
         );
     }
 
     @Test
     @Transactional
-    void getAllTransfertsByDateDemandeIsNullOrNotNull() throws Exception {
+    void getAllTransfertsByDateTransfertIsNullOrNotNull() throws Exception {
         // Initialize the database
         insertedTransfert = transfertRepository.saveAndFlush(transfert);
 
-        // Get all the transfertList where dateDemande is not null
-        defaultTransfertFiltering("dateDemande.specified=true", "dateDemande.specified=false");
+        // Get all the transfertList where dateTransfert is not null
+        defaultTransfertFiltering("dateTransfert.specified=true", "dateTransfert.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllTransfertsByDateDemandeIsGreaterThanOrEqualToSomething() throws Exception {
+    void getAllTransfertsByDateTransfertIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         insertedTransfert = transfertRepository.saveAndFlush(transfert);
 
-        // Get all the transfertList where dateDemande is greater than or equal to
+        // Get all the transfertList where dateTransfert is greater than or equal to
         defaultTransfertFiltering(
-            "dateDemande.greaterThanOrEqual=" + DEFAULT_DATE_DEMANDE,
-            "dateDemande.greaterThanOrEqual=" + UPDATED_DATE_DEMANDE
+            "dateTransfert.greaterThanOrEqual=" + DEFAULT_DATE_TRANSFERT,
+            "dateTransfert.greaterThanOrEqual=" + UPDATED_DATE_TRANSFERT
         );
     }
 
     @Test
     @Transactional
-    void getAllTransfertsByDateDemandeIsLessThanOrEqualToSomething() throws Exception {
+    void getAllTransfertsByDateTransfertIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         insertedTransfert = transfertRepository.saveAndFlush(transfert);
 
-        // Get all the transfertList where dateDemande is less than or equal to
+        // Get all the transfertList where dateTransfert is less than or equal to
         defaultTransfertFiltering(
-            "dateDemande.lessThanOrEqual=" + DEFAULT_DATE_DEMANDE,
-            "dateDemande.lessThanOrEqual=" + SMALLER_DATE_DEMANDE
+            "dateTransfert.lessThanOrEqual=" + DEFAULT_DATE_TRANSFERT,
+            "dateTransfert.lessThanOrEqual=" + SMALLER_DATE_TRANSFERT
         );
     }
 
     @Test
     @Transactional
-    void getAllTransfertsByDateDemandeIsLessThanSomething() throws Exception {
+    void getAllTransfertsByDateTransfertIsLessThanSomething() throws Exception {
         // Initialize the database
         insertedTransfert = transfertRepository.saveAndFlush(transfert);
 
-        // Get all the transfertList where dateDemande is less than
-        defaultTransfertFiltering("dateDemande.lessThan=" + UPDATED_DATE_DEMANDE, "dateDemande.lessThan=" + DEFAULT_DATE_DEMANDE);
+        // Get all the transfertList where dateTransfert is less than
+        defaultTransfertFiltering("dateTransfert.lessThan=" + UPDATED_DATE_TRANSFERT, "dateTransfert.lessThan=" + DEFAULT_DATE_TRANSFERT);
     }
 
     @Test
     @Transactional
-    void getAllTransfertsByDateDemandeIsGreaterThanSomething() throws Exception {
+    void getAllTransfertsByDateTransfertIsGreaterThanSomething() throws Exception {
         // Initialize the database
         insertedTransfert = transfertRepository.saveAndFlush(transfert);
 
-        // Get all the transfertList where dateDemande is greater than
-        defaultTransfertFiltering("dateDemande.greaterThan=" + SMALLER_DATE_DEMANDE, "dateDemande.greaterThan=" + DEFAULT_DATE_DEMANDE);
+        // Get all the transfertList where dateTransfert is greater than
+        defaultTransfertFiltering(
+            "dateTransfert.greaterThan=" + SMALLER_DATE_TRANSFERT,
+            "dateTransfert.greaterThan=" + DEFAULT_DATE_TRANSFERT
+        );
     }
 
     @Test
@@ -529,6 +536,50 @@ class TransfertResourceIT {
 
     @Test
     @Transactional
+    void getAllTransfertsByServiceOrigineIsEqualToSomething() throws Exception {
+        ServiceDgi serviceOrigine;
+        if (TestUtil.findAll(em, ServiceDgi.class).isEmpty()) {
+            transfertRepository.saveAndFlush(transfert);
+            serviceOrigine = ServiceDgiResourceIT.createEntity();
+        } else {
+            serviceOrigine = TestUtil.findAll(em, ServiceDgi.class).get(0);
+        }
+        em.persist(serviceOrigine);
+        em.flush();
+        transfert.setServiceOrigine(serviceOrigine);
+        transfertRepository.saveAndFlush(transfert);
+        Long serviceOrigineId = serviceOrigine.getId();
+        // Get all the transfertList where serviceOrigine equals to serviceOrigineId
+        defaultTransfertShouldBeFound("serviceOrigineId.equals=" + serviceOrigineId);
+
+        // Get all the transfertList where serviceOrigine equals to (serviceOrigineId + 1)
+        defaultTransfertShouldNotBeFound("serviceOrigineId.equals=" + (serviceOrigineId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllTransfertsByServiceDestinataireIsEqualToSomething() throws Exception {
+        ServiceDgi serviceDestinataire;
+        if (TestUtil.findAll(em, ServiceDgi.class).isEmpty()) {
+            transfertRepository.saveAndFlush(transfert);
+            serviceDestinataire = ServiceDgiResourceIT.createEntity();
+        } else {
+            serviceDestinataire = TestUtil.findAll(em, ServiceDgi.class).get(0);
+        }
+        em.persist(serviceDestinataire);
+        em.flush();
+        transfert.setServiceDestinataire(serviceDestinataire);
+        transfertRepository.saveAndFlush(transfert);
+        Long serviceDestinataireId = serviceDestinataire.getId();
+        // Get all the transfertList where serviceDestinataire equals to serviceDestinataireId
+        defaultTransfertShouldBeFound("serviceDestinataireId.equals=" + serviceDestinataireId);
+
+        // Get all the transfertList where serviceDestinataire equals to (serviceDestinataireId + 1)
+        defaultTransfertShouldNotBeFound("serviceDestinataireId.equals=" + (serviceDestinataireId + 1));
+    }
+
+    @Test
+    @Transactional
     void getAllTransfertsByDemandeurIsEqualToSomething() throws Exception {
         User demandeur;
         if (TestUtil.findAll(em, User.class).isEmpty()) {
@@ -571,28 +622,6 @@ class TransfertResourceIT {
         defaultTransfertShouldNotBeFound("validateurId.equals=" + (validateurId + 1));
     }
 
-    @Test
-    @Transactional
-    void getAllTransfertsByActifIsEqualToSomething() throws Exception {
-        Actif actif;
-        if (TestUtil.findAll(em, Actif.class).isEmpty()) {
-            transfertRepository.saveAndFlush(transfert);
-            actif = ActifResourceIT.createEntity();
-        } else {
-            actif = TestUtil.findAll(em, Actif.class).get(0);
-        }
-        em.persist(actif);
-        em.flush();
-        transfert.setActif(actif);
-        transfertRepository.saveAndFlush(transfert);
-        Long actifId = actif.getId();
-        // Get all the transfertList where actif equals to actifId
-        defaultTransfertShouldBeFound("actifId.equals=" + actifId);
-
-        // Get all the transfertList where actif equals to (actifId + 1)
-        defaultTransfertShouldNotBeFound("actifId.equals=" + (actifId + 1));
-    }
-
     private void defaultTransfertFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
         defaultTransfertShouldBeFound(shouldBeFound);
         defaultTransfertShouldNotBeFound(shouldNotBeFound);
@@ -607,7 +636,7 @@ class TransfertResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(transfert.getId().intValue())))
-            .andExpect(jsonPath("$.[*].dateDemande").value(hasItem(DEFAULT_DATE_DEMANDE.toString())))
+            .andExpect(jsonPath("$.[*].dateTransfert").value(hasItem(DEFAULT_DATE_TRANSFERT.toString())))
             .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT.toString())))
             .andExpect(jsonPath("$.[*].commentaireRejet").value(hasItem(DEFAULT_COMMENTAIRE_REJET)))
             .andExpect(jsonPath("$.[*].dateTraitement").value(hasItem(DEFAULT_DATE_TRAITEMENT.toString())));
@@ -659,7 +688,7 @@ class TransfertResourceIT {
         // Disconnect from session so that the updates on updatedTransfert are not directly saved in db
         em.detach(updatedTransfert);
         updatedTransfert
-            .dateDemande(UPDATED_DATE_DEMANDE)
+            .dateTransfert(UPDATED_DATE_TRANSFERT)
             .statut(UPDATED_STATUT)
             .commentaireRejet(UPDATED_COMMENTAIRE_REJET)
             .dateTraitement(UPDATED_DATE_TRAITEMENT);
@@ -753,7 +782,7 @@ class TransfertResourceIT {
         partialUpdatedTransfert.setId(transfert.getId());
 
         partialUpdatedTransfert
-            .dateDemande(UPDATED_DATE_DEMANDE)
+            .dateTransfert(UPDATED_DATE_TRANSFERT)
             .commentaireRejet(UPDATED_COMMENTAIRE_REJET)
             .dateTraitement(UPDATED_DATE_TRAITEMENT);
 
@@ -787,7 +816,7 @@ class TransfertResourceIT {
         partialUpdatedTransfert.setId(transfert.getId());
 
         partialUpdatedTransfert
-            .dateDemande(UPDATED_DATE_DEMANDE)
+            .dateTransfert(UPDATED_DATE_TRANSFERT)
             .statut(UPDATED_STATUT)
             .commentaireRejet(UPDATED_COMMENTAIRE_REJET)
             .dateTraitement(UPDATED_DATE_TRAITEMENT);

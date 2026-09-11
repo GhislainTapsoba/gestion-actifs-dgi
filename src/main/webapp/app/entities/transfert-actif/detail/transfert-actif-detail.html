@@ -1,0 +1,52 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (transfertActif(); as transfertActifRef) {
+      <div>
+        <h2 data-cy="transfertActifDetailsHeading">
+          <span jhiTranslate="gestionActifsDgiApp.transfertActif.detail.title">Transfert Actif</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ transfertActifRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.transfertActif.observation">Observation</span></dt>
+          <dd>
+            <span>{{ transfertActifRef.observation }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.transfertActif.transfert">Transfert</span></dt>
+          <dd>
+            @if (transfertActif()!.transfert) {
+              <div>
+                <a [routerLink]="['/transfert', transfertActif()!.transfert?.id, 'view']">{{ transfertActifRef.transfert?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.transfertActif.actif">Actif</span></dt>
+          <dd>
+            @if (transfertActif()!.actif) {
+              <div>
+                <a [routerLink]="['/actif', transfertActif()!.actif?.id, 'view']">{{ transfertActifRef.actif?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/transfert-actif', transfertActifRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

@@ -71,8 +71,7 @@ public class AffectationQueryService extends QueryService<Affectation> {
         Specification<Affectation> specification = Specification.unrestricted();
         specification = specification.and((root, query, builder) -> {
             if (Long.class != query.getResultType()) {
-                root.fetch(Affectation_.utilisateur, JoinType.LEFT);
-                root.fetch(Affectation_.actif, JoinType.LEFT);
+                root.fetch(Affectation_.agent, JoinType.LEFT);
             }
             return null;
         });
@@ -83,12 +82,9 @@ public class AffectationQueryService extends QueryService<Affectation> {
                     Boolean.TRUE.equals(criteria.getDistinct()) ? distinct(criteria.getDistinct()) : Specification.unrestricted(),
                     buildRangeSpecification(criteria.getId(), Affectation_.id),
                     buildRangeSpecification(criteria.getDateAffectation(), Affectation_.dateAffectation),
+                    buildStringSpecification(criteria.getMotif(), Affectation_.motif),
                     buildRangeSpecification(criteria.getDateRestitution(), Affectation_.dateRestitution),
-                    buildStringSpecification(criteria.getNumeroBordereau(), Affectation_.numeroBordereau),
-                    buildSpecification(criteria.getUtilisateurId(), root ->
-                        root.join(Affectation_.utilisateur, JoinType.LEFT).get(User_.id)
-                    ),
-                    buildSpecification(criteria.getActifId(), root -> root.join(Affectation_.actif, JoinType.LEFT).get(Actif_.id))
+                    buildSpecification(criteria.getAgentId(), root -> root.join(Affectation_.agent, JoinType.LEFT).get(Agent_.id))
                 )
             );
         }

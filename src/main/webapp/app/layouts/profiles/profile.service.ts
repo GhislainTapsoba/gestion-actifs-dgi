@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Service, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, map, shareReplay } from 'rxjs';
 
@@ -7,7 +7,7 @@ import { serverApiUrl } from 'app/config';
 
 import { InfoResponse, ProfileInfo } from './profile-info.model';
 
-@Service()
+@Injectable({ providedIn: 'root' })
 export class ProfileService {
   private readonly http = inject(HttpClient);
 

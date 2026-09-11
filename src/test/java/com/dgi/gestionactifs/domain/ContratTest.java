@@ -25,18 +25,6 @@ class ContratTest {
     }
 
     @Test
-    void actifTest() {
-        Contrat contrat = getContratRandomSampleGenerator();
-        Actif actifBack = getActifRandomSampleGenerator();
-
-        contrat.setActif(actifBack);
-        assertThat(contrat.getActif()).isEqualTo(actifBack);
-
-        contrat.actif(null);
-        assertThat(contrat.getActif()).isNull();
-    }
-
-    @Test
     void fournisseurTest() {
         Contrat contrat = getContratRandomSampleGenerator();
         Fournisseur fournisseurBack = getFournisseurRandomSampleGenerator();
@@ -46,5 +34,17 @@ class ContratTest {
 
         contrat.fournisseur(null);
         assertThat(contrat.getFournisseur()).isNull();
+    }
+
+    @Test
+    void actifTest() {
+        Contrat contrat = getContratRandomSampleGenerator();
+        Actif actifBack = getActifRandomSampleGenerator();
+
+        contrat.setActif(actifBack);
+        assertThat(contrat.getActif()).isEqualTo(actifBack);
+
+        contrat.actif(null);
+        assertThat(contrat.getActif()).isNull();
     }
 }

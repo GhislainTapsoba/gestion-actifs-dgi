@@ -1,0 +1,30 @@
+{
+  "annotations": {
+    "changelogDate": "20260910221038"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "dateDebut",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dateFin",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "statut",
+      "fieldType": "StatutRecensement",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PLANIFIER,EN_COURS,CLOTUREE"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Recensement",
+  "pagination": "pagination",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

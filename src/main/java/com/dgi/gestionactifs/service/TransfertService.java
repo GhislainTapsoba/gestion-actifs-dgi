@@ -1,4 +1,4 @@
-﻿package com.dgi.gestionactifs.service;
+package com.dgi.gestionactifs.service;
 
 import com.dgi.gestionactifs.service.dto.TransfertDTO;
 import java.util.Optional;
@@ -48,6 +48,7 @@ public interface TransfertService {
 
     /**
      * Valide un transfert en attente.
+     *
      * @param id l'id du transfert.
      * @return le transfert mis a jour.
      */
@@ -55,6 +56,7 @@ public interface TransfertService {
 
     /**
      * Rejette un transfert en attente avec un commentaire obligatoire.
+     *
      * @param id l'id du transfert.
      * @param commentaireRejet le motif du rejet, obligatoire.
      * @return le transfert mis a jour.

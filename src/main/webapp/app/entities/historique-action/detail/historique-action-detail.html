@@ -1,0 +1,66 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (historiqueAction(); as historiqueActionRef) {
+      <div>
+        <h2 data-cy="historiqueActionDetailsHeading">
+          <span jhiTranslate="gestionActifsDgiApp.historiqueAction.detail.title">Historique Action</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ historiqueActionRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.historiqueAction.dateAction">Date Action</span></dt>
+          <dd>
+            <span>{{ historiqueActionRef.dateAction | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.historiqueAction.typeAction">Type Action</span></dt>
+          <dd>
+            <span [jhiTranslate]="'gestionActifsDgiApp.TypeMouvement.' + (historiqueActionRef.typeAction ?? 'null')">{{
+              {
+                null: '',
+                CREATION: 'CREATION',
+                MODIFICATION: 'MODIFICATION',
+                SUPPRESSION: 'SUPPRESSION',
+                AFFECTATION: 'AFFECTATION',
+                TRANSFERT: 'TRANSFERT',
+                MAINTENANCE: 'MAINTENANCE',
+              }[historiqueActionRef.typeAction ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.historiqueAction.entiteCiblee">Entite Ciblee</span></dt>
+          <dd>
+            <span>{{ historiqueActionRef.entiteCiblee }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.historiqueAction.ancienneValeur">Ancienne Valeur</span></dt>
+          <dd>
+            <span>{{ historiqueActionRef.ancienneValeur }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.historiqueAction.nouvelleValeur">Nouvelle Valeur</span></dt>
+          <dd>
+            <span>{{ historiqueActionRef.nouvelleValeur }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.historiqueAction.utilisateur">Utilisateur</span></dt>
+          <dd>
+            <span>{{ historiqueActionRef.utilisateur?.id }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/historique-action', historiqueActionRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

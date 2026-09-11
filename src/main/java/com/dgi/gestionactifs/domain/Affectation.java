@@ -31,19 +31,16 @@ public class Affectation implements Serializable {
     @Column(name = "date_affectation", nullable = false)
     private LocalDate dateAffectation;
 
+    @Column(name = "motif")
+    private String motif;
+
     @Column(name = "date_restitution")
     private LocalDate dateRestitution;
 
-    @Column(name = "numero_bordereau")
-    private String numeroBordereau;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User utilisateur;
-
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "affectations", "transferts", "maintenances" }, allowSetters = true)
-    private Actif actif;
+    @JsonIgnoreProperties(value = { "service", "utilisateur" }, allowSetters = true)
+    private Agent agent;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -73,6 +70,19 @@ public class Affectation implements Serializable {
         this.dateAffectation = dateAffectation;
     }
 
+    public String getMotif() {
+        return this.motif;
+    }
+
+    public Affectation motif(String motif) {
+        this.setMotif(motif);
+        return this;
+    }
+
+    public void setMotif(String motif) {
+        this.motif = motif;
+    }
+
     public LocalDate getDateRestitution() {
         return this.dateRestitution;
     }
@@ -86,42 +96,16 @@ public class Affectation implements Serializable {
         this.dateRestitution = dateRestitution;
     }
 
-    public String getNumeroBordereau() {
-        return this.numeroBordereau;
+    public Agent getAgent() {
+        return this.agent;
     }
 
-    public Affectation numeroBordereau(String numeroBordereau) {
-        this.setNumeroBordereau(numeroBordereau);
-        return this;
+    public void setAgent(Agent agent) {
+        this.agent = agent;
     }
 
-    public void setNumeroBordereau(String numeroBordereau) {
-        this.numeroBordereau = numeroBordereau;
-    }
-
-    public User getUtilisateur() {
-        return this.utilisateur;
-    }
-
-    public void setUtilisateur(User user) {
-        this.utilisateur = user;
-    }
-
-    public Affectation utilisateur(User user) {
-        this.setUtilisateur(user);
-        return this;
-    }
-
-    public Actif getActif() {
-        return this.actif;
-    }
-
-    public void setActif(Actif actif) {
-        this.actif = actif;
-    }
-
-    public Affectation actif(Actif actif) {
-        this.setActif(actif);
+    public Affectation agent(Agent agent) {
+        this.setAgent(agent);
         return this;
     }
 
@@ -150,8 +134,8 @@ public class Affectation implements Serializable {
         return "Affectation{" +
             "id=" + getId() +
             ", dateAffectation='" + getDateAffectation() + "'" +
+            ", motif='" + getMotif() + "'" +
             ", dateRestitution='" + getDateRestitution() + "'" +
-            ", numeroBordereau='" + getNumeroBordereau() + "'" +
             "}";
     }
 }

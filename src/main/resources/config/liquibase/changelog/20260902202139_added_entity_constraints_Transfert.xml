@@ -10,6 +10,20 @@
     -->
     <changeSet id="20260902202139-2" author="jhipster">
 
+        <addForeignKeyConstraint baseColumnNames="service_origine_id"
+                                 baseTableName="transfert"
+                                 constraintName="fk_transfert__service_origine_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="service_dgi"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="service_destinataire_id"
+                                 baseTableName="transfert"
+                                 constraintName="fk_transfert__service_destinataire_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="service_dgi"
+                                 />
+
         <addForeignKeyConstraint baseColumnNames="demandeur_id"
                                  baseTableName="transfert"
                                  constraintName="fk_transfert__demandeur_id"
@@ -22,13 +36,6 @@
                                  constraintName="fk_transfert__validateur_id"
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"
-                                 />
-
-        <addForeignKeyConstraint baseColumnNames="actif_id"
-                                 baseTableName="transfert"
-                                 constraintName="fk_transfert__actif_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="actif"
                                  />
     </changeSet>
 </databaseChangeLog>

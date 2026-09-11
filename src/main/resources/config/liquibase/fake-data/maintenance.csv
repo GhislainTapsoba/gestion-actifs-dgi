@@ -1,31 +1,31 @@
 id;type_maintenance;date_panne;statut;compte_rendu;date_cloture;actif_id
-1;PREVENTIVE;2026-09-02;EN_COURS;Panne détectée lors du contrôle hebdomadaire.;2026-09-02;1
-2;PREVENTIVE;2026-09-02;CLOTUREE;Intervention terminée avec vérification complète.;2026-09-02;2
-3;CORRECTIVE;2026-09-01;EN_COURS;Système instable, diagnostic en cours.;2026-09-02;3
-4;CORRECTIVE;2026-09-02;CLOTUREE;Remplacement du composant et test de validation.;2026-09-02;4
-5;CORRECTIVE;2026-09-02;OUVERTE;Anomalie signalée sur le matériel réseau.;2026-09-02;5
-6;PREVENTIVE;2026-09-02;EN_COURS;Contrôle de sécurité programmé.;2026-09-02;6
-7;CORRECTIVE;2026-09-02;OUVERTE;Erreur de démarrage détectée sur le poste.;2026-09-02;7
-8;CORRECTIVE;2026-09-02;CLOTUREE;Maintenance effectuée, poste remis en service.;2026-09-02;8
-9;PREVENTIVE;2026-09-02;EN_COURS;Inspection des performances terminée.;2026-09-02;9
-10;PREVENTIVE;2026-09-02;CLOTUREE;Vérification du système de refroidissement OK.;2026-09-02;10
-11;CORRECTIVE;2026-09-02;EN_COURS;Problème de connexion identifié.;2026-09-02;11
-12;PREVENTIVE;2026-09-02;EN_COURS;Contrôle de routine sans anomalie majeure.;2026-09-02;12
-13;PREVENTIVE;2026-09-01;CLOTUREE;Maintenance préventive terminée.;2026-09-02;13
-14;CORRECTIVE;2026-09-02;CLOTUREE;Panne corrigée après remplacement de la carte.;2026-09-02;14
-15;CORRECTIVE;2026-09-02;OUVERTE;Signal de défaillance non résolu.;2026-09-02;15
-16;CORRECTIVE;2026-09-02;EN_COURS;Diagnostic technique en cours.;2026-09-02;16
-17;PREVENTIVE;2026-09-01;EN_COURS;Inspection du parc effectué.;2026-09-01;17
-18;PREVENTIVE;2026-09-02;CLOTUREE;Documentation de maintenance enregistrée.;2026-09-02;18
-19;CORRECTIVE;2026-09-01;OUVERTE;Défaillance du système de sauvegarde signalée.;2026-09-02;19
-20;PREVENTIVE;2026-09-02;CLOTUREE;Nettoyage et réglage du matériel finalisé.;2026-09-02;20
-21;CORRECTIVE;2026-09-02;CLOTUREE;Replacement du disque dur effectuée.;2026-09-02;21
-22;PREVENTIVE;2026-09-02;CLOTUREE;Vérification complète de la machine terminée.;2026-09-02;22
-23;CORRECTIVE;2026-09-02;OUVERTE;Panne intermittente de l'écran constatée.;2026-09-01;23
-24;CORRECTIVE;2026-09-02;OUVERTE;Erreur de lecteur détectée sur le poste.;2026-09-02;24
-25;CORRECTIVE;2026-09-02;CLOTUREE;Panne réparée et test de validation réussi.;2026-09-02;25
-26;CORRECTIVE;2026-09-02;EN_COURS;Analyse du défaut en cours.;2026-09-02;26
-27;CORRECTIVE;2026-09-02;CLOTUREE;Défaut corrigé selon procédure interne.;2026-09-02;27
-28;PREVENTIVE;2026-09-02;EN_COURS;Contrôle périodique sur la batterie.;2026-09-02;28
-29;CORRECTIVE;2026-09-02;CLOTUREE;Maintenance corrective terminée sans reprise.;2026-09-02;29
-30;CORRECTIVE;2026-09-02;EN_COURS;Diagnostic de l'écran en cours.;2026-09-02;30
+1;PREVENTIVE;2026-09-02;EN_COURS;../fake-data/blob/hipster.txt;2026-09-02;1
+2;PREVENTIVE;2026-09-02;CLOTUREE;../fake-data/blob/hipster.txt;2026-09-02;2
+3;CORRECTIVE;2026-09-01;EN_COURS;../fake-data/blob/hipster.txt;2026-09-02;3
+4;CORRECTIVE;2026-09-02;CLOTUREE;../fake-data/blob/hipster.txt;2026-09-02;4
+5;CORRECTIVE;2026-09-02;OUVERTE;../fake-data/blob/hipster.txt;2026-09-02;5
+6;PREVENTIVE;2026-09-02;EN_COURS;../fake-data/blob/hipster.txt;2026-09-02;6
+7;CORRECTIVE;2026-09-02;OUVERTE;../fake-data/blob/hipster.txt;2026-09-02;7
+8;CORRECTIVE;2026-09-02;CLOTUREE;../fake-data/blob/hipster.txt;2026-09-02;8
+9;PREVENTIVE;2026-09-02;EN_COURS;../fake-data/blob/hipster.txt;2026-09-02;9
+10;PREVENTIVE;2026-09-02;CLOTUREE;../fake-data/blob/hipster.txt;2026-09-02;10
+11;CORRECTIVE;2026-09-02;EN_COURS;../fake-data/blob/hipster.txt;2026-09-02;11
+12;PREVENTIVE;2026-09-02;EN_COURS;../fake-data/blob/hipster.txt;2026-09-02;12
+13;PREVENTIVE;2026-09-01;CLOTUREE;../fake-data/blob/hipster.txt;2026-09-02;13
+14;CORRECTIVE;2026-09-02;CLOTUREE;../fake-data/blob/hipster.txt;2026-09-02;14
+15;CORRECTIVE;2026-09-02;OUVERTE;../fake-data/blob/hipster.txt;2026-09-02;15
+16;CORRECTIVE;2026-09-02;EN_COURS;../fake-data/blob/hipster.txt;2026-09-02;16
+17;PREVENTIVE;2026-09-01;EN_COURS;../fake-data/blob/hipster.txt;2026-09-01;17
+18;PREVENTIVE;2026-09-02;CLOTUREE;../fake-data/blob/hipster.txt;2026-09-02;18
+19;CORRECTIVE;2026-09-01;OUVERTE;../fake-data/blob/hipster.txt;2026-09-02;19
+20;PREVENTIVE;2026-09-02;CLOTUREE;../fake-data/blob/hipster.txt;2026-09-02;20
+21;CORRECTIVE;2026-09-02;CLOTUREE;../fake-data/blob/hipster.txt;2026-09-02;21
+22;PREVENTIVE;2026-09-02;CLOTUREE;../fake-data/blob/hipster.txt;2026-09-02;22
+23;CORRECTIVE;2026-09-02;OUVERTE;../fake-data/blob/hipster.txt;2026-09-01;23
+24;CORRECTIVE;2026-09-02;OUVERTE;../fake-data/blob/hipster.txt;2026-09-02;24
+25;CORRECTIVE;2026-09-02;CLOTUREE;../fake-data/blob/hipster.txt;2026-09-02;25
+26;CORRECTIVE;2026-09-02;EN_COURS;../fake-data/blob/hipster.txt;2026-09-02;26
+27;CORRECTIVE;2026-09-02;CLOTUREE;../fake-data/blob/hipster.txt;2026-09-02;27
+28;PREVENTIVE;2026-09-02;EN_COURS;../fake-data/blob/hipster.txt;2026-09-02;28
+29;CORRECTIVE;2026-09-02;CLOTUREE;../fake-data/blob/hipster.txt;2026-09-02;29
+30;CORRECTIVE;2026-09-02;EN_COURS;../fake-data/blob/hipster.txt;2026-09-02;30

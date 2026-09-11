@@ -15,22 +15,42 @@
           </div>
         }
 
-        @let identifiantUniqueRef = editForm.get('identifiantUnique')!;
+        @let codeInventaireRef = editForm.get('codeInventaire')!;
         <div class="mb-3">
-          <label class="form-label" for="field_identifiantUnique" jhiTranslate="gestionActifsDgiApp.actif.identifiantUnique"
-            >Identifiant Unique</label
+          <label class="form-label" for="field_codeInventaire" jhiTranslate="gestionActifsDgiApp.actif.codeInventaire"
+            >Code Inventaire</label
           >
           <input
             type="text"
             class="form-control"
-            name="identifiantUnique"
-            id="field_identifiantUnique"
-            data-cy="identifiantUnique"
-            formControlName="identifiantUnique"
+            name="codeInventaire"
+            id="field_codeInventaire"
+            data-cy="codeInventaire"
+            formControlName="codeInventaire"
           />
-          @if (identifiantUniqueRef.invalid && (identifiantUniqueRef.dirty || identifiantUniqueRef.touched)) {
+          @if (codeInventaireRef.invalid && (codeInventaireRef.dirty || codeInventaireRef.touched)) {
             <div>
-              @if (identifiantUniqueRef.errors?.required) {
+              @if (codeInventaireRef.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let designationRef = editForm.get('designation')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_designation" jhiTranslate="gestionActifsDgiApp.actif.designation">Designation</label>
+          <input
+            type="text"
+            class="form-control"
+            name="designation"
+            id="field_designation"
+            data-cy="designation"
+            formControlName="designation"
+          />
+          @if (designationRef.invalid && (designationRef.dirty || designationRef.touched)) {
+            <div>
+              @if (designationRef.errors?.required) {
                 <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
               }
             </div>
@@ -38,15 +58,30 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="field_codeBarreQR" jhiTranslate="gestionActifsDgiApp.actif.codeBarreQR">Code Barre QR</label>
+          <label class="form-label" for="field_marque" jhiTranslate="gestionActifsDgiApp.actif.marque">Marque</label>
+          <input type="text" class="form-control" name="marque" id="field_marque" data-cy="marque" formControlName="marque" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_modele" jhiTranslate="gestionActifsDgiApp.actif.modele">Modele</label>
+          <input type="text" class="form-control" name="modele" id="field_modele" data-cy="modele" formControlName="modele" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_numeroSerie" jhiTranslate="gestionActifsDgiApp.actif.numeroSerie">Numero Serie</label>
           <input
             type="text"
             class="form-control"
-            name="codeBarreQR"
-            id="field_codeBarreQR"
-            data-cy="codeBarreQR"
-            formControlName="codeBarreQR"
+            name="numeroSerie"
+            id="field_numeroSerie"
+            data-cy="numeroSerie"
+            formControlName="numeroSerie"
           />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_codeBarre" jhiTranslate="gestionActifsDgiApp.actif.codeBarre">Code Barre</label>
+          <input type="text" class="form-control" name="codeBarre" id="field_codeBarre" data-cy="codeBarre" formControlName="codeBarre" />
         </div>
 
         @let typeRef = editForm.get('type')!;
@@ -115,6 +150,46 @@
             <button type="button" class="btn btn-secondary" (click)="dateAcquisitionDp.toggle()"><fa-icon icon="calendar-alt" /></button>
           </div>
         </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_valeurAcquisition" jhiTranslate="gestionActifsDgiApp.actif.valeurAcquisition"
+            >Valeur Acquisition</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="valeurAcquisition"
+            id="field_valeurAcquisition"
+            data-cy="valeurAcquisition"
+            formControlName="valeurAcquisition"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_categorie" jhiTranslate="gestionActifsDgiApp.actif.categorie">Categorie</label>
+          <select
+            class="form-control"
+            id="field_categorie"
+            data-cy="categorie"
+            name="categorie"
+            formControlName="categorie"
+            [compareWith]="compareCategorieMateriel"
+          >
+            @if (!editForm.get('categorie')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (categorieMaterielOption of categorieMaterielsSharedCollection(); track $index) {
+              <option [ngValue]="categorieMaterielOption">{{ categorieMaterielOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['categorie'])!.invalid && (editForm.get(['categorie'])!.dirty || editForm.get(['categorie'])!.touched)) {
+          <div>
+            @if (editForm.get(['categorie'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+            }
+          </div>
+        }
       </div>
 
       <div>

@@ -16,14 +16,12 @@ public class AffectationDTO implements Serializable {
     @NotNull
     private LocalDate dateAffectation;
 
+    private String motif;
+
     private LocalDate dateRestitution;
 
-    private String numeroBordereau;
-
-    private UserDTO utilisateur;
-
     @NotNull
-    private ActifDTO actif;
+    private AgentDTO agent;
 
     public Long getId() {
         return id;
@@ -41,6 +39,14 @@ public class AffectationDTO implements Serializable {
         this.dateAffectation = dateAffectation;
     }
 
+    public String getMotif() {
+        return motif;
+    }
+
+    public void setMotif(String motif) {
+        this.motif = motif;
+    }
+
     public LocalDate getDateRestitution() {
         return dateRestitution;
     }
@@ -49,28 +55,12 @@ public class AffectationDTO implements Serializable {
         this.dateRestitution = dateRestitution;
     }
 
-    public String getNumeroBordereau() {
-        return numeroBordereau;
+    public AgentDTO getAgent() {
+        return agent;
     }
 
-    public void setNumeroBordereau(String numeroBordereau) {
-        this.numeroBordereau = numeroBordereau;
-    }
-
-    public UserDTO getUtilisateur() {
-        return utilisateur;
-    }
-
-    public void setUtilisateur(UserDTO utilisateur) {
-        this.utilisateur = utilisateur;
-    }
-
-    public ActifDTO getActif() {
-        return actif;
-    }
-
-    public void setActif(ActifDTO actif) {
-        this.actif = actif;
+    public void setAgent(AgentDTO agent) {
+        this.agent = agent;
     }
 
     @Override
@@ -100,10 +90,9 @@ public class AffectationDTO implements Serializable {
         return "AffectationDTO{" +
             "id=" + getId() +
             ", dateAffectation='" + getDateAffectation() + "'" +
+            ", motif='" + getMotif() + "'" +
             ", dateRestitution='" + getDateRestitution() + "'" +
-            ", numeroBordereau='" + getNumeroBordereau() + "'" +
-            ", utilisateur=" + getUtilisateur() +
-            ", actif=" + getActif() +
+            ", agent=" + getAgent() +
             "}";
     }
 }

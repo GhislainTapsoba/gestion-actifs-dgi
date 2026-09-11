@@ -1,0 +1,44 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (recensement(); as recensementRef) {
+      <div>
+        <h2 data-cy="recensementDetailsHeading"><span jhiTranslate="gestionActifsDgiApp.recensement.detail.title">Recensement</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ recensementRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.recensement.dateDebut">Date Debut</span></dt>
+          <dd>
+            <span>{{ recensementRef.dateDebut | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.recensement.dateFin">Date Fin</span></dt>
+          <dd>
+            <span>{{ recensementRef.dateFin | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.recensement.statut">Statut</span></dt>
+          <dd>
+            <span [jhiTranslate]="'gestionActifsDgiApp.StatutRecensement.' + (recensementRef.statut ?? 'null')">{{
+              { null: '', PLANIFIER: 'PLANIFIER', EN_COURS: 'EN_COURS', CLOTUREE: 'CLOTUREE' }[recensementRef.statut ?? 'null']
+            }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/recensement', recensementRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

@@ -19,23 +19,19 @@
           <dd>
             <span>{{ affectationRef.dateAffectation | formatMediumDate }}</span>
           </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.affectation.motif">Motif</span></dt>
+          <dd>
+            <span>{{ affectationRef.motif }}</span>
+          </dd>
           <dt><span jhiTranslate="gestionActifsDgiApp.affectation.dateRestitution">Date Restitution</span></dt>
           <dd>
             <span>{{ affectationRef.dateRestitution | formatMediumDate }}</span>
           </dd>
-          <dt><span jhiTranslate="gestionActifsDgiApp.affectation.numeroBordereau">Numero Bordereau</span></dt>
+          <dt><span jhiTranslate="gestionActifsDgiApp.affectation.agent">Agent</span></dt>
           <dd>
-            <span>{{ affectationRef.numeroBordereau }}</span>
-          </dd>
-          <dt><span jhiTranslate="gestionActifsDgiApp.affectation.utilisateur">Utilisateur</span></dt>
-          <dd>
-            <span>{{ affectationRef.utilisateur?.id }}</span>
-          </dd>
-          <dt><span jhiTranslate="gestionActifsDgiApp.affectation.actif">Actif</span></dt>
-          <dd>
-            @if (affectation()!.actif) {
+            @if (affectation()!.agent) {
               <div>
-                <a [routerLink]="['/actif', affectation()!.actif?.id, 'view']">{{ affectationRef.actif?.id }}</a>
+                <a [routerLink]="['/agent', affectation()!.agent?.id, 'view']">{{ affectationRef.agent?.id }}</a>
               </div>
             }
           </dd>

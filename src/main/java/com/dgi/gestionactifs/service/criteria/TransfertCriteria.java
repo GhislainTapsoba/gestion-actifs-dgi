@@ -44,7 +44,7 @@ public class TransfertCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private LocalDateFilter dateDemande;
+    private LocalDateFilter dateTransfert;
 
     private StatutTransfertFilter statut;
 
@@ -52,11 +52,13 @@ public class TransfertCriteria implements Serializable, Criteria {
 
     private LocalDateFilter dateTraitement;
 
+    private LongFilter serviceOrigineId;
+
+    private LongFilter serviceDestinataireId;
+
     private LongFilter demandeurId;
 
     private LongFilter validateurId;
-
-    private LongFilter actifId;
 
     private Boolean distinct;
 
@@ -64,13 +66,14 @@ public class TransfertCriteria implements Serializable, Criteria {
 
     public TransfertCriteria(TransfertCriteria other) {
         this.id = other.optionalId().map(LongFilter::copy).orElse(null);
-        this.dateDemande = other.optionalDateDemande().map(LocalDateFilter::copy).orElse(null);
+        this.dateTransfert = other.optionalDateTransfert().map(LocalDateFilter::copy).orElse(null);
         this.statut = other.optionalStatut().map(StatutTransfertFilter::copy).orElse(null);
         this.commentaireRejet = other.optionalCommentaireRejet().map(StringFilter::copy).orElse(null);
         this.dateTraitement = other.optionalDateTraitement().map(LocalDateFilter::copy).orElse(null);
+        this.serviceOrigineId = other.optionalServiceOrigineId().map(LongFilter::copy).orElse(null);
+        this.serviceDestinataireId = other.optionalServiceDestinataireId().map(LongFilter::copy).orElse(null);
         this.demandeurId = other.optionalDemandeurId().map(LongFilter::copy).orElse(null);
         this.validateurId = other.optionalValidateurId().map(LongFilter::copy).orElse(null);
-        this.actifId = other.optionalActifId().map(LongFilter::copy).orElse(null);
         this.distinct = other.distinct;
     }
 
@@ -98,23 +101,23 @@ public class TransfertCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
-    public LocalDateFilter getDateDemande() {
-        return dateDemande;
+    public LocalDateFilter getDateTransfert() {
+        return dateTransfert;
     }
 
-    public Optional<LocalDateFilter> optionalDateDemande() {
-        return Optional.ofNullable(dateDemande);
+    public Optional<LocalDateFilter> optionalDateTransfert() {
+        return Optional.ofNullable(dateTransfert);
     }
 
-    public LocalDateFilter dateDemande() {
-        if (dateDemande == null) {
-            setDateDemande(new LocalDateFilter());
+    public LocalDateFilter dateTransfert() {
+        if (dateTransfert == null) {
+            setDateTransfert(new LocalDateFilter());
         }
-        return dateDemande;
+        return dateTransfert;
     }
 
-    public void setDateDemande(LocalDateFilter dateDemande) {
-        this.dateDemande = dateDemande;
+    public void setDateTransfert(LocalDateFilter dateTransfert) {
+        this.dateTransfert = dateTransfert;
     }
 
     public StatutTransfertFilter getStatut() {
@@ -174,6 +177,44 @@ public class TransfertCriteria implements Serializable, Criteria {
         this.dateTraitement = dateTraitement;
     }
 
+    public LongFilter getServiceOrigineId() {
+        return serviceOrigineId;
+    }
+
+    public Optional<LongFilter> optionalServiceOrigineId() {
+        return Optional.ofNullable(serviceOrigineId);
+    }
+
+    public LongFilter serviceOrigineId() {
+        if (serviceOrigineId == null) {
+            setServiceOrigineId(new LongFilter());
+        }
+        return serviceOrigineId;
+    }
+
+    public void setServiceOrigineId(LongFilter serviceOrigineId) {
+        this.serviceOrigineId = serviceOrigineId;
+    }
+
+    public LongFilter getServiceDestinataireId() {
+        return serviceDestinataireId;
+    }
+
+    public Optional<LongFilter> optionalServiceDestinataireId() {
+        return Optional.ofNullable(serviceDestinataireId);
+    }
+
+    public LongFilter serviceDestinataireId() {
+        if (serviceDestinataireId == null) {
+            setServiceDestinataireId(new LongFilter());
+        }
+        return serviceDestinataireId;
+    }
+
+    public void setServiceDestinataireId(LongFilter serviceDestinataireId) {
+        this.serviceDestinataireId = serviceDestinataireId;
+    }
+
     public LongFilter getDemandeurId() {
         return demandeurId;
     }
@@ -212,25 +253,6 @@ public class TransfertCriteria implements Serializable, Criteria {
         this.validateurId = validateurId;
     }
 
-    public LongFilter getActifId() {
-        return actifId;
-    }
-
-    public Optional<LongFilter> optionalActifId() {
-        return Optional.ofNullable(actifId);
-    }
-
-    public LongFilter actifId() {
-        if (actifId == null) {
-            setActifId(new LongFilter());
-        }
-        return actifId;
-    }
-
-    public void setActifId(LongFilter actifId) {
-        this.actifId = actifId;
-    }
-
     public Boolean getDistinct() {
         return distinct;
     }
@@ -261,20 +283,32 @@ public class TransfertCriteria implements Serializable, Criteria {
         final TransfertCriteria that = (TransfertCriteria) o;
         return (
             Objects.equals(id, that.id) &&
-            Objects.equals(dateDemande, that.dateDemande) &&
+            Objects.equals(dateTransfert, that.dateTransfert) &&
             Objects.equals(statut, that.statut) &&
             Objects.equals(commentaireRejet, that.commentaireRejet) &&
             Objects.equals(dateTraitement, that.dateTraitement) &&
+            Objects.equals(serviceOrigineId, that.serviceOrigineId) &&
+            Objects.equals(serviceDestinataireId, that.serviceDestinataireId) &&
             Objects.equals(demandeurId, that.demandeurId) &&
             Objects.equals(validateurId, that.validateurId) &&
-            Objects.equals(actifId, that.actifId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, dateDemande, statut, commentaireRejet, dateTraitement, demandeurId, validateurId, actifId, distinct);
+        return Objects.hash(
+            id,
+            dateTransfert,
+            statut,
+            commentaireRejet,
+            dateTraitement,
+            serviceOrigineId,
+            serviceDestinataireId,
+            demandeurId,
+            validateurId,
+            distinct
+        );
     }
 
     // prettier-ignore
@@ -282,13 +316,14 @@ public class TransfertCriteria implements Serializable, Criteria {
     public String toString() {
         return "TransfertCriteria{" +
             optionalId().map(f -> "id=" + f + ", ").orElse("") +
-            optionalDateDemande().map(f -> "dateDemande=" + f + ", ").orElse("") +
+            optionalDateTransfert().map(f -> "dateTransfert=" + f + ", ").orElse("") +
             optionalStatut().map(f -> "statut=" + f + ", ").orElse("") +
             optionalCommentaireRejet().map(f -> "commentaireRejet=" + f + ", ").orElse("") +
             optionalDateTraitement().map(f -> "dateTraitement=" + f + ", ").orElse("") +
+            optionalServiceOrigineId().map(f -> "serviceOrigineId=" + f + ", ").orElse("") +
+            optionalServiceDestinataireId().map(f -> "serviceDestinataireId=" + f + ", ").orElse("") +
             optionalDemandeurId().map(f -> "demandeurId=" + f + ", ").orElse("") +
             optionalValidateurId().map(f -> "validateurId=" + f + ", ").orElse("") +
-            optionalActifId().map(f -> "actifId=" + f + ", ").orElse("") +
             optionalDistinct().map(f -> "distinct=" + f + ", ").orElse("") +
         "}";
     }

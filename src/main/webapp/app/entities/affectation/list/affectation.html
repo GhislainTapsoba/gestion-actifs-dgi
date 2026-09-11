@@ -47,27 +47,21 @@
                 <fa-icon class="p-1" icon="sort" />
               </div>
             </th>
+            <th scope="col" jhiSortBy="motif">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.affectation.motif">Motif</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
             <th scope="col" jhiSortBy="dateRestitution">
               <div class="d-flex">
                 <span jhiTranslate="gestionActifsDgiApp.affectation.dateRestitution">Date Restitution</span>
                 <fa-icon class="p-1" icon="sort" />
               </div>
             </th>
-            <th scope="col" jhiSortBy="numeroBordereau">
+            <th scope="col" jhiSortBy="agent.id">
               <div class="d-flex">
-                <span jhiTranslate="gestionActifsDgiApp.affectation.numeroBordereau">Numero Bordereau</span>
-                <fa-icon class="p-1" icon="sort" />
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="utilisateur.id">
-              <div class="d-flex">
-                <span jhiTranslate="gestionActifsDgiApp.affectation.utilisateur">Utilisateur</span>
-                <fa-icon class="p-1" icon="sort" />
-              </div>
-            </th>
-            <th scope="col" jhiSortBy="actif.id">
-              <div class="d-flex">
-                <span jhiTranslate="gestionActifsDgiApp.affectation.actif">Actif</span>
+                <span jhiTranslate="gestionActifsDgiApp.affectation.agent">Agent</span>
                 <fa-icon class="p-1" icon="sort" />
               </div>
             </th>
@@ -81,15 +75,12 @@
                 <a [routerLink]="['/affectation', affectation.id, 'view']">{{ affectation.id }}</a>
               </td>
               <td>{{ affectation.dateAffectation | formatMediumDate }}</td>
+              <td>{{ affectation.motif }}</td>
               <td>{{ affectation.dateRestitution | formatMediumDate }}</td>
-              <td>{{ affectation.numeroBordereau }}</td>
               <td>
-                {{ affectation.utilisateur?.id }}
-              </td>
-              <td>
-                @if (affectation.actif) {
+                @if (affectation.agent) {
                   <div>
-                    <a [routerLink]="['/actif', affectation.actif.id, 'view']">{{ affectation.actif.id }}</a>
+                    <a [routerLink]="['/agent', affectation.agent.id, 'view']">{{ affectation.agent.id }}</a>
                   </div>
                 }
               </td>

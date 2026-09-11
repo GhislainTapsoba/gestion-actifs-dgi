@@ -81,16 +81,6 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="field_actif" jhiTranslate="gestionActifsDgiApp.contrat.actif">Actif</label>
-          <select class="form-control" id="field_actif" data-cy="actif" name="actif" formControlName="actif" [compareWith]="compareActif">
-            <option [ngValue]="null"></option>
-            @for (actifOption of actifsSharedCollection(); track $index) {
-              <option [ngValue]="actifOption">{{ actifOption.id }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="mb-3">
           <label class="form-label" for="field_fournisseur" jhiTranslate="gestionActifsDgiApp.contrat.fournisseur">Fournisseur</label>
           <select
             class="form-control"
@@ -100,7 +90,7 @@
             formControlName="fournisseur"
             [compareWith]="compareFournisseur"
           >
-            @if (editForm.get(['fournisseur'])!.value === null) {
+            @if (!editForm.get('fournisseur')!.value) {
               <option [ngValue]="null" selected></option>
             }
             @for (fournisseurOption of fournisseursSharedCollection(); track $index) {
@@ -115,6 +105,16 @@
             }
           </div>
         }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_actif" jhiTranslate="gestionActifsDgiApp.contrat.actif">Actif</label>
+          <select class="form-control" id="field_actif" data-cy="actif" name="actif" formControlName="actif" [compareWith]="compareActif">
+            <option [ngValue]="null"></option>
+            @for (actifOption of actifsSharedCollection(); track $index) {
+              <option [ngValue]="actifOption">{{ actifOption.id }}</option>
+            }
+          </select>
+        </div>
       </div>
 
       <div>

@@ -1,0 +1,75 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (equipementRecensement(); as equipementRecensementRef) {
+      <div>
+        <h2 data-cy="equipementRecensementDetailsHeading">
+          <span jhiTranslate="gestionActifsDgiApp.equipementRecensement.detail.title">Equipement Recensement</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ equipementRecensementRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.equipementRecensement.etatConstate">Etat Constate</span></dt>
+          <dd>
+            <span [jhiTranslate]="'gestionActifsDgiApp.EtatMateriel.' + (equipementRecensementRef.etatConstate ?? 'null')">{{
+              {
+                null: '',
+                NEUF: 'NEUF',
+                EN_SERVICE: 'EN_SERVICE',
+                EN_PANNE: 'EN_PANNE',
+                EN_MAINTENANCE: 'EN_MAINTENANCE',
+                REFORME: 'REFORME',
+              }[equipementRecensementRef.etatConstate ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.equipementRecensement.dateConstat">Date Constat</span></dt>
+          <dd>
+            <span>{{ equipementRecensementRef.dateConstat | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.equipementRecensement.emplacementConstate">Emplacement Constate</span></dt>
+          <dd>
+            <span>{{ equipementRecensementRef.emplacementConstate }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.equipementRecensement.anomalieConstatee">Anomalie Constatee</span></dt>
+          <dd>
+            <span>{{ equipementRecensementRef.anomalieConstatee }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.equipementRecensement.recensement">Recensement</span></dt>
+          <dd>
+            @if (equipementRecensement()!.recensement) {
+              <div>
+                <a [routerLink]="['/recensement', equipementRecensement()!.recensement?.id, 'view']">{{
+                  equipementRecensementRef.recensement?.id
+                }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.equipementRecensement.actif">Actif</span></dt>
+          <dd>
+            @if (equipementRecensement()!.actif) {
+              <div>
+                <a [routerLink]="['/actif', equipementRecensement()!.actif?.id, 'view']">{{ equipementRecensementRef.actif?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/equipement-recensement', equipementRecensementRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

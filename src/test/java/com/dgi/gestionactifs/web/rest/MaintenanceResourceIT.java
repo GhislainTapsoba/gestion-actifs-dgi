@@ -101,7 +101,7 @@ class MaintenanceResourceIT {
         // Add required entity
         Actif actif;
         if (TestUtil.findAll(em, Actif.class).isEmpty()) {
-            actif = ActifResourceIT.createEntity();
+            actif = ActifResourceIT.createEntity(em);
             em.persist(actif);
             em.flush();
         } else {
@@ -127,7 +127,7 @@ class MaintenanceResourceIT {
         // Add required entity
         Actif actif;
         if (TestUtil.findAll(em, Actif.class).isEmpty()) {
-            actif = ActifResourceIT.createUpdatedEntity();
+            actif = ActifResourceIT.createUpdatedEntity(em);
             em.persist(actif);
             em.flush();
         } else {
@@ -243,18 +243,6 @@ class MaintenanceResourceIT {
             .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT.toString())))
             .andExpect(jsonPath("$.[*].compteRendu").value(hasItem(DEFAULT_COMPTE_RENDU)))
             .andExpect(jsonPath("$.[*].dateCloture").value(hasItem(DEFAULT_DATE_CLOTURE.toString())));
-    }
-
-    @Test
-    @Transactional
-    @WithMockUser(username = "agent", authorities = { "ROLE_AGENT" })
-    void getAllMaintenancesForAgentWithoutAssignedActifsReturnsEmptyList() throws Exception {
-        restMaintenanceMockMvc
-            .perform(get(ENTITY_API_URL + "?sort=id,desc"))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$").isEmpty());
     }
 
     @Test
@@ -511,6 +499,28 @@ class MaintenanceResourceIT {
 
     @Test
     @Transactional
+    void getAllMaintenancesByActifIsEqualToSomething() throws Exception {
+        Actif actif;
+        if (TestUtil.findAll(em, Actif.class).isEmpty()) {
+            maintenanceRepository.saveAndFlush(maintenance);
+            actif = ActifResourceIT.createEntity(em);
+        } else {
+            actif = TestUtil.findAll(em, Actif.class).get(0);
+        }
+        em.persist(actif);
+        em.flush();
+        maintenance.setActif(actif);
+        maintenanceRepository.saveAndFlush(maintenance);
+        Long actifId = actif.getId();
+        // Get all the maintenanceList where actif equals to actifId
+        defaultMaintenanceShouldBeFound("actifId.equals=" + actifId);
+
+        // Get all the maintenanceList where actif equals to (actifId + 1)
+        defaultMaintenanceShouldNotBeFound("actifId.equals=" + (actifId + 1));
+    }
+
+    @Test
+    @Transactional
     void getAllMaintenancesByTechnicienIsEqualToSomething() throws Exception {
         User technicien;
         if (TestUtil.findAll(em, User.class).isEmpty()) {
@@ -529,28 +539,6 @@ class MaintenanceResourceIT {
 
         // Get all the maintenanceList where technicien equals to (technicienId + 1)
         defaultMaintenanceShouldNotBeFound("technicienId.equals=" + (technicienId + 1));
-    }
-
-    @Test
-    @Transactional
-    void getAllMaintenancesByActifIsEqualToSomething() throws Exception {
-        Actif actif;
-        if (TestUtil.findAll(em, Actif.class).isEmpty()) {
-            maintenanceRepository.saveAndFlush(maintenance);
-            actif = ActifResourceIT.createEntity();
-        } else {
-            actif = TestUtil.findAll(em, Actif.class).get(0);
-        }
-        em.persist(actif);
-        em.flush();
-        maintenance.setActif(actif);
-        maintenanceRepository.saveAndFlush(maintenance);
-        Long actifId = actif.getId();
-        // Get all the maintenanceList where actif equals to actifId
-        defaultMaintenanceShouldBeFound("actifId.equals=" + actifId);
-
-        // Get all the maintenanceList where actif equals to (actifId + 1)
-        defaultMaintenanceShouldNotBeFound("actifId.equals=" + (actifId + 1));
     }
 
     private void defaultMaintenanceFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {

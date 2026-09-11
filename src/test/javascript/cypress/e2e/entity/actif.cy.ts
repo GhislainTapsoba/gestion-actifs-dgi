@@ -14,9 +14,15 @@ describe('Actif e2e test', () => {
   const actifPageUrl = '/actif';
   let username: string;
   let password: string;
-  const actifSample = { identifiantUnique: 'multiple', type: 'POSTE_TRAVAIL', etat: 'PERDU_VOLE' };
+  const actifSample = {
+    codeInventaire: 'terne comme tant que',
+    designation: 'hirsute sitôt que du fait que',
+    type: 'IMPRIMANTE',
+    etat: 'REFORME',
+  };
 
   let actif;
+  let categorieMateriel;
 
   before(() => {
     cy.credentials().then(credentials => {
@@ -29,9 +35,28 @@ describe('Actif e2e test', () => {
   });
 
   beforeEach(() => {
+    // create an instance at the required relationship entity:
+    cy.authenticatedRequest({
+      method: 'POST',
+      url: '/api/categorie-materiels',
+      body: { libelle: 'communauté étudiante hôte', description: 'par suite de brusque aux environs de' },
+    }).then(({ body }) => {
+      categorieMateriel = body;
+    });
+  });
+
+  beforeEach(() => {
     cy.intercept('GET', '/api/actifs+(?*|)').as('entitiesRequest');
     cy.intercept('POST', '/api/actifs').as('postEntityRequest');
     cy.intercept('DELETE', '/api/actifs/*').as('deleteEntityRequest');
+  });
+
+  beforeEach(() => {
+    // Simulate relationships api for better performance and reproducibility.
+    cy.intercept('GET', '/api/categorie-materiels', {
+      statusCode: 200,
+      body: [categorieMateriel],
+    });
   });
 
   afterEach(() => {
@@ -41,6 +66,17 @@ describe('Actif e2e test', () => {
         url: `/api/actifs/${actif.id}`,
       }).then(() => {
         actif = undefined;
+      });
+    }
+  });
+
+  afterEach(() => {
+    if (categorieMateriel) {
+      cy.authenticatedRequest({
+        method: 'DELETE',
+        url: `/api/categorie-materiels/${categorieMateriel.id}`,
+      }).then(() => {
+        categorieMateriel = undefined;
       });
     }
   });
@@ -89,7 +125,10 @@ describe('Actif e2e test', () => {
         cy.authenticatedRequest({
           method: 'POST',
           url: '/api/actifs',
-          body: actifSample,
+          body: {
+            ...actifSample,
+            categorie: categorieMateriel,
+          },
         }).then(({ body }) => {
           actif = body;
 
@@ -170,22 +209,39 @@ describe('Actif e2e test', () => {
     });
 
     it('should create an instance of Actif', () => {
-      cy.get(`[data-cy="identifiantUnique"]`).type('rectorat clac');
-      cy.get(`[data-cy="identifiantUnique"]`).should('have.value', 'rectorat clac');
+      cy.get(`[data-cy="codeInventaire"]`).type('rectorat clac');
+      cy.get(`[data-cy="codeInventaire"]`).should('have.value', 'rectorat clac');
 
-      cy.get(`[data-cy="codeBarreQR"]`).type('réserver');
-      cy.get(`[data-cy="codeBarreQR"]`).should('have.value', 'réserver');
+      cy.get(`[data-cy="designation"]`).type('réserver');
+      cy.get(`[data-cy="designation"]`).should('have.value', 'réserver');
 
-      cy.get(`[data-cy="type"]`).select('RESEAU');
+      cy.get(`[data-cy="marque"]`).type('volontiers aïe déjà');
+      cy.get(`[data-cy="marque"]`).should('have.value', 'volontiers aïe déjà');
+
+      cy.get(`[data-cy="modele"]`).type('corps enseignant oups vroum');
+      cy.get(`[data-cy="modele"]`).should('have.value', 'corps enseignant oups vroum');
+
+      cy.get(`[data-cy="numeroSerie"]`).type('adversaire auparavant partenaire');
+      cy.get(`[data-cy="numeroSerie"]`).should('have.value', 'adversaire auparavant partenaire');
+
+      cy.get(`[data-cy="codeBarre"]`).type('opposer');
+      cy.get(`[data-cy="codeBarre"]`).should('have.value', 'opposer');
+
+      cy.get(`[data-cy="type"]`).select('PERIPHERIQUE');
 
       cy.get(`[data-cy="etat"]`).select('EN_MAINTENANCE');
 
-      cy.get(`[data-cy="localisation"]`).type('cot cot rigoler');
-      cy.get(`[data-cy="localisation"]`).should('have.value', 'cot cot rigoler');
+      cy.get(`[data-cy="localisation"]`).type('responsable dérouler');
+      cy.get(`[data-cy="localisation"]`).should('have.value', 'responsable dérouler');
 
       cy.get(`[data-cy="dateAcquisition"]`).type('2026-09-02');
       cy.get(`[data-cy="dateAcquisition"]`).blur();
       cy.get(`[data-cy="dateAcquisition"]`).should('have.value', '2026-09-02');
+
+      cy.get(`[data-cy="valeurAcquisition"]`).type('25587.19');
+      cy.get(`[data-cy="valeurAcquisition"]`).should('have.value', '25587.19');
+
+      cy.get(`[data-cy="categorie"]`).select(1);
 
       cy.get(entityCreateSaveButtonSelector).click();
 

@@ -15,7 +15,7 @@ public class TransfertDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private LocalDate dateDemande;
+    private LocalDate dateTransfert;
 
     @NotNull
     private StatutTransfert statut;
@@ -24,12 +24,15 @@ public class TransfertDTO implements Serializable {
 
     private LocalDate dateTraitement;
 
+    @NotNull
+    private ServiceDgiDTO serviceOrigine;
+
+    @NotNull
+    private ServiceDgiDTO serviceDestinataire;
+
     private UserDTO demandeur;
 
     private UserDTO validateur;
-
-    @NotNull
-    private ActifDTO actif;
 
     public Long getId() {
         return id;
@@ -39,12 +42,12 @@ public class TransfertDTO implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getDateDemande() {
-        return dateDemande;
+    public LocalDate getDateTransfert() {
+        return dateTransfert;
     }
 
-    public void setDateDemande(LocalDate dateDemande) {
-        this.dateDemande = dateDemande;
+    public void setDateTransfert(LocalDate dateTransfert) {
+        this.dateTransfert = dateTransfert;
     }
 
     public StatutTransfert getStatut() {
@@ -71,6 +74,22 @@ public class TransfertDTO implements Serializable {
         this.dateTraitement = dateTraitement;
     }
 
+    public ServiceDgiDTO getServiceOrigine() {
+        return serviceOrigine;
+    }
+
+    public void setServiceOrigine(ServiceDgiDTO serviceOrigine) {
+        this.serviceOrigine = serviceOrigine;
+    }
+
+    public ServiceDgiDTO getServiceDestinataire() {
+        return serviceDestinataire;
+    }
+
+    public void setServiceDestinataire(ServiceDgiDTO serviceDestinataire) {
+        this.serviceDestinataire = serviceDestinataire;
+    }
+
     public UserDTO getDemandeur() {
         return demandeur;
     }
@@ -85,14 +104,6 @@ public class TransfertDTO implements Serializable {
 
     public void setValidateur(UserDTO validateur) {
         this.validateur = validateur;
-    }
-
-    public ActifDTO getActif() {
-        return actif;
-    }
-
-    public void setActif(ActifDTO actif) {
-        this.actif = actif;
     }
 
     @Override
@@ -121,13 +132,14 @@ public class TransfertDTO implements Serializable {
     public String toString() {
         return "TransfertDTO{" +
             "id=" + getId() +
-            ", dateDemande='" + getDateDemande() + "'" +
+            ", dateTransfert='" + getDateTransfert() + "'" +
             ", statut='" + getStatut() + "'" +
             ", commentaireRejet='" + getCommentaireRejet() + "'" +
             ", dateTraitement='" + getDateTraitement() + "'" +
+            ", serviceOrigine=" + getServiceOrigine() +
+            ", serviceDestinataire=" + getServiceDestinataire() +
             ", demandeur=" + getDemandeur() +
             ", validateur=" + getValidateur() +
-            ", actif=" + getActif() +
             "}";
     }
 }

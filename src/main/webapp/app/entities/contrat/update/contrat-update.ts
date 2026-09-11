@@ -31,21 +31,21 @@ export class ContratUpdate implements OnInit {
   contrat: IContrat | null = null;
   typeContratValues = Object.keys(TypeContrat);
 
-  actifsSharedCollection = signal<IActif[]>([]);
   fournisseursSharedCollection = signal<IFournisseur[]>([]);
+  actifsSharedCollection = signal<IActif[]>([]);
 
   protected contratService = inject(ContratService);
   protected contratFormService = inject(ContratFormService);
-  protected actifService = inject(ActifService);
   protected fournisseurService = inject(FournisseurService);
+  protected actifService = inject(ActifService);
   protected activatedRoute = inject(ActivatedRoute);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: ContratFormGroup = this.contratFormService.createContratFormGroup();
 
-  compareActif = (o1: IActif | null, o2: IActif | null): boolean => this.actifService.compareActif(o1, o2);
-
   compareFournisseur = (o1: IFournisseur | null, o2: IFournisseur | null): boolean => this.fournisseurService.compareFournisseur(o1, o2);
+
+  compareActif = (o1: IActif | null, o2: IActif | null): boolean => this.actifService.compareActif(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ contrat }) => {
@@ -95,19 +95,13 @@ export class ContratUpdate implements OnInit {
     this.contrat = contrat;
     this.contratFormService.resetForm(this.editForm, contrat);
 
-    this.actifsSharedCollection.update(actifs => this.actifService.addActifToCollectionIfMissing<IActif>(actifs, contrat.actif));
     this.fournisseursSharedCollection.update(fournisseurs =>
       this.fournisseurService.addFournisseurToCollectionIfMissing<IFournisseur>(fournisseurs, contrat.fournisseur),
     );
+    this.actifsSharedCollection.update(actifs => this.actifService.addActifToCollectionIfMissing<IActif>(actifs, contrat.actif));
   }
 
   protected loadRelationshipsOptions(): void {
-    this.actifService
-      .query()
-      .pipe(map((res: HttpResponse<IActif[]>) => res.body ?? []))
-      .pipe(map((actifs: IActif[]) => this.actifService.addActifToCollectionIfMissing<IActif>(actifs, this.contrat?.actif)))
-      .subscribe((actifs: IActif[]) => this.actifsSharedCollection.set(actifs));
-
     this.fournisseurService
       .query()
       .pipe(map((res: HttpResponse<IFournisseur[]>) => res.body ?? []))
@@ -117,5 +111,11 @@ export class ContratUpdate implements OnInit {
         ),
       )
       .subscribe((fournisseurs: IFournisseur[]) => this.fournisseursSharedCollection.set(fournisseurs));
+
+    this.actifService
+      .query()
+      .pipe(map((res: HttpResponse<IActif[]>) => res.body ?? []))
+      .pipe(map((actifs: IActif[]) => this.actifService.addActifToCollectionIfMissing<IActif>(actifs, this.contrat?.actif)))
+      .subscribe((actifs: IActif[]) => this.actifsSharedCollection.set(actifs));
   }
 }

@@ -69,24 +69,31 @@ public class ActifQueryService extends QueryService<Actif> {
      */
     protected Specification<Actif> createSpecification(ActifCriteria criteria) {
         Specification<Actif> specification = Specification.unrestricted();
+        specification = specification.and((root, query, builder) -> {
+            if (Long.class != query.getResultType()) {
+                root.fetch(Actif_.categorie, JoinType.LEFT);
+            }
+            return null;
+        });
         if (criteria != null) {
             // This has to be called first, because the distinct method returns null
             specification = specification.and(
                 Specification.allOf(
                     Boolean.TRUE.equals(criteria.getDistinct()) ? distinct(criteria.getDistinct()) : Specification.unrestricted(),
                     buildRangeSpecification(criteria.getId(), Actif_.id),
-                    buildStringSpecification(criteria.getIdentifiantUnique(), Actif_.identifiantUnique),
-                    buildStringSpecification(criteria.getCodeBarreQR(), Actif_.codeBarreQR),
+                    buildStringSpecification(criteria.getCodeInventaire(), Actif_.codeInventaire),
+                    buildStringSpecification(criteria.getDesignation(), Actif_.designation),
+                    buildStringSpecification(criteria.getMarque(), Actif_.marque),
+                    buildStringSpecification(criteria.getModele(), Actif_.modele),
+                    buildStringSpecification(criteria.getNumeroSerie(), Actif_.numeroSerie),
+                    buildStringSpecification(criteria.getCodeBarre(), Actif_.codeBarre),
                     buildSpecification(criteria.getType(), Actif_.type),
                     buildSpecification(criteria.getEtat(), Actif_.etat),
                     buildStringSpecification(criteria.getLocalisation(), Actif_.localisation),
                     buildRangeSpecification(criteria.getDateAcquisition(), Actif_.dateAcquisition),
-                    buildSpecification(criteria.getAffectationId(), root ->
-                        root.join(Actif_.affectations, JoinType.LEFT).get(Affectation_.id)
-                    ),
-                    buildSpecification(criteria.getTransfertId(), root -> root.join(Actif_.transferts, JoinType.LEFT).get(Transfert_.id)),
-                    buildSpecification(criteria.getMaintenanceId(), root ->
-                        root.join(Actif_.maintenances, JoinType.LEFT).get(Maintenance_.id)
+                    buildRangeSpecification(criteria.getValeurAcquisition(), Actif_.valeurAcquisition),
+                    buildSpecification(criteria.getCategorieId(), root ->
+                        root.join(Actif_.categorie, JoinType.LEFT).get(CategorieMateriel_.id)
                     )
                 )
             );

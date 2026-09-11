@@ -19,10 +19,9 @@
       },
       "id": "ID",
       "dateAffectation": "Date Affectation",
+      "motif": "Motif",
       "dateRestitution": "Date Restitution",
-      "numeroBordereau": "Numero Bordereau",
-      "utilisateur": "Utilisateur",
-      "actif": "Actif"
+      "agent": "Agent"
     }
   }
 }

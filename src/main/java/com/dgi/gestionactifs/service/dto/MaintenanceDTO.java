@@ -29,10 +29,10 @@ public class MaintenanceDTO implements Serializable {
 
     private LocalDate dateCloture;
 
-    private UserDTO technicien;
-
     @NotNull
     private ActifDTO actif;
+
+    private UserDTO technicien;
 
     public Long getId() {
         return id;
@@ -82,20 +82,20 @@ public class MaintenanceDTO implements Serializable {
         this.dateCloture = dateCloture;
     }
 
-    public UserDTO getTechnicien() {
-        return technicien;
-    }
-
-    public void setTechnicien(UserDTO technicien) {
-        this.technicien = technicien;
-    }
-
     public ActifDTO getActif() {
         return actif;
     }
 
     public void setActif(ActifDTO actif) {
         this.actif = actif;
+    }
+
+    public UserDTO getTechnicien() {
+        return technicien;
+    }
+
+    public void setTechnicien(UserDTO technicien) {
+        this.technicien = technicien;
     }
 
     @Override
@@ -129,8 +129,8 @@ public class MaintenanceDTO implements Serializable {
             ", statut='" + getStatut() + "'" +
             ", compteRendu='" + getCompteRendu() + "'" +
             ", dateCloture='" + getDateCloture() + "'" +
-            ", technicien=" + getTechnicien() +
             ", actif=" + getActif() +
+            ", technicien=" + getTechnicien() +
             "}";
     }
 }

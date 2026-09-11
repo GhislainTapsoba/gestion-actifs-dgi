@@ -14,10 +14,10 @@ describe('Maintenance e2e test', () => {
   const maintenancePageUrl = '/maintenance';
   let username: string;
   let password: string;
-  const maintenanceSample = { typeMaintenance: 'PREVENTIVE', statut: 'OUVERTE' };
+  // const maintenanceSample = {"typeMaintenance":"PREVENTIVE","statut":"OUVERTE"};
 
   let maintenance;
-  let actif;
+  // let actif;
 
   before(() => {
     cy.credentials().then(credentials => {
@@ -29,23 +29,18 @@ describe('Maintenance e2e test', () => {
     cy.login(username, password);
   });
 
+  /* Disabled due to incompatibility
   beforeEach(() => {
     // create an instance at the required relationship entity:
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/actifs',
-      body: {
-        identifiantUnique: 'lectorat',
-        codeBarreQR: 'pardonner nourrir sur',
-        type: 'RESEAU',
-        etat: 'EN_SERVICE',
-        localisation: 'glouglou là-haut',
-        dateAcquisition: '2026-09-01',
-      },
+      body: {"codeInventaire":"lectorat","designation":"pardonner nourrir sur","marque":"puisque police smack","modele":"éveiller","numeroSerie":"subito accumuler","codeBarre":"chez","type":"POSTE_TRAVAIL","etat":"EN_SERVICE","localisation":"quelque tandis que","dateAcquisition":"2026-09-02","valeurAcquisition":6197.21},
     }).then(({ body }) => {
       actif = body;
     });
   });
+   */
 
   beforeEach(() => {
     cy.intercept('GET', '/api/maintenances+(?*|)').as('entitiesRequest');
@@ -53,18 +48,21 @@ describe('Maintenance e2e test', () => {
     cy.intercept('DELETE', '/api/maintenances/*').as('deleteEntityRequest');
   });
 
+  /* Disabled due to incompatibility
   beforeEach(() => {
     // Simulate relationships api for better performance and reproducibility.
+    cy.intercept('GET', '/api/actifs', {
+      statusCode: 200,
+      body: [actif],
+    });
+
     cy.intercept('GET', '/api/users', {
       statusCode: 200,
       body: [],
     });
 
-    cy.intercept('GET', '/api/actifs', {
-      statusCode: 200,
-      body: [actif],
-    });
   });
+   */
 
   afterEach(() => {
     if (maintenance) {
@@ -77,6 +75,7 @@ describe('Maintenance e2e test', () => {
     }
   });
 
+  /* Disabled due to incompatibility
   afterEach(() => {
     if (actif) {
       cy.authenticatedRequest({
@@ -87,6 +86,7 @@ describe('Maintenance e2e test', () => {
       });
     }
   });
+   */
 
   it('Maintenances menu should load Maintenances page', () => {
     cy.visit('/');
@@ -128,13 +128,14 @@ describe('Maintenance e2e test', () => {
     });
 
     describe('with existing value', () => {
+      /* Disabled due to incompatibility
       beforeEach(() => {
         cy.authenticatedRequest({
           method: 'POST',
           url: '/api/maintenances',
           body: {
             ...maintenanceSample,
-            actif,
+            actif: actif,
           },
         }).then(({ body }) => {
           maintenance = body;
@@ -151,13 +152,24 @@ describe('Maintenance e2e test', () => {
                 link: '<http://localhost/api/maintenances?page=0&size=20>; rel="last",<http://localhost/api/maintenances?page=0&size=20>; rel="first"',
               },
               body: [maintenance],
-            },
+            }
           ).as('entitiesRequestInternal');
         });
 
         cy.visit(maintenancePageUrl);
 
         cy.wait('@entitiesRequestInternal');
+      });
+       */
+
+      beforeEach(function () {
+        cy.visit(maintenancePageUrl);
+
+        cy.wait('@entitiesRequest').then(({ response }) => {
+          if (response?.body.length === 0) {
+            this.skip();
+          }
+        });
       });
 
       it('detail button click should load details Maintenance page', () => {
@@ -191,7 +203,8 @@ describe('Maintenance e2e test', () => {
         cy.location('pathname').should('eq', maintenancePageUrl);
       });
 
-      it('last delete button click should delete instance of Maintenance', () => {
+      // Reason: cannot create a required entity with relationship with required relationships.
+      it.skip('last delete button click should delete instance of Maintenance', () => {
         cy.get(entityDeleteButtonSelector).last().click();
         cy.getEntityDeleteDialogHeading('maintenance').should('exist');
         cy.get(entityConfirmDeleteButtonSelector).click();
@@ -215,7 +228,8 @@ describe('Maintenance e2e test', () => {
       cy.getEntityCreateUpdateHeading('Maintenance');
     });
 
-    it('should create an instance of Maintenance', () => {
+    // Reason: cannot create a required entity with relationship with required relationships.
+    it.skip('should create an instance of Maintenance', () => {
       cy.get(`[data-cy="typeMaintenance"]`).select('PREVENTIVE');
 
       cy.get(`[data-cy="datePanne"]`).type('2026-09-01');

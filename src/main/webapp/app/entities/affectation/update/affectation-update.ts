@@ -7,10 +7,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap/datepicker';
 import { Observable, finalize, map } from 'rxjs';
 
-import { IActif } from 'app/entities/actif/actif.model';
-import { ActifService } from 'app/entities/actif/service/actif.service';
-import { UserService } from 'app/entities/user/service/user.service';
-import { IUser } from 'app/entities/user/user.model';
+import { IAgent } from 'app/entities/agent/agent.model';
+import { AgentService } from 'app/entities/agent/service/agent.service';
 import { AlertError } from 'app/shared/alert';
 import { TranslateDirective } from 'app/shared/language';
 import { IAffectation } from '../affectation.model';
@@ -27,21 +25,17 @@ export class AffectationUpdate implements OnInit {
   readonly isSaving = signal(false);
   affectation: IAffectation | null = null;
 
-  usersSharedCollection = signal<IUser[]>([]);
-  actifsSharedCollection = signal<IActif[]>([]);
+  agentsSharedCollection = signal<IAgent[]>([]);
 
   protected affectationService = inject(AffectationService);
   protected affectationFormService = inject(AffectationFormService);
-  protected userService = inject(UserService);
-  protected actifService = inject(ActifService);
+  protected agentService = inject(AgentService);
   protected activatedRoute = inject(ActivatedRoute);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: AffectationFormGroup = this.affectationFormService.createAffectationFormGroup();
 
-  compareUser = (o1: IUser | null, o2: IUser | null): boolean => this.userService.compareUser(o1, o2);
-
-  compareActif = (o1: IActif | null, o2: IActif | null): boolean => this.actifService.compareActif(o1, o2);
+  compareAgent = (o1: IAgent | null, o2: IAgent | null): boolean => this.agentService.compareAgent(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ affectation }) => {
@@ -91,21 +85,14 @@ export class AffectationUpdate implements OnInit {
     this.affectation = affectation;
     this.affectationFormService.resetForm(this.editForm, affectation);
 
-    this.usersSharedCollection.update(users => this.userService.addUserToCollectionIfMissing<IUser>(users, affectation.utilisateur));
-    this.actifsSharedCollection.update(actifs => this.actifService.addActifToCollectionIfMissing<IActif>(actifs, affectation.actif));
+    this.agentsSharedCollection.update(agents => this.agentService.addAgentToCollectionIfMissing<IAgent>(agents, affectation.agent));
   }
 
   protected loadRelationshipsOptions(): void {
-    this.userService
+    this.agentService
       .query()
-      .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
-      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing<IUser>(users, this.affectation?.utilisateur)))
-      .subscribe((users: IUser[]) => this.usersSharedCollection.set(users));
-
-    this.actifService
-      .query()
-      .pipe(map((res: HttpResponse<IActif[]>) => res.body ?? []))
-      .pipe(map((actifs: IActif[]) => this.actifService.addActifToCollectionIfMissing<IActif>(actifs, this.affectation?.actif)))
-      .subscribe((actifs: IActif[]) => this.actifsSharedCollection.set(actifs));
+      .pipe(map((res: HttpResponse<IAgent[]>) => res.body ?? []))
+      .pipe(map((agents: IAgent[]) => this.agentService.addAgentToCollectionIfMissing<IAgent>(agents, this.affectation?.agent)))
+      .subscribe((agents: IAgent[]) => this.agentsSharedCollection.set(agents));
   }
 }

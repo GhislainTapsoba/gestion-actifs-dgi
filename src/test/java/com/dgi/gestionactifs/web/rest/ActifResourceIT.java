@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.dgi.gestionactifs.IntegrationTest;
 import com.dgi.gestionactifs.domain.Actif;
+import com.dgi.gestionactifs.domain.CategorieMateriel;
 import com.dgi.gestionactifs.domain.enumeration.StatutActif;
 import com.dgi.gestionactifs.domain.enumeration.TypeActif;
 import com.dgi.gestionactifs.repository.ActifRepository;
@@ -37,11 +38,23 @@ import tools.jackson.databind.ObjectMapper;
 @WithMockUser
 class ActifResourceIT {
 
-    private static final String DEFAULT_IDENTIFIANT_UNIQUE = "AAAAAAAAAA";
-    private static final String UPDATED_IDENTIFIANT_UNIQUE = "BBBBBBBBBB";
+    private static final String DEFAULT_CODE_INVENTAIRE = "AAAAAAAAAA";
+    private static final String UPDATED_CODE_INVENTAIRE = "BBBBBBBBBB";
 
-    private static final String DEFAULT_CODE_BARRE_QR = "AAAAAAAAAA";
-    private static final String UPDATED_CODE_BARRE_QR = "BBBBBBBBBB";
+    private static final String DEFAULT_DESIGNATION = "AAAAAAAAAA";
+    private static final String UPDATED_DESIGNATION = "BBBBBBBBBB";
+
+    private static final String DEFAULT_MARQUE = "AAAAAAAAAA";
+    private static final String UPDATED_MARQUE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_MODELE = "AAAAAAAAAA";
+    private static final String UPDATED_MODELE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_NUMERO_SERIE = "AAAAAAAAAA";
+    private static final String UPDATED_NUMERO_SERIE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CODE_BARRE = "AAAAAAAAAA";
+    private static final String UPDATED_CODE_BARRE = "BBBBBBBBBB";
 
     private static final TypeActif DEFAULT_TYPE = TypeActif.POSTE_TRAVAIL;
     private static final TypeActif UPDATED_TYPE = TypeActif.IMPRIMANTE;
@@ -55,6 +68,10 @@ class ActifResourceIT {
     private static final LocalDate DEFAULT_DATE_ACQUISITION = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DATE_ACQUISITION = LocalDate.parse("2026-09-02");
     private static final LocalDate SMALLER_DATE_ACQUISITION = LocalDate.ofEpochDay(-1L);
+
+    private static final Double DEFAULT_VALEUR_ACQUISITION = 1D;
+    private static final Double UPDATED_VALEUR_ACQUISITION = 2D;
+    private static final Double SMALLER_VALEUR_ACQUISITION = 1D - 1D;
 
     private static final String ENTITY_API_URL = "/api/actifs";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -87,14 +104,30 @@ class ActifResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Actif createEntity() {
-        return new Actif()
-            .identifiantUnique(DEFAULT_IDENTIFIANT_UNIQUE)
-            .codeBarreQR(DEFAULT_CODE_BARRE_QR)
+    public static Actif createEntity(EntityManager em) {
+        Actif actif = new Actif()
+            .codeInventaire(DEFAULT_CODE_INVENTAIRE)
+            .designation(DEFAULT_DESIGNATION)
+            .marque(DEFAULT_MARQUE)
+            .modele(DEFAULT_MODELE)
+            .numeroSerie(DEFAULT_NUMERO_SERIE)
+            .codeBarre(DEFAULT_CODE_BARRE)
             .type(DEFAULT_TYPE)
             .etat(DEFAULT_ETAT)
             .localisation(DEFAULT_LOCALISATION)
-            .dateAcquisition(DEFAULT_DATE_ACQUISITION);
+            .dateAcquisition(DEFAULT_DATE_ACQUISITION)
+            .valeurAcquisition(DEFAULT_VALEUR_ACQUISITION);
+        // Add required entity
+        CategorieMateriel categorieMateriel;
+        if (TestUtil.findAll(em, CategorieMateriel.class).isEmpty()) {
+            categorieMateriel = CategorieMaterielResourceIT.createEntity();
+            em.persist(categorieMateriel);
+            em.flush();
+        } else {
+            categorieMateriel = TestUtil.findAll(em, CategorieMateriel.class).get(0);
+        }
+        actif.setCategorie(categorieMateriel);
+        return actif;
     }
 
     /**
@@ -103,19 +136,35 @@ class ActifResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Actif createUpdatedEntity() {
-        return new Actif()
-            .identifiantUnique(UPDATED_IDENTIFIANT_UNIQUE)
-            .codeBarreQR(UPDATED_CODE_BARRE_QR)
+    public static Actif createUpdatedEntity(EntityManager em) {
+        Actif updatedActif = new Actif()
+            .codeInventaire(UPDATED_CODE_INVENTAIRE)
+            .designation(UPDATED_DESIGNATION)
+            .marque(UPDATED_MARQUE)
+            .modele(UPDATED_MODELE)
+            .numeroSerie(UPDATED_NUMERO_SERIE)
+            .codeBarre(UPDATED_CODE_BARRE)
             .type(UPDATED_TYPE)
             .etat(UPDATED_ETAT)
             .localisation(UPDATED_LOCALISATION)
-            .dateAcquisition(UPDATED_DATE_ACQUISITION);
+            .dateAcquisition(UPDATED_DATE_ACQUISITION)
+            .valeurAcquisition(UPDATED_VALEUR_ACQUISITION);
+        // Add required entity
+        CategorieMateriel categorieMateriel;
+        if (TestUtil.findAll(em, CategorieMateriel.class).isEmpty()) {
+            categorieMateriel = CategorieMaterielResourceIT.createUpdatedEntity();
+            em.persist(categorieMateriel);
+            em.flush();
+        } else {
+            categorieMateriel = TestUtil.findAll(em, CategorieMateriel.class).get(0);
+        }
+        updatedActif.setCategorie(categorieMateriel);
+        return updatedActif;
     }
 
     @BeforeEach
     void initTest() {
-        actif = createEntity();
+        actif = createEntity(em);
     }
 
     @AfterEach
@@ -170,10 +219,27 @@ class ActifResourceIT {
 
     @Test
     @Transactional
-    void checkIdentifiantUniqueIsRequired() throws Exception {
+    void checkCodeInventaireIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
         // set the field null
-        actif.setIdentifiantUnique(null);
+        actif.setCodeInventaire(null);
+
+        // Create the Actif, which fails.
+        ActifDTO actifDTO = actifMapper.toDto(actif);
+
+        restActifMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(om.writeValueAsBytes(actifDTO)))
+            .andExpect(status().isBadRequest());
+
+        assertSameRepositoryCount(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    void checkDesignationIsRequired() throws Exception {
+        long databaseSizeBeforeTest = getRepositoryCount();
+        // set the field null
+        actif.setDesignation(null);
 
         // Create the Actif, which fails.
         ActifDTO actifDTO = actifMapper.toDto(actif);
@@ -231,12 +297,17 @@ class ActifResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(actif.getId().intValue())))
-            .andExpect(jsonPath("$.[*].identifiantUnique").value(hasItem(DEFAULT_IDENTIFIANT_UNIQUE)))
-            .andExpect(jsonPath("$.[*].codeBarreQR").value(hasItem(DEFAULT_CODE_BARRE_QR)))
+            .andExpect(jsonPath("$.[*].codeInventaire").value(hasItem(DEFAULT_CODE_INVENTAIRE)))
+            .andExpect(jsonPath("$.[*].designation").value(hasItem(DEFAULT_DESIGNATION)))
+            .andExpect(jsonPath("$.[*].marque").value(hasItem(DEFAULT_MARQUE)))
+            .andExpect(jsonPath("$.[*].modele").value(hasItem(DEFAULT_MODELE)))
+            .andExpect(jsonPath("$.[*].numeroSerie").value(hasItem(DEFAULT_NUMERO_SERIE)))
+            .andExpect(jsonPath("$.[*].codeBarre").value(hasItem(DEFAULT_CODE_BARRE)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].etat").value(hasItem(DEFAULT_ETAT.toString())))
             .andExpect(jsonPath("$.[*].localisation").value(hasItem(DEFAULT_LOCALISATION)))
-            .andExpect(jsonPath("$.[*].dateAcquisition").value(hasItem(DEFAULT_DATE_ACQUISITION.toString())));
+            .andExpect(jsonPath("$.[*].dateAcquisition").value(hasItem(DEFAULT_DATE_ACQUISITION.toString())))
+            .andExpect(jsonPath("$.[*].valeurAcquisition").value(hasItem(DEFAULT_VALEUR_ACQUISITION)));
     }
 
     @Test
@@ -251,12 +322,17 @@ class ActifResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(actif.getId().intValue()))
-            .andExpect(jsonPath("$.identifiantUnique").value(DEFAULT_IDENTIFIANT_UNIQUE))
-            .andExpect(jsonPath("$.codeBarreQR").value(DEFAULT_CODE_BARRE_QR))
+            .andExpect(jsonPath("$.codeInventaire").value(DEFAULT_CODE_INVENTAIRE))
+            .andExpect(jsonPath("$.designation").value(DEFAULT_DESIGNATION))
+            .andExpect(jsonPath("$.marque").value(DEFAULT_MARQUE))
+            .andExpect(jsonPath("$.modele").value(DEFAULT_MODELE))
+            .andExpect(jsonPath("$.numeroSerie").value(DEFAULT_NUMERO_SERIE))
+            .andExpect(jsonPath("$.codeBarre").value(DEFAULT_CODE_BARRE))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
             .andExpect(jsonPath("$.etat").value(DEFAULT_ETAT.toString()))
             .andExpect(jsonPath("$.localisation").value(DEFAULT_LOCALISATION))
-            .andExpect(jsonPath("$.dateAcquisition").value(DEFAULT_DATE_ACQUISITION.toString()));
+            .andExpect(jsonPath("$.dateAcquisition").value(DEFAULT_DATE_ACQUISITION.toString()))
+            .andExpect(jsonPath("$.valeurAcquisition").value(DEFAULT_VALEUR_ACQUISITION));
     }
 
     @Test
@@ -276,117 +352,311 @@ class ActifResourceIT {
 
     @Test
     @Transactional
-    void getAllActifsByIdentifiantUniqueIsEqualToSomething() throws Exception {
+    void getAllActifsByCodeInventaireIsEqualToSomething() throws Exception {
         // Initialize the database
         insertedActif = actifRepository.saveAndFlush(actif);
 
-        // Get all the actifList where identifiantUnique equals to
+        // Get all the actifList where codeInventaire equals to
+        defaultActifFiltering("codeInventaire.equals=" + DEFAULT_CODE_INVENTAIRE, "codeInventaire.equals=" + UPDATED_CODE_INVENTAIRE);
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByCodeInventaireIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where codeInventaire in
         defaultActifFiltering(
-            "identifiantUnique.equals=" + DEFAULT_IDENTIFIANT_UNIQUE,
-            "identifiantUnique.equals=" + UPDATED_IDENTIFIANT_UNIQUE
+            "codeInventaire.in=" + DEFAULT_CODE_INVENTAIRE + "," + UPDATED_CODE_INVENTAIRE,
+            "codeInventaire.in=" + UPDATED_CODE_INVENTAIRE
         );
     }
 
     @Test
     @Transactional
-    void getAllActifsByIdentifiantUniqueIsInShouldWork() throws Exception {
+    void getAllActifsByCodeInventaireIsNullOrNotNull() throws Exception {
         // Initialize the database
         insertedActif = actifRepository.saveAndFlush(actif);
 
-        // Get all the actifList where identifiantUnique in
+        // Get all the actifList where codeInventaire is not null
+        defaultActifFiltering("codeInventaire.specified=true", "codeInventaire.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByCodeInventaireContainsSomething() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where codeInventaire contains
+        defaultActifFiltering("codeInventaire.contains=" + DEFAULT_CODE_INVENTAIRE, "codeInventaire.contains=" + UPDATED_CODE_INVENTAIRE);
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByCodeInventaireNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where codeInventaire does not contain
         defaultActifFiltering(
-            "identifiantUnique.in=" + DEFAULT_IDENTIFIANT_UNIQUE + "," + UPDATED_IDENTIFIANT_UNIQUE,
-            "identifiantUnique.in=" + UPDATED_IDENTIFIANT_UNIQUE
+            "codeInventaire.doesNotContain=" + UPDATED_CODE_INVENTAIRE,
+            "codeInventaire.doesNotContain=" + DEFAULT_CODE_INVENTAIRE
         );
     }
 
     @Test
     @Transactional
-    void getAllActifsByIdentifiantUniqueIsNullOrNotNull() throws Exception {
+    void getAllActifsByDesignationIsEqualToSomething() throws Exception {
         // Initialize the database
         insertedActif = actifRepository.saveAndFlush(actif);
 
-        // Get all the actifList where identifiantUnique is not null
-        defaultActifFiltering("identifiantUnique.specified=true", "identifiantUnique.specified=false");
+        // Get all the actifList where designation equals to
+        defaultActifFiltering("designation.equals=" + DEFAULT_DESIGNATION, "designation.equals=" + UPDATED_DESIGNATION);
     }
 
     @Test
     @Transactional
-    void getAllActifsByIdentifiantUniqueContainsSomething() throws Exception {
+    void getAllActifsByDesignationIsInShouldWork() throws Exception {
         // Initialize the database
         insertedActif = actifRepository.saveAndFlush(actif);
 
-        // Get all the actifList where identifiantUnique contains
+        // Get all the actifList where designation in
+        defaultActifFiltering("designation.in=" + DEFAULT_DESIGNATION + "," + UPDATED_DESIGNATION, "designation.in=" + UPDATED_DESIGNATION);
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByDesignationIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where designation is not null
+        defaultActifFiltering("designation.specified=true", "designation.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByDesignationContainsSomething() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where designation contains
+        defaultActifFiltering("designation.contains=" + DEFAULT_DESIGNATION, "designation.contains=" + UPDATED_DESIGNATION);
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByDesignationNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where designation does not contain
+        defaultActifFiltering("designation.doesNotContain=" + UPDATED_DESIGNATION, "designation.doesNotContain=" + DEFAULT_DESIGNATION);
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByMarqueIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where marque equals to
+        defaultActifFiltering("marque.equals=" + DEFAULT_MARQUE, "marque.equals=" + UPDATED_MARQUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByMarqueIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where marque in
+        defaultActifFiltering("marque.in=" + DEFAULT_MARQUE + "," + UPDATED_MARQUE, "marque.in=" + UPDATED_MARQUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByMarqueIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where marque is not null
+        defaultActifFiltering("marque.specified=true", "marque.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByMarqueContainsSomething() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where marque contains
+        defaultActifFiltering("marque.contains=" + DEFAULT_MARQUE, "marque.contains=" + UPDATED_MARQUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByMarqueNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where marque does not contain
+        defaultActifFiltering("marque.doesNotContain=" + UPDATED_MARQUE, "marque.doesNotContain=" + DEFAULT_MARQUE);
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByModeleIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where modele equals to
+        defaultActifFiltering("modele.equals=" + DEFAULT_MODELE, "modele.equals=" + UPDATED_MODELE);
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByModeleIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where modele in
+        defaultActifFiltering("modele.in=" + DEFAULT_MODELE + "," + UPDATED_MODELE, "modele.in=" + UPDATED_MODELE);
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByModeleIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where modele is not null
+        defaultActifFiltering("modele.specified=true", "modele.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByModeleContainsSomething() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where modele contains
+        defaultActifFiltering("modele.contains=" + DEFAULT_MODELE, "modele.contains=" + UPDATED_MODELE);
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByModeleNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where modele does not contain
+        defaultActifFiltering("modele.doesNotContain=" + UPDATED_MODELE, "modele.doesNotContain=" + DEFAULT_MODELE);
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByNumeroSerieIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where numeroSerie equals to
+        defaultActifFiltering("numeroSerie.equals=" + DEFAULT_NUMERO_SERIE, "numeroSerie.equals=" + UPDATED_NUMERO_SERIE);
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByNumeroSerieIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where numeroSerie in
         defaultActifFiltering(
-            "identifiantUnique.contains=" + DEFAULT_IDENTIFIANT_UNIQUE,
-            "identifiantUnique.contains=" + UPDATED_IDENTIFIANT_UNIQUE
+            "numeroSerie.in=" + DEFAULT_NUMERO_SERIE + "," + UPDATED_NUMERO_SERIE,
+            "numeroSerie.in=" + UPDATED_NUMERO_SERIE
         );
     }
 
     @Test
     @Transactional
-    void getAllActifsByIdentifiantUniqueNotContainsSomething() throws Exception {
+    void getAllActifsByNumeroSerieIsNullOrNotNull() throws Exception {
         // Initialize the database
         insertedActif = actifRepository.saveAndFlush(actif);
 
-        // Get all the actifList where identifiantUnique does not contain
-        defaultActifFiltering(
-            "identifiantUnique.doesNotContain=" + UPDATED_IDENTIFIANT_UNIQUE,
-            "identifiantUnique.doesNotContain=" + DEFAULT_IDENTIFIANT_UNIQUE
-        );
+        // Get all the actifList where numeroSerie is not null
+        defaultActifFiltering("numeroSerie.specified=true", "numeroSerie.specified=false");
     }
 
     @Test
     @Transactional
-    void getAllActifsByCodeBarreQRIsEqualToSomething() throws Exception {
+    void getAllActifsByNumeroSerieContainsSomething() throws Exception {
         // Initialize the database
         insertedActif = actifRepository.saveAndFlush(actif);
 
-        // Get all the actifList where codeBarreQR equals to
-        defaultActifFiltering("codeBarreQR.equals=" + DEFAULT_CODE_BARRE_QR, "codeBarreQR.equals=" + UPDATED_CODE_BARRE_QR);
+        // Get all the actifList where numeroSerie contains
+        defaultActifFiltering("numeroSerie.contains=" + DEFAULT_NUMERO_SERIE, "numeroSerie.contains=" + UPDATED_NUMERO_SERIE);
     }
 
     @Test
     @Transactional
-    void getAllActifsByCodeBarreQRIsInShouldWork() throws Exception {
+    void getAllActifsByNumeroSerieNotContainsSomething() throws Exception {
         // Initialize the database
         insertedActif = actifRepository.saveAndFlush(actif);
 
-        // Get all the actifList where codeBarreQR in
-        defaultActifFiltering(
-            "codeBarreQR.in=" + DEFAULT_CODE_BARRE_QR + "," + UPDATED_CODE_BARRE_QR,
-            "codeBarreQR.in=" + UPDATED_CODE_BARRE_QR
-        );
+        // Get all the actifList where numeroSerie does not contain
+        defaultActifFiltering("numeroSerie.doesNotContain=" + UPDATED_NUMERO_SERIE, "numeroSerie.doesNotContain=" + DEFAULT_NUMERO_SERIE);
     }
 
     @Test
     @Transactional
-    void getAllActifsByCodeBarreQRIsNullOrNotNull() throws Exception {
+    void getAllActifsByCodeBarreIsEqualToSomething() throws Exception {
         // Initialize the database
         insertedActif = actifRepository.saveAndFlush(actif);
 
-        // Get all the actifList where codeBarreQR is not null
-        defaultActifFiltering("codeBarreQR.specified=true", "codeBarreQR.specified=false");
+        // Get all the actifList where codeBarre equals to
+        defaultActifFiltering("codeBarre.equals=" + DEFAULT_CODE_BARRE, "codeBarre.equals=" + UPDATED_CODE_BARRE);
     }
 
     @Test
     @Transactional
-    void getAllActifsByCodeBarreQRContainsSomething() throws Exception {
+    void getAllActifsByCodeBarreIsInShouldWork() throws Exception {
         // Initialize the database
         insertedActif = actifRepository.saveAndFlush(actif);
 
-        // Get all the actifList where codeBarreQR contains
-        defaultActifFiltering("codeBarreQR.contains=" + DEFAULT_CODE_BARRE_QR, "codeBarreQR.contains=" + UPDATED_CODE_BARRE_QR);
+        // Get all the actifList where codeBarre in
+        defaultActifFiltering("codeBarre.in=" + DEFAULT_CODE_BARRE + "," + UPDATED_CODE_BARRE, "codeBarre.in=" + UPDATED_CODE_BARRE);
     }
 
     @Test
     @Transactional
-    void getAllActifsByCodeBarreQRNotContainsSomething() throws Exception {
+    void getAllActifsByCodeBarreIsNullOrNotNull() throws Exception {
         // Initialize the database
         insertedActif = actifRepository.saveAndFlush(actif);
 
-        // Get all the actifList where codeBarreQR does not contain
-        defaultActifFiltering("codeBarreQR.doesNotContain=" + UPDATED_CODE_BARRE_QR, "codeBarreQR.doesNotContain=" + DEFAULT_CODE_BARRE_QR);
+        // Get all the actifList where codeBarre is not null
+        defaultActifFiltering("codeBarre.specified=true", "codeBarre.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByCodeBarreContainsSomething() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where codeBarre contains
+        defaultActifFiltering("codeBarre.contains=" + DEFAULT_CODE_BARRE, "codeBarre.contains=" + UPDATED_CODE_BARRE);
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByCodeBarreNotContainsSomething() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where codeBarre does not contain
+        defaultActifFiltering("codeBarre.doesNotContain=" + UPDATED_CODE_BARRE, "codeBarre.doesNotContain=" + DEFAULT_CODE_BARRE);
     }
 
     @Test
@@ -587,6 +857,116 @@ class ActifResourceIT {
         );
     }
 
+    @Test
+    @Transactional
+    void getAllActifsByValeurAcquisitionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where valeurAcquisition equals to
+        defaultActifFiltering(
+            "valeurAcquisition.equals=" + DEFAULT_VALEUR_ACQUISITION,
+            "valeurAcquisition.equals=" + UPDATED_VALEUR_ACQUISITION
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByValeurAcquisitionIsInShouldWork() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where valeurAcquisition in
+        defaultActifFiltering(
+            "valeurAcquisition.in=" + DEFAULT_VALEUR_ACQUISITION + "," + UPDATED_VALEUR_ACQUISITION,
+            "valeurAcquisition.in=" + UPDATED_VALEUR_ACQUISITION
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByValeurAcquisitionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where valeurAcquisition is not null
+        defaultActifFiltering("valeurAcquisition.specified=true", "valeurAcquisition.specified=false");
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByValeurAcquisitionIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where valeurAcquisition is greater than or equal to
+        defaultActifFiltering(
+            "valeurAcquisition.greaterThanOrEqual=" + DEFAULT_VALEUR_ACQUISITION,
+            "valeurAcquisition.greaterThanOrEqual=" + UPDATED_VALEUR_ACQUISITION
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByValeurAcquisitionIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where valeurAcquisition is less than or equal to
+        defaultActifFiltering(
+            "valeurAcquisition.lessThanOrEqual=" + DEFAULT_VALEUR_ACQUISITION,
+            "valeurAcquisition.lessThanOrEqual=" + SMALLER_VALEUR_ACQUISITION
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByValeurAcquisitionIsLessThanSomething() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where valeurAcquisition is less than
+        defaultActifFiltering(
+            "valeurAcquisition.lessThan=" + UPDATED_VALEUR_ACQUISITION,
+            "valeurAcquisition.lessThan=" + DEFAULT_VALEUR_ACQUISITION
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByValeurAcquisitionIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        insertedActif = actifRepository.saveAndFlush(actif);
+
+        // Get all the actifList where valeurAcquisition is greater than
+        defaultActifFiltering(
+            "valeurAcquisition.greaterThan=" + SMALLER_VALEUR_ACQUISITION,
+            "valeurAcquisition.greaterThan=" + DEFAULT_VALEUR_ACQUISITION
+        );
+    }
+
+    @Test
+    @Transactional
+    void getAllActifsByCategorieIsEqualToSomething() throws Exception {
+        CategorieMateriel categorie;
+        if (TestUtil.findAll(em, CategorieMateriel.class).isEmpty()) {
+            actifRepository.saveAndFlush(actif);
+            categorie = CategorieMaterielResourceIT.createEntity();
+        } else {
+            categorie = TestUtil.findAll(em, CategorieMateriel.class).get(0);
+        }
+        em.persist(categorie);
+        em.flush();
+        actif.setCategorie(categorie);
+        actifRepository.saveAndFlush(actif);
+        Long categorieId = categorie.getId();
+        // Get all the actifList where categorie equals to categorieId
+        defaultActifShouldBeFound("categorieId.equals=" + categorieId);
+
+        // Get all the actifList where categorie equals to (categorieId + 1)
+        defaultActifShouldNotBeFound("categorieId.equals=" + (categorieId + 1));
+    }
+
     private void defaultActifFiltering(String shouldBeFound, String shouldNotBeFound) throws Exception {
         defaultActifShouldBeFound(shouldBeFound);
         defaultActifShouldNotBeFound(shouldNotBeFound);
@@ -601,12 +981,17 @@ class ActifResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(actif.getId().intValue())))
-            .andExpect(jsonPath("$.[*].identifiantUnique").value(hasItem(DEFAULT_IDENTIFIANT_UNIQUE)))
-            .andExpect(jsonPath("$.[*].codeBarreQR").value(hasItem(DEFAULT_CODE_BARRE_QR)))
+            .andExpect(jsonPath("$.[*].codeInventaire").value(hasItem(DEFAULT_CODE_INVENTAIRE)))
+            .andExpect(jsonPath("$.[*].designation").value(hasItem(DEFAULT_DESIGNATION)))
+            .andExpect(jsonPath("$.[*].marque").value(hasItem(DEFAULT_MARQUE)))
+            .andExpect(jsonPath("$.[*].modele").value(hasItem(DEFAULT_MODELE)))
+            .andExpect(jsonPath("$.[*].numeroSerie").value(hasItem(DEFAULT_NUMERO_SERIE)))
+            .andExpect(jsonPath("$.[*].codeBarre").value(hasItem(DEFAULT_CODE_BARRE)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].etat").value(hasItem(DEFAULT_ETAT.toString())))
             .andExpect(jsonPath("$.[*].localisation").value(hasItem(DEFAULT_LOCALISATION)))
-            .andExpect(jsonPath("$.[*].dateAcquisition").value(hasItem(DEFAULT_DATE_ACQUISITION.toString())));
+            .andExpect(jsonPath("$.[*].dateAcquisition").value(hasItem(DEFAULT_DATE_ACQUISITION.toString())))
+            .andExpect(jsonPath("$.[*].valeurAcquisition").value(hasItem(DEFAULT_VALEUR_ACQUISITION)));
 
         // Check, that the count call also returns 1
         restActifMockMvc
@@ -655,12 +1040,17 @@ class ActifResourceIT {
         // Disconnect from session so that the updates on updatedActif are not directly saved in db
         em.detach(updatedActif);
         updatedActif
-            .identifiantUnique(UPDATED_IDENTIFIANT_UNIQUE)
-            .codeBarreQR(UPDATED_CODE_BARRE_QR)
+            .codeInventaire(UPDATED_CODE_INVENTAIRE)
+            .designation(UPDATED_DESIGNATION)
+            .marque(UPDATED_MARQUE)
+            .modele(UPDATED_MODELE)
+            .numeroSerie(UPDATED_NUMERO_SERIE)
+            .codeBarre(UPDATED_CODE_BARRE)
             .type(UPDATED_TYPE)
             .etat(UPDATED_ETAT)
             .localisation(UPDATED_LOCALISATION)
-            .dateAcquisition(UPDATED_DATE_ACQUISITION);
+            .dateAcquisition(UPDATED_DATE_ACQUISITION)
+            .valeurAcquisition(UPDATED_VALEUR_ACQUISITION);
         ActifDTO actifDTO = actifMapper.toDto(updatedActif);
 
         restActifMockMvc
@@ -747,8 +1137,10 @@ class ActifResourceIT {
         partialUpdatedActif.setId(actif.getId());
 
         partialUpdatedActif
-            .identifiantUnique(UPDATED_IDENTIFIANT_UNIQUE)
-            .localisation(UPDATED_LOCALISATION)
+            .codeInventaire(UPDATED_CODE_INVENTAIRE)
+            .numeroSerie(UPDATED_NUMERO_SERIE)
+            .codeBarre(UPDATED_CODE_BARRE)
+            .type(UPDATED_TYPE)
             .dateAcquisition(UPDATED_DATE_ACQUISITION);
 
         restActifMockMvc
@@ -778,12 +1170,17 @@ class ActifResourceIT {
         partialUpdatedActif.setId(actif.getId());
 
         partialUpdatedActif
-            .identifiantUnique(UPDATED_IDENTIFIANT_UNIQUE)
-            .codeBarreQR(UPDATED_CODE_BARRE_QR)
+            .codeInventaire(UPDATED_CODE_INVENTAIRE)
+            .designation(UPDATED_DESIGNATION)
+            .marque(UPDATED_MARQUE)
+            .modele(UPDATED_MODELE)
+            .numeroSerie(UPDATED_NUMERO_SERIE)
+            .codeBarre(UPDATED_CODE_BARRE)
             .type(UPDATED_TYPE)
             .etat(UPDATED_ETAT)
             .localisation(UPDATED_LOCALISATION)
-            .dateAcquisition(UPDATED_DATE_ACQUISITION);
+            .dateAcquisition(UPDATED_DATE_ACQUISITION)
+            .valeurAcquisition(UPDATED_VALEUR_ACQUISITION);
 
         restActifMockMvc
             .perform(

@@ -72,15 +72,18 @@ class ActifCriteriaTest {
 
     private static void setAllFilters(ActifCriteria actifCriteria) {
         actifCriteria.id();
-        actifCriteria.identifiantUnique();
-        actifCriteria.codeBarreQR();
+        actifCriteria.codeInventaire();
+        actifCriteria.designation();
+        actifCriteria.marque();
+        actifCriteria.modele();
+        actifCriteria.numeroSerie();
+        actifCriteria.codeBarre();
         actifCriteria.type();
         actifCriteria.etat();
         actifCriteria.localisation();
         actifCriteria.dateAcquisition();
-        actifCriteria.affectationId();
-        actifCriteria.transfertId();
-        actifCriteria.maintenanceId();
+        actifCriteria.valeurAcquisition();
+        actifCriteria.categorieId();
         actifCriteria.distinct();
     }
 
@@ -88,15 +91,18 @@ class ActifCriteriaTest {
         return new Condition<>(
             criteria ->
                 condition.apply(criteria.getId()) &&
-                condition.apply(criteria.getIdentifiantUnique()) &&
-                condition.apply(criteria.getCodeBarreQR()) &&
+                condition.apply(criteria.getCodeInventaire()) &&
+                condition.apply(criteria.getDesignation()) &&
+                condition.apply(criteria.getMarque()) &&
+                condition.apply(criteria.getModele()) &&
+                condition.apply(criteria.getNumeroSerie()) &&
+                condition.apply(criteria.getCodeBarre()) &&
                 condition.apply(criteria.getType()) &&
                 condition.apply(criteria.getEtat()) &&
                 condition.apply(criteria.getLocalisation()) &&
                 condition.apply(criteria.getDateAcquisition()) &&
-                condition.apply(criteria.getAffectationId()) &&
-                condition.apply(criteria.getTransfertId()) &&
-                condition.apply(criteria.getMaintenanceId()) &&
+                condition.apply(criteria.getValeurAcquisition()) &&
+                condition.apply(criteria.getCategorieId()) &&
                 condition.apply(criteria.getDistinct()),
             "every filter matches"
         );
@@ -106,15 +112,18 @@ class ActifCriteriaTest {
         return new Condition<>(
             criteria ->
                 condition.apply(criteria.getId(), copy.getId()) &&
-                condition.apply(criteria.getIdentifiantUnique(), copy.getIdentifiantUnique()) &&
-                condition.apply(criteria.getCodeBarreQR(), copy.getCodeBarreQR()) &&
+                condition.apply(criteria.getCodeInventaire(), copy.getCodeInventaire()) &&
+                condition.apply(criteria.getDesignation(), copy.getDesignation()) &&
+                condition.apply(criteria.getMarque(), copy.getMarque()) &&
+                condition.apply(criteria.getModele(), copy.getModele()) &&
+                condition.apply(criteria.getNumeroSerie(), copy.getNumeroSerie()) &&
+                condition.apply(criteria.getCodeBarre(), copy.getCodeBarre()) &&
                 condition.apply(criteria.getType(), copy.getType()) &&
                 condition.apply(criteria.getEtat(), copy.getEtat()) &&
                 condition.apply(criteria.getLocalisation(), copy.getLocalisation()) &&
                 condition.apply(criteria.getDateAcquisition(), copy.getDateAcquisition()) &&
-                condition.apply(criteria.getAffectationId(), copy.getAffectationId()) &&
-                condition.apply(criteria.getTransfertId(), copy.getTransfertId()) &&
-                condition.apply(criteria.getMaintenanceId(), copy.getMaintenanceId()) &&
+                condition.apply(criteria.getValeurAcquisition(), copy.getValeurAcquisition()) &&
+                condition.apply(criteria.getCategorieId(), copy.getCategorieId()) &&
                 condition.apply(criteria.getDistinct(), copy.getDistinct()),
             "every filter matches"
         );

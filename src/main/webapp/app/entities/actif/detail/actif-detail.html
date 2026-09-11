@@ -15,13 +15,29 @@
           <dd>
             <span>{{ actifRef.id }}</span>
           </dd>
-          <dt><span jhiTranslate="gestionActifsDgiApp.actif.identifiantUnique">Identifiant Unique</span></dt>
+          <dt><span jhiTranslate="gestionActifsDgiApp.actif.codeInventaire">Code Inventaire</span></dt>
           <dd>
-            <span>{{ actifRef.identifiantUnique }}</span>
+            <span>{{ actifRef.codeInventaire }}</span>
           </dd>
-          <dt><span jhiTranslate="gestionActifsDgiApp.actif.codeBarreQR">Code Barre QR</span></dt>
+          <dt><span jhiTranslate="gestionActifsDgiApp.actif.designation">Designation</span></dt>
           <dd>
-            <span>{{ actifRef.codeBarreQR }}</span>
+            <span>{{ actifRef.designation }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.actif.marque">Marque</span></dt>
+          <dd>
+            <span>{{ actifRef.marque }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.actif.modele">Modele</span></dt>
+          <dd>
+            <span>{{ actifRef.modele }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.actif.numeroSerie">Numero Serie</span></dt>
+          <dd>
+            <span>{{ actifRef.numeroSerie }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.actif.codeBarre">Code Barre</span></dt>
+          <dd>
+            <span>{{ actifRef.codeBarre }}</span>
           </dd>
           <dt><span jhiTranslate="gestionActifsDgiApp.actif.type">Type</span></dt>
           <dd>
@@ -38,29 +54,115 @@
           </dd>
           <dt><span jhiTranslate="gestionActifsDgiApp.actif.etat">Etat</span></dt>
           <dd>
-            <span [jhiTranslate]="'gestionActifsDgiApp.StatutActif.' + (actifRef.etat ?? 'null')">{{
-              { null: '', EN_SERVICE: 'EN_SERVICE', EN_MAINTENANCE: 'EN_MAINTENANCE', REFORME: 'REFORME', PERDU_VOLE: 'PERDU_VOLE' }[
-                actifRef.etat ?? 'null'
-              ]
-            }}</span>
+            <span
+              class="badge"
+              [class.bg-success]="actifRef.etat === 'EN_SERVICE'"
+              [class.bg-warning]="actifRef.etat === 'EN_MAINTENANCE'"
+              [class.text-dark]="actifRef.etat === 'EN_MAINTENANCE'"
+              [class.bg-secondary]="actifRef.etat === 'REFORME'"
+              [class.bg-danger]="actifRef.etat === 'PERDU_VOLE'"
+            >
+              {{ actifRef.etat }}
+            </span>
           </dd>
           <dt><span jhiTranslate="gestionActifsDgiApp.actif.localisation">Localisation</span></dt>
           <dd>
-            <span>{{ actifRef.localisation }}</span>
+            <span>{{ actifRef.localisation || '—' }}</span>
           </dd>
           <dt><span jhiTranslate="gestionActifsDgiApp.actif.dateAcquisition">Date Acquisition</span></dt>
           <dd>
-            <span>{{ actifRef.dateAcquisition | formatMediumDate }}</span>
+            <span>{{ (actifRef.dateAcquisition | formatMediumDate) || '—' }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.actif.valeurAcquisition">Valeur Acquisition</span></dt>
+          <dd>
+            <span>{{ actifRef.valeurAcquisition ? actifRef.valeurAcquisition + ' FCFA' : '—' }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.actif.categorie">Categorie</span></dt>
+          <dd>
+            @if (actif()!.categorie) {
+              <div>
+                <a [routerLink]="['/categorie-materiel', actif()!.categorie?.id, 'view']">
+                  {{ actifRef.categorie?.libelle || '#' + actifRef.categorie?.id }}
+                </a>
+              </div>
+            }
           </dd>
         </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
-        </button>
+        <!-- Étiquette d'inventaire physique DGI -->
+        <div class="card mb-4 mt-3 border p-3 bg-light">
+          <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+            <h5 class="mb-0 text-primary"><fa-icon icon="barcode" />&nbsp;Étiquette d'inventaire physique DGI</h5>
+            <button type="button" class="btn btn-secondary btn-sm" (click)="imprimerEtiquette()">
+              <fa-icon icon="print" />&nbsp;Imprimer l'étiquette (80x45mm)
+            </button>
+          </div>
+          <p class="text-muted small mb-2">
+            Étiquette normalisée avec code-barres pour identification physique du bien sur le parc matériel.
+          </p>
+          <div class="p-3 bg-white border rounded text-center" style="max-width: 320px">
+            <div style="font-size: 0.75rem; font-weight: 800; color: #0f172a">DIRECTION GÉNÉRALE DES IMPÔTS</div>
+            <div style="font-size: 0.85rem; font-weight: 700; margin: 4px 0">{{ actifRef.designation }}</div>
+            <div style="font-size: 0.7rem; color: #64748b">
+              {{ actifRef.marque }} {{ actifRef.modele }} | S/N: {{ actifRef.numeroSerie || '—' }}
+            </div>
+            <div class="mt-2 text-center">
+              <svg viewBox="0 0 200 40" style="height: 45px; width: 100%; max-width: 240px">
+                <rect x="0" y="0" width="200" height="40" fill="#fff" />
+                <g fill="#000">
+                  <rect x="5" y="0" width="3" height="35" />
+                  <rect x="10" y="0" width="2" height="35" />
+                  <rect x="15" y="0" width="4" height="35" />
+                  <rect x="22" y="0" width="2" height="35" />
+                  <rect x="27" y="0" width="5" height="35" />
+                  <rect x="35" y="0" width="2" height="35" />
+                  <rect x="40" y="0" width="4" height="35" />
+                  <rect x="47" y="0" width="3" height="35" />
+                  <rect x="53" y="0" width="2" height="35" />
+                  <rect x="58" y="0" width="5" height="35" />
+                  <rect x="66" y="0" width="2" height="35" />
+                  <rect x="71" y="0" width="3" height="35" />
+                  <rect x="77" y="0" width="4" height="35" />
+                  <rect x="84" y="0" width="2" height="35" />
+                  <rect x="89" y="0" width="5" height="35" />
+                  <rect x="97" y="0" width="3" height="35" />
+                  <rect x="103" y="0" width="2" height="35" />
+                  <rect x="108" y="0" width="4" height="35" />
+                  <rect x="115" y="0" width="3" height="35" />
+                  <rect x="121" y="0" width="5" height="35" />
+                  <rect x="129" y="0" width="2" height="35" />
+                  <rect x="134" y="0" width="4" height="35" />
+                  <rect x="141" y="0" width="2" height="35" />
+                  <rect x="146" y="0" width="5" height="35" />
+                  <rect x="154" y="0" width="3" height="35" />
+                  <rect x="160" y="0" width="2" height="35" />
+                  <rect x="165" y="0" width="4" height="35" />
+                  <rect x="172" y="0" width="5" height="35" />
+                  <rect x="180" y="0" width="2" height="35" />
+                  <rect x="185" y="0" width="4" height="35" />
+                  <rect x="192" y="0" width="3" height="35" />
+                </g>
+              </svg>
+              <div style="font-family: monospace; font-size: 0.8rem; font-weight: bold; letter-spacing: 0.1em">
+                * {{ actifRef.codeBarre || actifRef.codeInventaire }} *
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <button type="button" [routerLink]="['/actif', actifRef.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
-        </button>
+        <div class="d-flex gap-2 flex-wrap">
+          <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+            <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+          </button>
+
+          <button type="button" class="btn btn-secondary" (click)="imprimerEtiquette()">
+            <fa-icon icon="print" />&nbsp;<span>Imprimer l'étiquette</span>
+          </button>
+
+          <button type="button" [routerLink]="['/actif', actifRef.id, 'edit']" class="btn btn-primary">
+            <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+          </button>
+        </div>
       </div>
     }
   </div>

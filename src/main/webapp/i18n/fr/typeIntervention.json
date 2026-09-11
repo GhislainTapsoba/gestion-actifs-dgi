@@ -1,0 +1,9 @@
+{
+  "gestionActifsDgiApp": {
+    "TypeIntervention": {
+      "null": "",
+      "PREVENTIVE": "PREVENTIVE",
+      "CORRECTIVE": "CORRECTIVE"
+    }
+  }
+}

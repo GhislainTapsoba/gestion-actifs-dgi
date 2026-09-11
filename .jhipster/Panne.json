@@ -1,0 +1,39 @@
+{
+  "annotations": {
+    "changelogDate": "20260910221037"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dateDeclaration",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "statutPanne",
+      "fieldType": "StatutPanne",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "SIGNALEE,EN_COURS,RESOLUE"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Panne",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "actif",
+      "relationshipName": "actif",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

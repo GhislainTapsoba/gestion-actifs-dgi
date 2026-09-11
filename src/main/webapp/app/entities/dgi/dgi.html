@@ -1,0 +1,34 @@
+<section class="dgi-shell">
+  <header class="dgi-shell__header">
+    <div>
+      <span class="dgi-shell__eyebrow">DGI</span>
+      <h1 class="dgi-shell__title">Administration des actifs</h1>
+    </div>
+    <a routerLink="/" class="btn btn-outline-primary btn-sm">
+      <fa-icon icon="arrow-left" />
+      Retour au tableau de bord
+    </a>
+  </header>
+
+  <div class="dgi-grid">
+    @for (module of modules(); track module.key) {
+      <a class="dgi-card dgi-card--{{ module.accent }}" [routerLink]="module.route">
+        <div class="dgi-card__icon">
+          <fa-icon [icon]="module.icon" />
+        </div>
+        <div class="dgi-card__content">
+          <div class="dgi-card__meta">
+            @if (module.count !== null) {
+              <span>{{ module.count }}</span>
+              <small>éléments</small>
+            } @else {
+              <span class="dgi-card__meta-loading">—</span>
+            }
+          </div>
+          <h2>{{ module.label }}</h2>
+          <p>{{ module.description }}</p>
+        </div>
+      </a>
+    }
+  </div>
+</section>

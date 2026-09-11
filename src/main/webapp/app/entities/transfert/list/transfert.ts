@@ -9,6 +9,7 @@ import { NgbPagination } from '@ng-bootstrap/ng-bootstrap/pagination';
 import { combineLatest, filter, map, tap } from 'rxjs';
 
 import { DEFAULT_SORT_DATA, ITEMS_PER_PAGE, ITEM_DELETED_EVENT, PAGE_HEADER, SORT, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config';
+import { AccountService } from 'app/core/auth';
 import { Alert, AlertError } from 'app/shared/alert';
 import { FormatMediumDatePipe } from 'app/shared/date';
 import { Filter, FilterOptions, IFilterOption, IFilterOptions } from 'app/shared/filter';
@@ -60,6 +61,7 @@ export class Transfert {
   protected readonly sortService = inject(SortService);
   protected readonly filterOptions = toSignal(this.filters.filterChanges);
   protected modalService = inject(NgbModal);
+  protected readonly accountService = inject(AccountService);
 
   constructor() {
     effect(() => {
@@ -92,6 +94,36 @@ export class Transfert {
   }
 
   trackId = (item: ITransfert): number => this.transfertService.getTransfertIdentifier(item);
+
+  canValidate(): boolean {
+    return this.accountService.hasAnyAuthority(['ROLE_ADMIN', 'ROLE_RESPONSABLE']);
+  }
+
+  valider(transfert: ITransfert): void {
+    if (!transfert.id) return;
+    if (confirm(`Confirmez-vous la validation du transfert #${transfert.id} ?`)) {
+      this.transfertService.valider(transfert.id).subscribe({
+        next: updated => {
+          this.transferts.update(list => list.map(t => (t.id === updated.id ? updated : t)));
+        },
+      });
+    }
+  }
+
+  rejeter(transfert: ITransfert): void {
+    if (!transfert.id) return;
+    const motif = prompt(`Veuillez saisir le motif du rejet pour le transfert #${transfert.id} :`);
+    if (motif === null) return;
+    if (!motif.trim()) {
+      alert('Le motif du rejet est obligatoire.');
+      return;
+    }
+    this.transfertService.rejeter(transfert.id, motif.trim()).subscribe({
+      next: updated => {
+        this.transferts.update(list => list.map(t => (t.id === updated.id ? updated : t)));
+      },
+    });
+  }
 
   delete(transfert: ITransfert): void {
     const modalRef = this.modalService.open(TransfertDeleteDialog, { size: 'lg', backdrop: 'static' });

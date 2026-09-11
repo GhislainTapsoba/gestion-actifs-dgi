@@ -24,10 +24,10 @@ public class ContratDTO implements Serializable {
     @NotNull
     private LocalDate dateFin;
 
-    private ActifDTO actif;
-
     @NotNull
     private FournisseurDTO fournisseur;
+
+    private ActifDTO actif;
 
     public Long getId() {
         return id;
@@ -69,20 +69,20 @@ public class ContratDTO implements Serializable {
         this.dateFin = dateFin;
     }
 
-    public ActifDTO getActif() {
-        return actif;
-    }
-
-    public void setActif(ActifDTO actif) {
-        this.actif = actif;
-    }
-
     public FournisseurDTO getFournisseur() {
         return fournisseur;
     }
 
     public void setFournisseur(FournisseurDTO fournisseur) {
         this.fournisseur = fournisseur;
+    }
+
+    public ActifDTO getActif() {
+        return actif;
+    }
+
+    public void setActif(ActifDTO actif) {
+        this.actif = actif;
     }
 
     @Override
@@ -115,8 +115,8 @@ public class ContratDTO implements Serializable {
             ", reference='" + getReference() + "'" +
             ", dateDebut='" + getDateDebut() + "'" +
             ", dateFin='" + getDateFin() + "'" +
-            ", actif=" + getActif() +
             ", fournisseur=" + getFournisseur() +
+            ", actif=" + getActif() +
             "}";
     }
 }

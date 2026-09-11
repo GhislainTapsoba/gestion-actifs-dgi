@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (inventaire(); as inventaireRef) {
+      <div>
+        <h2 data-cy="inventaireDetailsHeading"><span jhiTranslate="gestionActifsDgiApp.inventaire.detail.title">Inventaire</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ inventaireRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.inventaire.nomFichier">Nom Fichier</span></dt>
+          <dd>
+            <span>{{ inventaireRef.nomFichier }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.inventaire.dateImport">Date Import</span></dt>
+          <dd>
+            <span>{{ inventaireRef.dateImport | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.inventaire.actif">Actif</span></dt>
+          <dd>
+            @if (inventaire()!.actif) {
+              <div>
+                <a [routerLink]="['/actif', inventaire()!.actif?.id, 'view']">{{ inventaireRef.actif?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/inventaire', inventaireRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

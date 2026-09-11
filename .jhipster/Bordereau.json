@@ -1,0 +1,62 @@
+{
+  "annotations": {
+    "changelogDate": "20260910221034"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "numero",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dateEmission",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "typeBordereau",
+      "fieldType": "TypeBordereau",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "AFFECTATION,TRANSFERT"
+    },
+    {
+      "fieldName": "statutValidation",
+      "fieldType": "StatutBordereau",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "EN_ATTENTE,VALIDE,REJETE"
+    },
+    {
+      "fieldName": "dateValidation",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Bordereau",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "transfert",
+      "relationshipName": "transfert",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "affectation",
+      "relationshipName": "affectation",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "user",
+      "relationshipName": "emetteur",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required",
+      "relationshipWithBuiltInEntity": true
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

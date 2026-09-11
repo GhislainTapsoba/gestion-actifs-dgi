@@ -1,0 +1,40 @@
+<section class="dgi-module">
+  <header class="dgi-module__header">
+    <div>
+      <span class="dgi-module__eyebrow">DGI</span>
+      <h1>{{ definition.title }}</h1>
+      <p>{{ definition.subtitle }}</p>
+    </div>
+    <div class="dgi-module__actions">
+      <a routerLink="/dgi" class="btn btn-outline-primary btn-sm">
+        <fa-icon icon="arrow-left" />
+        Retour
+      </a>
+      <button class="btn btn-primary btn-sm" type="button">
+        <fa-icon icon="plus" />
+        Nouveau
+      </button>
+    </div>
+  </header>
+
+  <div class="dgi-module__table-wrap">
+    <table class="table table-striped align-middle mb-0">
+      <thead>
+        <tr>
+          @for (column of definition.columns; track column.key) {
+            <th scope="col">{{ column.label }}</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of definition.rows; track row['code'] ?? row['nom'] ?? row['libelle'] ?? row['numero']) {
+          <tr>
+            @for (column of definition.columns; track column.key) {
+              <td>{{ row[column.key] }}</td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

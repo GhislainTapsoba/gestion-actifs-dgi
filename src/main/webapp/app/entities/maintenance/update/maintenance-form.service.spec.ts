@@ -25,8 +25,8 @@ describe('Maintenance Form Service', () => {
             statut: expect.any(Object),
             compteRendu: expect.any(Object),
             dateCloture: expect.any(Object),
-            technicien: expect.any(Object),
             actif: expect.any(Object),
+            technicien: expect.any(Object),
           }),
         );
       });
@@ -42,8 +42,8 @@ describe('Maintenance Form Service', () => {
             statut: expect.any(Object),
             compteRendu: expect.any(Object),
             dateCloture: expect.any(Object),
-            technicien: expect.any(Object),
             actif: expect.any(Object),
+            technicien: expect.any(Object),
           }),
         );
       });

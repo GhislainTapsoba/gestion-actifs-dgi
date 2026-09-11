@@ -63,15 +63,15 @@
                 <fa-icon class="p-1" icon="sort" />
               </div>
             </th>
-            <th scope="col" jhiSortBy="actif.id">
-              <div class="d-flex">
-                <span jhiTranslate="gestionActifsDgiApp.contrat.actif">Actif</span>
-                <fa-icon class="p-1" icon="sort" />
-              </div>
-            </th>
             <th scope="col" jhiSortBy="fournisseur.id">
               <div class="d-flex">
                 <span jhiTranslate="gestionActifsDgiApp.contrat.fournisseur">Fournisseur</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="actif.id">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.contrat.actif">Actif</span>
                 <fa-icon class="p-1" icon="sort" />
               </div>
             </th>
@@ -91,16 +91,16 @@
               <td>{{ contrat.dateDebut | formatMediumDate }}</td>
               <td>{{ contrat.dateFin | formatMediumDate }}</td>
               <td>
-                @if (contrat.actif) {
+                @if (contrat.fournisseur) {
                   <div>
-                    <a [routerLink]="['/actif', contrat.actif.id, 'view']">{{ contrat.actif.id }}</a>
+                    <a [routerLink]="['/fournisseur', contrat.fournisseur.id, 'view']">{{ contrat.fournisseur.id }}</a>
                   </div>
                 }
               </td>
               <td>
-                @if (contrat.fournisseur) {
+                @if (contrat.actif) {
                   <div>
-                    <a [routerLink]="['/fournisseur', contrat.fournisseur.id, 'view']">{{ contrat.fournisseur.id }}</a>
+                    <a [routerLink]="['/actif', contrat.actif.id, 'view']">{{ contrat.actif.id }}</a>
                   </div>
                 }
               </td>

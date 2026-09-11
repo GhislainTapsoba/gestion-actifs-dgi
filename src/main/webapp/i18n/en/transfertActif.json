@@ -1,0 +1,26 @@
+{
+  "gestionActifsDgiApp": {
+    "transfertActif": {
+      "home": {
+        "title": "Transfert Actifs",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Transfert Actif",
+        "createOrEditLabel": "Create or edit a Transfert Actif",
+        "notFound": "No Transfert Actifs found"
+      },
+      "created": "A new Transfert Actif is created with identifier {{ param }}",
+      "updated": "A Transfert Actif is updated with identifier {{ param }}",
+      "deleted": "A Transfert Actif is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Transfert Actif {{ id }}?"
+      },
+      "detail": {
+        "title": "Transfert Actif"
+      },
+      "id": "ID",
+      "observation": "Observation",
+      "transfert": "Transfert",
+      "actif": "Actif"
+    }
+  }
+}

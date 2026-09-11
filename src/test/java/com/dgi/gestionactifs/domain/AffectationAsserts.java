@@ -48,8 +48,8 @@ public class AffectationAsserts {
         assertThat(actual)
             .as("Verify Affectation relevant properties")
             .satisfies(a -> assertThat(a.getDateAffectation()).as("check dateAffectation").isEqualTo(expected.getDateAffectation()))
-            .satisfies(a -> assertThat(a.getDateRestitution()).as("check dateRestitution").isEqualTo(expected.getDateRestitution()))
-            .satisfies(a -> assertThat(a.getNumeroBordereau()).as("check numeroBordereau").isEqualTo(expected.getNumeroBordereau()));
+            .satisfies(a -> assertThat(a.getMotif()).as("check motif").isEqualTo(expected.getMotif()))
+            .satisfies(a -> assertThat(a.getDateRestitution()).as("check dateRestitution").isEqualTo(expected.getDateRestitution()));
     }
 
     /**
@@ -61,6 +61,6 @@ public class AffectationAsserts {
     public static void assertAffectationUpdatableRelationshipsEquals(Affectation expected, Affectation actual) {
         assertThat(actual)
             .as("Verify Affectation relationships")
-            .satisfies(a -> assertThat(a.getActif()).as("check actif").isEqualTo(expected.getActif()));
+            .satisfies(a -> assertThat(a.getAgent()).as("check agent").isEqualTo(expected.getAgent()));
     }
 }

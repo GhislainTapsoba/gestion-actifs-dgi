@@ -72,13 +72,14 @@ class TransfertCriteriaTest {
 
     private static void setAllFilters(TransfertCriteria transfertCriteria) {
         transfertCriteria.id();
-        transfertCriteria.dateDemande();
+        transfertCriteria.dateTransfert();
         transfertCriteria.statut();
         transfertCriteria.commentaireRejet();
         transfertCriteria.dateTraitement();
+        transfertCriteria.serviceOrigineId();
+        transfertCriteria.serviceDestinataireId();
         transfertCriteria.demandeurId();
         transfertCriteria.validateurId();
-        transfertCriteria.actifId();
         transfertCriteria.distinct();
     }
 
@@ -86,13 +87,14 @@ class TransfertCriteriaTest {
         return new Condition<>(
             criteria ->
                 condition.apply(criteria.getId()) &&
-                condition.apply(criteria.getDateDemande()) &&
+                condition.apply(criteria.getDateTransfert()) &&
                 condition.apply(criteria.getStatut()) &&
                 condition.apply(criteria.getCommentaireRejet()) &&
                 condition.apply(criteria.getDateTraitement()) &&
+                condition.apply(criteria.getServiceOrigineId()) &&
+                condition.apply(criteria.getServiceDestinataireId()) &&
                 condition.apply(criteria.getDemandeurId()) &&
                 condition.apply(criteria.getValidateurId()) &&
-                condition.apply(criteria.getActifId()) &&
                 condition.apply(criteria.getDistinct()),
             "every filter matches"
         );
@@ -102,13 +104,14 @@ class TransfertCriteriaTest {
         return new Condition<>(
             criteria ->
                 condition.apply(criteria.getId(), copy.getId()) &&
-                condition.apply(criteria.getDateDemande(), copy.getDateDemande()) &&
+                condition.apply(criteria.getDateTransfert(), copy.getDateTransfert()) &&
                 condition.apply(criteria.getStatut(), copy.getStatut()) &&
                 condition.apply(criteria.getCommentaireRejet(), copy.getCommentaireRejet()) &&
                 condition.apply(criteria.getDateTraitement(), copy.getDateTraitement()) &&
+                condition.apply(criteria.getServiceOrigineId(), copy.getServiceOrigineId()) &&
+                condition.apply(criteria.getServiceDestinataireId(), copy.getServiceDestinataireId()) &&
                 condition.apply(criteria.getDemandeurId(), copy.getDemandeurId()) &&
                 condition.apply(criteria.getValidateurId(), copy.getValidateurId()) &&
-                condition.apply(criteria.getActifId(), copy.getActifId()) &&
                 condition.apply(criteria.getDistinct(), copy.getDistinct()),
             "every filter matches"
         );

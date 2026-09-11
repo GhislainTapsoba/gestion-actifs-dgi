@@ -1,7 +1,7 @@
 package com.dgi.gestionactifs.domain;
 
-import static com.dgi.gestionactifs.domain.ActifTestSamples.*;
 import static com.dgi.gestionactifs.domain.AffectationTestSamples.*;
+import static com.dgi.gestionactifs.domain.AgentTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.dgi.gestionactifs.web.rest.TestUtil;
@@ -24,14 +24,14 @@ class AffectationTest {
     }
 
     @Test
-    void actifTest() {
+    void agentTest() {
         Affectation affectation = getAffectationRandomSampleGenerator();
-        Actif actifBack = getActifRandomSampleGenerator();
+        Agent agentBack = getAgentRandomSampleGenerator();
 
-        affectation.setActif(actifBack);
-        assertThat(affectation.getActif()).isEqualTo(actifBack);
+        affectation.setAgent(agentBack);
+        assertThat(affectation.getAgent()).isEqualTo(agentBack);
 
-        affectation.actif(null);
-        assertThat(affectation.getActif()).isNull();
+        affectation.agent(null);
+        assertThat(affectation.getAgent()).isNull();
     }
 }

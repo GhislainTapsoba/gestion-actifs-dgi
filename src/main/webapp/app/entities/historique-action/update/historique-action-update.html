@@ -1,0 +1,161 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-historique-action-heading"
+        data-cy="HistoriqueActionCreateUpdateHeading"
+        jhiTranslate="gestionActifsDgiApp.historiqueAction.home.createOrEditLabel"
+      >
+        Créer ou éditer un Historique Action
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="global.field.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let dateActionRef = editForm.get('dateAction')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_dateAction" jhiTranslate="gestionActifsDgiApp.historiqueAction.dateAction"
+            >Date Action</label
+          >
+          <div class="d-flex">
+            <input
+              id="field_dateAction"
+              data-cy="dateAction"
+              type="datetime-local"
+              class="form-control"
+              name="dateAction"
+              formControlName="dateAction"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          @if (dateActionRef.invalid && (dateActionRef.dirty || dateActionRef.touched)) {
+            <div>
+              @if (dateActionRef.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!dateActionRef.errors?.datetimelocal"
+                jhiTranslate="entity.validation.datetimelocal"
+                >Ce champ doit être une date et une heure.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let typeActionRef = editForm.get('typeAction')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_typeAction" jhiTranslate="gestionActifsDgiApp.historiqueAction.typeAction"
+            >Type Action</label
+          >
+          <select class="form-control" name="typeAction" formControlName="typeAction" id="field_typeAction" data-cy="typeAction">
+            <option [ngValue]="null">{{ 'gestionActifsDgiApp.TypeMouvement.null' | translate }}</option>
+            @for (typeMouvement of typeMouvementValues; track $index) {
+              <option [value]="typeMouvement">{{ 'gestionActifsDgiApp.TypeMouvement.' + typeMouvement | translate }}</option>
+            }
+          </select>
+          @if (typeActionRef.invalid && (typeActionRef.dirty || typeActionRef.touched)) {
+            <div>
+              @if (typeActionRef.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_entiteCiblee" jhiTranslate="gestionActifsDgiApp.historiqueAction.entiteCiblee"
+            >Entite Ciblee</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="entiteCiblee"
+            id="field_entiteCiblee"
+            data-cy="entiteCiblee"
+            formControlName="entiteCiblee"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_ancienneValeur" jhiTranslate="gestionActifsDgiApp.historiqueAction.ancienneValeur"
+            >Ancienne Valeur</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="ancienneValeur"
+            id="field_ancienneValeur"
+            data-cy="ancienneValeur"
+            formControlName="ancienneValeur"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_nouvelleValeur" jhiTranslate="gestionActifsDgiApp.historiqueAction.nouvelleValeur"
+            >Nouvelle Valeur</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="nouvelleValeur"
+            id="field_nouvelleValeur"
+            data-cy="nouvelleValeur"
+            formControlName="nouvelleValeur"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_utilisateur" jhiTranslate="gestionActifsDgiApp.historiqueAction.utilisateur"
+            >Utilisateur</label
+          >
+          <select
+            class="form-control"
+            id="field_utilisateur"
+            data-cy="utilisateur"
+            name="utilisateur"
+            formControlName="utilisateur"
+            [compareWith]="compareUser"
+          >
+            @if (!editForm.get('utilisateur')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (userOption of usersSharedCollection(); track $index) {
+              <option [ngValue]="userOption">{{ userOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['utilisateur'])!.invalid && (editForm.get(['utilisateur'])!.dirty || editForm.get(['utilisateur'])!.touched)) {
+          <div>
+            @if (editForm.get(['utilisateur'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban" />&nbsp;<span jhiTranslate="entity.action.cancel">Annuler</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving()"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save" />&nbsp;<span jhiTranslate="entity.action.save">Sauvegarder</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

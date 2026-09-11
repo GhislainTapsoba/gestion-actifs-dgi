@@ -10,18 +10,11 @@
     -->
     <changeSet id="20260902202138-2" author="jhipster">
 
-        <addForeignKeyConstraint baseColumnNames="utilisateur_id"
+        <addForeignKeyConstraint baseColumnNames="agent_id"
                                  baseTableName="affectation"
-                                 constraintName="fk_affectation__utilisateur_id"
+                                 constraintName="fk_affectation__agent_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="jhi_user"
-                                 />
-
-        <addForeignKeyConstraint baseColumnNames="actif_id"
-                                 baseTableName="affectation"
-                                 constraintName="fk_affectation__actif_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="actif"
+                                 referencedTableName="agent"
                                  />
     </changeSet>
 </databaseChangeLog>

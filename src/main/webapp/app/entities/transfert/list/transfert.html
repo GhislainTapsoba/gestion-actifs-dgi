@@ -41,9 +41,9 @@
                 <fa-icon class="p-1" icon="sort" />
               </div>
             </th>
-            <th scope="col" jhiSortBy="dateDemande">
+            <th scope="col" jhiSortBy="dateTransfert">
               <div class="d-flex">
-                <span jhiTranslate="gestionActifsDgiApp.transfert.dateDemande">Date Demande</span>
+                <span jhiTranslate="gestionActifsDgiApp.transfert.dateTransfert">Date Transfert</span>
                 <fa-icon class="p-1" icon="sort" />
               </div>
             </th>
@@ -65,6 +65,18 @@
                 <fa-icon class="p-1" icon="sort" />
               </div>
             </th>
+            <th scope="col" jhiSortBy="serviceOrigine.id">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.transfert.serviceOrigine">Service Origine</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="serviceDestinataire.id">
+              <div class="d-flex">
+                <span jhiTranslate="gestionActifsDgiApp.transfert.serviceDestinataire">Service Destinataire</span>
+                <fa-icon class="p-1" icon="sort" />
+              </div>
+            </th>
             <th scope="col" jhiSortBy="demandeur.id">
               <div class="d-flex">
                 <span jhiTranslate="gestionActifsDgiApp.transfert.demandeur">Demandeur</span>
@@ -77,12 +89,6 @@
                 <fa-icon class="p-1" icon="sort" />
               </div>
             </th>
-            <th scope="col" jhiSortBy="actif.id">
-              <div class="d-flex">
-                <span jhiTranslate="gestionActifsDgiApp.transfert.actif">Actif</span>
-                <fa-icon class="p-1" icon="sort" />
-              </div>
-            </th>
             <th scope="col"></th>
           </tr>
         </thead>
@@ -90,29 +96,64 @@
           @for (transfert of transferts(); track trackId(transfert)) {
             <tr data-cy="entityTable">
               <td>
-                <a [routerLink]="['/transfert', transfert.id, 'view']">{{ transfert.id }}</a>
+                <a [routerLink]="['/transfert', transfert.id, 'view']">#{{ transfert.id }}</a>
               </td>
-              <td>{{ transfert.dateDemande | formatMediumDate }}</td>
-              <td [jhiTranslate]="'gestionActifsDgiApp.StatutTransfert.' + (transfert.statut ?? 'null')">
-                {{ { null: '', EN_ATTENTE: 'EN_ATTENTE', VALIDE: 'VALIDE', REJETE: 'REJETE' }[transfert.statut ?? 'null'] }}
+              <td>{{ transfert.dateTransfert | formatMediumDate }}</td>
+              <td>
+                <span
+                  class="badge"
+                  [class.bg-warning]="transfert.statut === 'EN_ATTENTE'"
+                  [class.text-dark]="transfert.statut === 'EN_ATTENTE'"
+                  [class.bg-success]="transfert.statut === 'VALIDE'"
+                  [class.bg-danger]="transfert.statut === 'REJETE'"
+                >
+                  {{ transfert.statut }}
+                </span>
               </td>
               <td>{{ transfert.commentaireRejet }}</td>
               <td>{{ transfert.dateTraitement | formatMediumDate }}</td>
               <td>
-                {{ transfert.demandeur?.id }}
-              </td>
-              <td>
-                {{ transfert.validateur?.id }}
-              </td>
-              <td>
-                @if (transfert.actif) {
+                @if (transfert.serviceOrigine) {
                   <div>
-                    <a [routerLink]="['/actif', transfert.actif.id, 'view']">{{ transfert.actif.id }}</a>
+                    <a [routerLink]="['/service-dgi', transfert.serviceOrigine.id, 'view']">
+                      {{ transfert.serviceOrigine.nomService || '#' + transfert.serviceOrigine.id }}
+                    </a>
                   </div>
                 }
               </td>
+              <td>
+                @if (transfert.serviceDestinataire) {
+                  <div>
+                    <a [routerLink]="['/service-dgi', transfert.serviceDestinataire.id, 'view']">
+                      {{ transfert.serviceDestinataire.nomService || '#' + transfert.serviceDestinataire.id }}
+                    </a>
+                  </div>
+                }
+              </td>
+              <td>
+                {{ transfert.demandeur?.login || transfert.demandeur?.id }}
+              </td>
+              <td>
+                {{ transfert.validateur?.login || transfert.validateur?.id }}
+              </td>
               <td class="text-end">
                 <div class="btn-group">
+                  @if (canValidate() && transfert.statut === 'EN_ATTENTE') {
+                    <button type="button" class="btn btn-success btn-sm" (click)="valider(transfert)" title="Valider le transfert">
+                      <fa-icon icon="check" />
+                      <span class="d-none d-lg-inline">Valider</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-warning btn-sm text-dark"
+                      (click)="rejeter(transfert)"
+                      title="Rejeter le transfert"
+                    >
+                      <fa-icon icon="ban" />
+                      <span class="d-none d-lg-inline">Rejeter</span>
+                    </button>
+                  }
+
                   <a [routerLink]="['/transfert', transfert.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                     <fa-icon icon="eye" />
                     <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Voir</span>

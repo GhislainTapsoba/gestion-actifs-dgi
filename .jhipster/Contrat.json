@@ -29,17 +29,17 @@
   "pagination": "pagination",
   "relationships": [
     {
+      "otherEntityName": "fournisseur",
+      "relationshipName": "fournisseur",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
       "otherEntityName": "actif",
       "relationshipName": "actif",
       "relationshipSide": "left",
       "relationshipType": "many-to-one"
-    },
-    {
-      "otherEntityName": "fournisseur",
-      "relationshipName": "fournisseur",
-      "relationshipSide": "right",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": "required"
     }
   ],
   "searchEngine": "no",

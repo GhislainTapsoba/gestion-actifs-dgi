@@ -2,14 +2,11 @@ package com.dgi.gestionactifs.domain;
 
 import com.dgi.gestionactifs.domain.enumeration.StatutActif;
 import com.dgi.gestionactifs.domain.enumeration.TypeActif;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -32,11 +29,24 @@ public class Actif implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "identifiant_unique", nullable = false, unique = true)
-    private String identifiantUnique;
+    @Column(name = "code_inventaire", nullable = false, unique = true)
+    private String codeInventaire;
 
-    @Column(name = "code_barre_qr")
-    private String codeBarreQR;
+    @NotNull
+    @Column(name = "designation", nullable = false)
+    private String designation;
+
+    @Column(name = "marque")
+    private String marque;
+
+    @Column(name = "modele")
+    private String modele;
+
+    @Column(name = "numero_serie")
+    private String numeroSerie;
+
+    @Column(name = "code_barre")
+    private String codeBarre;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -54,20 +64,12 @@ public class Actif implements Serializable {
     @Column(name = "date_acquisition")
     private LocalDate dateAcquisition;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "actif")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "utilisateur", "actif" }, allowSetters = true)
-    private Set<Affectation> affectations = new HashSet<>();
+    @Column(name = "valeur_acquisition")
+    private Double valeurAcquisition;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "actif")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "demandeur", "validateur", "actif" }, allowSetters = true)
-    private Set<Transfert> transferts = new HashSet<>();
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "actif")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "technicien", "actif" }, allowSetters = true)
-    private Set<Maintenance> maintenances = new HashSet<>();
+    @ManyToOne(optional = false)
+    @NotNull
+    private CategorieMateriel categorie;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -84,30 +86,82 @@ public class Actif implements Serializable {
         this.id = id;
     }
 
-    public String getIdentifiantUnique() {
-        return this.identifiantUnique;
+    public String getCodeInventaire() {
+        return this.codeInventaire;
     }
 
-    public Actif identifiantUnique(String identifiantUnique) {
-        this.setIdentifiantUnique(identifiantUnique);
+    public Actif codeInventaire(String codeInventaire) {
+        this.setCodeInventaire(codeInventaire);
         return this;
     }
 
-    public void setIdentifiantUnique(String identifiantUnique) {
-        this.identifiantUnique = identifiantUnique;
+    public void setCodeInventaire(String codeInventaire) {
+        this.codeInventaire = codeInventaire;
     }
 
-    public String getCodeBarreQR() {
-        return this.codeBarreQR;
+    public String getDesignation() {
+        return this.designation;
     }
 
-    public Actif codeBarreQR(String codeBarreQR) {
-        this.setCodeBarreQR(codeBarreQR);
+    public Actif designation(String designation) {
+        this.setDesignation(designation);
         return this;
     }
 
-    public void setCodeBarreQR(String codeBarreQR) {
-        this.codeBarreQR = codeBarreQR;
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
+
+    public String getMarque() {
+        return this.marque;
+    }
+
+    public Actif marque(String marque) {
+        this.setMarque(marque);
+        return this;
+    }
+
+    public void setMarque(String marque) {
+        this.marque = marque;
+    }
+
+    public String getModele() {
+        return this.modele;
+    }
+
+    public Actif modele(String modele) {
+        this.setModele(modele);
+        return this;
+    }
+
+    public void setModele(String modele) {
+        this.modele = modele;
+    }
+
+    public String getNumeroSerie() {
+        return this.numeroSerie;
+    }
+
+    public Actif numeroSerie(String numeroSerie) {
+        this.setNumeroSerie(numeroSerie);
+        return this;
+    }
+
+    public void setNumeroSerie(String numeroSerie) {
+        this.numeroSerie = numeroSerie;
+    }
+
+    public String getCodeBarre() {
+        return this.codeBarre;
+    }
+
+    public Actif codeBarre(String codeBarre) {
+        this.setCodeBarre(codeBarre);
+        return this;
+    }
+
+    public void setCodeBarre(String codeBarre) {
+        this.codeBarre = codeBarre;
     }
 
     public TypeActif getType() {
@@ -162,96 +216,29 @@ public class Actif implements Serializable {
         this.dateAcquisition = dateAcquisition;
     }
 
-    public Set<Affectation> getAffectations() {
-        return this.affectations;
+    public Double getValeurAcquisition() {
+        return this.valeurAcquisition;
     }
 
-    public void setAffectations(Set<Affectation> affectations) {
-        if (this.affectations != null) {
-            this.affectations.forEach(i -> i.setActif(null));
-        }
-        if (affectations != null) {
-            affectations.forEach(i -> i.setActif(this));
-        }
-        this.affectations = affectations;
-    }
-
-    public Actif affectations(Set<Affectation> affectations) {
-        this.setAffectations(affectations);
+    public Actif valeurAcquisition(Double valeurAcquisition) {
+        this.setValeurAcquisition(valeurAcquisition);
         return this;
     }
 
-    public Actif addAffectation(Affectation affectation) {
-        this.affectations.add(affectation);
-        affectation.setActif(this);
-        return this;
+    public void setValeurAcquisition(Double valeurAcquisition) {
+        this.valeurAcquisition = valeurAcquisition;
     }
 
-    public Actif removeAffectation(Affectation affectation) {
-        this.affectations.remove(affectation);
-        affectation.setActif(null);
-        return this;
+    public CategorieMateriel getCategorie() {
+        return this.categorie;
     }
 
-    public Set<Transfert> getTransferts() {
-        return this.transferts;
+    public void setCategorie(CategorieMateriel categorieMateriel) {
+        this.categorie = categorieMateriel;
     }
 
-    public void setTransferts(Set<Transfert> transferts) {
-        if (this.transferts != null) {
-            this.transferts.forEach(i -> i.setActif(null));
-        }
-        if (transferts != null) {
-            transferts.forEach(i -> i.setActif(this));
-        }
-        this.transferts = transferts;
-    }
-
-    public Actif transferts(Set<Transfert> transferts) {
-        this.setTransferts(transferts);
-        return this;
-    }
-
-    public Actif addTransfert(Transfert transfert) {
-        this.transferts.add(transfert);
-        transfert.setActif(this);
-        return this;
-    }
-
-    public Actif removeTransfert(Transfert transfert) {
-        this.transferts.remove(transfert);
-        transfert.setActif(null);
-        return this;
-    }
-
-    public Set<Maintenance> getMaintenances() {
-        return this.maintenances;
-    }
-
-    public void setMaintenances(Set<Maintenance> maintenances) {
-        if (this.maintenances != null) {
-            this.maintenances.forEach(i -> i.setActif(null));
-        }
-        if (maintenances != null) {
-            maintenances.forEach(i -> i.setActif(this));
-        }
-        this.maintenances = maintenances;
-    }
-
-    public Actif maintenances(Set<Maintenance> maintenances) {
-        this.setMaintenances(maintenances);
-        return this;
-    }
-
-    public Actif addMaintenance(Maintenance maintenance) {
-        this.maintenances.add(maintenance);
-        maintenance.setActif(this);
-        return this;
-    }
-
-    public Actif removeMaintenance(Maintenance maintenance) {
-        this.maintenances.remove(maintenance);
-        maintenance.setActif(null);
+    public Actif categorie(CategorieMateriel categorieMateriel) {
+        this.setCategorie(categorieMateriel);
         return this;
     }
 
@@ -279,12 +266,17 @@ public class Actif implements Serializable {
     public String toString() {
         return "Actif{" +
             "id=" + getId() +
-            ", identifiantUnique='" + getIdentifiantUnique() + "'" +
-            ", codeBarreQR='" + getCodeBarreQR() + "'" +
+            ", codeInventaire='" + getCodeInventaire() + "'" +
+            ", designation='" + getDesignation() + "'" +
+            ", marque='" + getMarque() + "'" +
+            ", modele='" + getModele() + "'" +
+            ", numeroSerie='" + getNumeroSerie() + "'" +
+            ", codeBarre='" + getCodeBarre() + "'" +
             ", type='" + getType() + "'" +
             ", etat='" + getEtat() + "'" +
             ", localisation='" + getLocalisation() + "'" +
             ", dateAcquisition='" + getDateAcquisition() + "'" +
+            ", valeurAcquisition=" + getValeurAcquisition() +
             "}";
     }
 }

@@ -1,0 +1,51 @@
+{
+  "annotations": {
+    "changelogDate": "20260910221036"
+  },
+  "applications": ["*"],
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "dateDeclaration",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "typeIntervention",
+      "fieldType": "TypeIntervention",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PREVENTIVE,CORRECTIVE"
+    },
+    {
+      "fieldName": "statut",
+      "fieldType": "StatutIntervention",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "EN_COURS,CLOTUREE,ANNULEE"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Intervention",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "panne",
+      "relationshipName": "panne",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "planningMaintenance",
+      "otherEntityRelationshipName": "intervention",
+      "relationshipName": "planning",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

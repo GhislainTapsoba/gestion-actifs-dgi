@@ -1,0 +1,61 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (planningMaintenance(); as planningMaintenanceRef) {
+      <div>
+        <h2 data-cy="planningMaintenanceDetailsHeading">
+          <span jhiTranslate="gestionActifsDgiApp.planningMaintenance.detail.title">Planning Maintenance</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ planningMaintenanceRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.planningMaintenance.datePrevue">Date Prevue</span></dt>
+          <dd>
+            <span>{{ planningMaintenanceRef.datePrevue | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.planningMaintenance.periodicite">Periodicite</span></dt>
+          <dd>
+            <span>{{ planningMaintenanceRef.periodicite }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.planningMaintenance.statut">Statut</span></dt>
+          <dd>
+            <span [jhiTranslate]="'gestionActifsDgiApp.StatutPlanning.' + (planningMaintenanceRef.statut ?? 'null')">{{
+              { null: '', PLANIFIER: 'PLANIFIER', EN_COURS: 'EN_COURS', TERMINER: 'TERMINER', ANNULER: 'ANNULER' }[
+                planningMaintenanceRef.statut ?? 'null'
+              ]
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.planningMaintenance.description">Description</span></dt>
+          <dd>
+            <span>{{ planningMaintenanceRef.description }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.planningMaintenance.intervention">Intervention</span></dt>
+          <dd>
+            @for (intervention of planningMaintenanceRef.interventions; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/intervention', intervention.id, 'view']">{{ intervention?.id }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/planning-maintenance', planningMaintenanceRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

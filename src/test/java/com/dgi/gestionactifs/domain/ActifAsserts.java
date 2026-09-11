@@ -47,12 +47,17 @@ public class ActifAsserts {
     public static void assertActifUpdatableFieldsEquals(Actif expected, Actif actual) {
         assertThat(actual)
             .as("Verify Actif relevant properties")
-            .satisfies(a -> assertThat(a.getIdentifiantUnique()).as("check identifiantUnique").isEqualTo(expected.getIdentifiantUnique()))
-            .satisfies(a -> assertThat(a.getCodeBarreQR()).as("check codeBarreQR").isEqualTo(expected.getCodeBarreQR()))
+            .satisfies(a -> assertThat(a.getCodeInventaire()).as("check codeInventaire").isEqualTo(expected.getCodeInventaire()))
+            .satisfies(a -> assertThat(a.getDesignation()).as("check designation").isEqualTo(expected.getDesignation()))
+            .satisfies(a -> assertThat(a.getMarque()).as("check marque").isEqualTo(expected.getMarque()))
+            .satisfies(a -> assertThat(a.getModele()).as("check modele").isEqualTo(expected.getModele()))
+            .satisfies(a -> assertThat(a.getNumeroSerie()).as("check numeroSerie").isEqualTo(expected.getNumeroSerie()))
+            .satisfies(a -> assertThat(a.getCodeBarre()).as("check codeBarre").isEqualTo(expected.getCodeBarre()))
             .satisfies(a -> assertThat(a.getType()).as("check type").isEqualTo(expected.getType()))
             .satisfies(a -> assertThat(a.getEtat()).as("check etat").isEqualTo(expected.getEtat()))
             .satisfies(a -> assertThat(a.getLocalisation()).as("check localisation").isEqualTo(expected.getLocalisation()))
-            .satisfies(a -> assertThat(a.getDateAcquisition()).as("check dateAcquisition").isEqualTo(expected.getDateAcquisition()));
+            .satisfies(a -> assertThat(a.getDateAcquisition()).as("check dateAcquisition").isEqualTo(expected.getDateAcquisition()))
+            .satisfies(a -> assertThat(a.getValeurAcquisition()).as("check valeurAcquisition").isEqualTo(expected.getValeurAcquisition()));
     }
 
     /**
@@ -62,6 +67,8 @@ public class ActifAsserts {
      * @param actual the actual entity
      */
     public static void assertActifUpdatableRelationshipsEquals(Actif expected, Actif actual) {
-        // empty method
+        assertThat(actual)
+            .as("Verify Actif relationships")
+            .satisfies(a -> assertThat(a.getCategorie()).as("check categorie").isEqualTo(expected.getCategorie()));
     }
 }

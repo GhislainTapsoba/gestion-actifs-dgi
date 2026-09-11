@@ -10,18 +10,18 @@
     -->
     <changeSet id="20260902202140-2" author="jhipster">
 
-        <addForeignKeyConstraint baseColumnNames="technicien_id"
-                                 baseTableName="maintenance"
-                                 constraintName="fk_maintenance__technicien_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="jhi_user"
-                                 />
-
         <addForeignKeyConstraint baseColumnNames="actif_id"
                                  baseTableName="maintenance"
                                  constraintName="fk_maintenance__actif_id"
                                  referencedColumnNames="id"
                                  referencedTableName="actif"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="technicien_id"
+                                 baseTableName="maintenance"
+                                 constraintName="fk_maintenance__technicien_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"
                                  />
     </changeSet>
 </databaseChangeLog>

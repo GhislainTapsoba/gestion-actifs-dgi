@@ -10,14 +10,14 @@ public class AffectationTestSamples {
     private static final AtomicLong longCount = new AtomicLong(random.nextInt() + 2L * Integer.MAX_VALUE);
 
     public static Affectation getAffectationSample1() {
-        return new Affectation().id(1L).numeroBordereau("numeroBordereau1");
+        return new Affectation().id(1L).motif("motif1");
     }
 
     public static Affectation getAffectationSample2() {
-        return new Affectation().id(2L).numeroBordereau("numeroBordereau2");
+        return new Affectation().id(2L).motif("motif2");
     }
 
     public static Affectation getAffectationRandomSampleGenerator() {
-        return new Affectation().id(longCount.incrementAndGet()).numeroBordereau(UUID.randomUUID().toString());
+        return new Affectation().id(longCount.incrementAndGet()).motif(UUID.randomUUID().toString());
     }
 }

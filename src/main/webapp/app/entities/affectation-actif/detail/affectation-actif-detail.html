@@ -1,0 +1,60 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (affectationActif(); as affectationActifRef) {
+      <div>
+        <h2 data-cy="affectationActifDetailsHeading">
+          <span jhiTranslate="gestionActifsDgiApp.affectationActif.detail.title">Affectation Actif</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ affectationActifRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.affectationActif.observation">Observation</span></dt>
+          <dd>
+            <span>{{ affectationActifRef.observation }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.affectationActif.statut">Statut</span></dt>
+          <dd>
+            <span [jhiTranslate]="'gestionActifsDgiApp.StatutAffectation.' + (affectationActifRef.statut ?? 'null')">{{
+              { null: '', ACTIVE: 'ACTIVE', CLOTUREE: 'CLOTUREE' }[affectationActifRef.statut ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.affectationActif.affectation">Affectation</span></dt>
+          <dd>
+            @if (affectationActif()!.affectation) {
+              <div>
+                <a [routerLink]="['/affectation', affectationActif()!.affectation?.id, 'view']">{{
+                  affectationActifRef.affectation?.id
+                }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.affectationActif.actif">Actif</span></dt>
+          <dd>
+            @if (affectationActif()!.actif) {
+              <div>
+                <a [routerLink]="['/actif', affectationActif()!.actif?.id, 'view']">{{ affectationActifRef.actif?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left" />&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/affectation-actif', affectationActifRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

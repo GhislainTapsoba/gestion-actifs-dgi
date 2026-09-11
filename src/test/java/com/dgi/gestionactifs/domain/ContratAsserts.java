@@ -62,7 +62,7 @@ public class ContratAsserts {
     public static void assertContratUpdatableRelationshipsEquals(Contrat expected, Contrat actual) {
         assertThat(actual)
             .as("Verify Contrat relationships")
-            .satisfies(a -> assertThat(a.getActif()).as("check actif").isEqualTo(expected.getActif()))
-            .satisfies(a -> assertThat(a.getFournisseur()).as("check fournisseur").isEqualTo(expected.getFournisseur()));
+            .satisfies(a -> assertThat(a.getFournisseur()).as("check fournisseur").isEqualTo(expected.getFournisseur()))
+            .satisfies(a -> assertThat(a.getActif()).as("check actif").isEqualTo(expected.getActif()));
     }
 }

@@ -1,7 +1,6 @@
-﻿package com.dgi.gestionactifs.web.rest;
+package com.dgi.gestionactifs.web.rest;
 
 import com.dgi.gestionactifs.repository.AffectationRepository;
-import com.dgi.gestionactifs.security.SecurityUtils;
 import com.dgi.gestionactifs.service.AffectationQueryService;
 import com.dgi.gestionactifs.service.AffectationService;
 import com.dgi.gestionactifs.service.criteria.AffectationCriteria;
@@ -21,10 +20,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import tech.jhipster.service.filter.LongFilter;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -66,7 +63,6 @@ public class AffectationResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new affectationDTO, or with status {@code 400 (Bad Request)} if the affectation has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PreAuthorize("hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_RESPONSABLE')")
     @PostMapping("")
     public ResponseEntity<AffectationDTO> createAffectation(@Valid @RequestBody AffectationDTO affectationDTO) throws URISyntaxException {
         LOG.debug("REST request to save Affectation : {}", affectationDTO);
@@ -89,7 +85,6 @@ public class AffectationResource {
      * or with status {@code 500 (Internal Server Error)} if the affectationDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PreAuthorize("hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_RESPONSABLE')")
     @PutMapping("/{id}")
     public ResponseEntity<AffectationDTO> updateAffectation(
         @PathVariable(value = "id", required = false) final Long id,
@@ -156,40 +151,12 @@ public class AffectationResource {
      * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of Affectations in body.
      */
-    @PreAuthorize(
-        "hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_RESPONSABLE') or hasAuthority('ROLE_AGENT')"
-    )
     @GetMapping("")
     public ResponseEntity<List<AffectationDTO>> getAllAffectations(
         AffectationCriteria criteria,
         @org.springdoc.core.annotations.ParameterObject Pageable pageable
     ) {
         LOG.debug("REST request to get Affectations by criteria: {}", criteria);
-
-        boolean isAgentOnly =
-            SecurityUtils.hasCurrentUserThisAuthority("ROLE_AGENT") &&
-            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_ADMIN") &&
-            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_TECHNICIEN") &&
-            !SecurityUtils.hasCurrentUserThisAuthority("ROLE_RESPONSABLE");
-
-        if (isAgentOnly) {
-            java.util.List<Long> affectationIds = affectationRepository
-                .findByUtilisateur_Login(SecurityUtils.getCurrentUserLogin().orElse(""))
-                .stream()
-                .map(com.dgi.gestionactifs.domain.Affectation::getId)
-                .distinct()
-                .toList();
-            if (affectationIds.isEmpty()) {
-                HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(
-                    ServletUriComponentsBuilder.fromCurrentRequest(),
-                    Page.empty(pageable)
-                );
-                return ResponseEntity.ok().headers(headers).body(List.of());
-            }
-            LongFilter idFilter = new LongFilter();
-            idFilter.setIn(affectationIds);
-            criteria.setId(idFilter);
-        }
 
         Page<AffectationDTO> page = affectationQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -214,9 +181,6 @@ public class AffectationResource {
      * @param id the id of the affectationDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the affectationDTO, or with status {@code 404 (Not Found)}.
      */
-    @PreAuthorize(
-        "hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_TECHNICIEN') or hasAuthority('ROLE_RESPONSABLE') or hasAuthority('ROLE_AGENT')"
-    )
     @GetMapping("/{id}")
     public ResponseEntity<AffectationDTO> getAffectation(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Affectation : {}", id);
@@ -230,7 +194,6 @@ public class AffectationResource {
      * @param id the id of the affectationDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAffectation(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Affectation : {}", id);

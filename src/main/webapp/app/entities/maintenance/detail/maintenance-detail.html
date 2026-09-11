@@ -39,10 +39,6 @@
           <dd>
             <span>{{ maintenanceRef.dateCloture | formatMediumDate }}</span>
           </dd>
-          <dt><span jhiTranslate="gestionActifsDgiApp.maintenance.technicien">Technicien</span></dt>
-          <dd>
-            <span>{{ maintenanceRef.technicien?.id }}</span>
-          </dd>
           <dt><span jhiTranslate="gestionActifsDgiApp.maintenance.actif">Actif</span></dt>
           <dd>
             @if (maintenance()!.actif) {
@@ -50,6 +46,10 @@
                 <a [routerLink]="['/actif', maintenance()!.actif?.id, 'view']">{{ maintenanceRef.actif?.id }}</a>
               </div>
             }
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.maintenance.technicien">Technicien</span></dt>
+          <dd>
+            <span>{{ maintenanceRef.technicien?.id }}</span>
           </dd>
         </dl>
 

@@ -1,6 +1,6 @@
 package com.dgi.gestionactifs.domain;
 
-import static com.dgi.gestionactifs.domain.ActifTestSamples.*;
+import static com.dgi.gestionactifs.domain.ServiceDgiTestSamples.*;
 import static com.dgi.gestionactifs.domain.TransfertTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,14 +24,26 @@ class TransfertTest {
     }
 
     @Test
-    void actifTest() {
+    void serviceOrigineTest() {
         Transfert transfert = getTransfertRandomSampleGenerator();
-        Actif actifBack = getActifRandomSampleGenerator();
+        ServiceDgi serviceDgiBack = getServiceDgiRandomSampleGenerator();
 
-        transfert.setActif(actifBack);
-        assertThat(transfert.getActif()).isEqualTo(actifBack);
+        transfert.setServiceOrigine(serviceDgiBack);
+        assertThat(transfert.getServiceOrigine()).isEqualTo(serviceDgiBack);
 
-        transfert.actif(null);
-        assertThat(transfert.getActif()).isNull();
+        transfert.serviceOrigine(null);
+        assertThat(transfert.getServiceOrigine()).isNull();
+    }
+
+    @Test
+    void serviceDestinataireTest() {
+        Transfert transfert = getTransfertRandomSampleGenerator();
+        ServiceDgi serviceDgiBack = getServiceDgiRandomSampleGenerator();
+
+        transfert.setServiceDestinataire(serviceDgiBack);
+        assertThat(transfert.getServiceDestinataire()).isEqualTo(serviceDgiBack);
+
+        transfert.serviceDestinataire(null);
+        assertThat(transfert.getServiceDestinataire()).isNull();
     }
 }

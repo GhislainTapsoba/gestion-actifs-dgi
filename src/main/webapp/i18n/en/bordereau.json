@@ -1,0 +1,31 @@
+{
+  "gestionActifsDgiApp": {
+    "bordereau": {
+      "home": {
+        "title": "Bordereaus",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Bordereau",
+        "createOrEditLabel": "Create or edit a Bordereau",
+        "notFound": "No Bordereaus found"
+      },
+      "created": "A new Bordereau is created with identifier {{ param }}",
+      "updated": "A Bordereau is updated with identifier {{ param }}",
+      "deleted": "A Bordereau is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Bordereau {{ id }}?"
+      },
+      "detail": {
+        "title": "Bordereau"
+      },
+      "id": "ID",
+      "numero": "Numero",
+      "dateEmission": "Date Emission",
+      "typeBordereau": "Type Bordereau",
+      "statutValidation": "Statut Validation",
+      "dateValidation": "Date Validation",
+      "transfert": "Transfert",
+      "affectation": "Affectation",
+      "emetteur": "Emetteur"
+    }
+  }
+}

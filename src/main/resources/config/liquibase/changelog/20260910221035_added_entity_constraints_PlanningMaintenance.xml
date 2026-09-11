@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity PlanningMaintenance.
+    -->
+    <changeSet id="20260910221035-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="planning_maintenance_id"
+                                 baseTableName="rel_planning_maintenance__intervention"
+                                 constraintName="fk_rel_planning_maintenance__in__planning_maintenance_c8_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="planning_maintenance"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="intervention_id"
+                                 baseTableName="rel_planning_maintenance__intervention"
+                                 constraintName="fk_rel_planning_maintenance__intervention__intervention_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="intervention"
+                                 />
+    </changeSet>
+</databaseChangeLog>

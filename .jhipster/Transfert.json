@@ -6,7 +6,7 @@
   "dto": "mapstruct",
   "fields": [
     {
-      "fieldName": "dateDemande",
+      "fieldName": "dateTransfert",
       "fieldType": "LocalDate",
       "fieldValidateRules": ["required"]
     },
@@ -30,6 +30,20 @@
   "pagination": "pagination",
   "relationships": [
     {
+      "otherEntityName": "serviceDgi",
+      "relationshipName": "serviceOrigine",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "serviceDgi",
+      "relationshipName": "serviceDestinataire",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
       "otherEntityName": "user",
       "relationshipName": "demandeur",
       "relationshipSide": "left",
@@ -42,13 +56,6 @@
       "relationshipSide": "left",
       "relationshipType": "many-to-one",
       "relationshipWithBuiltInEntity": true
-    },
-    {
-      "otherEntityName": "actif",
-      "relationshipName": "actif",
-      "relationshipSide": "right",
-      "relationshipType": "many-to-one",
-      "relationshipValidateRules": "required"
     }
   ],
   "searchEngine": "no",

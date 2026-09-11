@@ -19,25 +19,27 @@
           </div>
         }
 
-        @let dateDemandeRef = editForm.get('dateDemande')!;
+        @let dateTransfertRef = editForm.get('dateTransfert')!;
         <div class="mb-3">
-          <label class="form-label" for="field_dateDemande" jhiTranslate="gestionActifsDgiApp.transfert.dateDemande">Date Demande</label>
+          <label class="form-label" for="field_dateTransfert" jhiTranslate="gestionActifsDgiApp.transfert.dateTransfert"
+            >Date Transfert</label
+          >
           <div class="input-group">
             <input
-              id="field_dateDemande"
-              data-cy="dateDemande"
+              id="field_dateTransfert"
+              data-cy="dateTransfert"
               type="text"
               class="form-control"
-              name="dateDemande"
+              name="dateTransfert"
               ngbDatepicker
-              #dateDemandeDp="ngbDatepicker"
-              formControlName="dateDemande"
+              #dateTransfertDp="ngbDatepicker"
+              formControlName="dateTransfert"
             />
-            <button type="button" class="btn btn-secondary" (click)="dateDemandeDp.toggle()"><fa-icon icon="calendar-alt" /></button>
+            <button type="button" class="btn btn-secondary" (click)="dateTransfertDp.toggle()"><fa-icon icon="calendar-alt" /></button>
           </div>
-          @if (dateDemandeRef.invalid && (dateDemandeRef.dirty || dateDemandeRef.touched)) {
+          @if (dateTransfertRef.invalid && (dateTransfertRef.dirty || dateTransfertRef.touched)) {
             <div>
-              @if (dateDemandeRef.errors?.required) {
+              @if (dateTransfertRef.errors?.required) {
                 <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
               }
             </div>
@@ -96,6 +98,68 @@
         </div>
 
         <div class="mb-3">
+          <label class="form-label" for="field_serviceOrigine" jhiTranslate="gestionActifsDgiApp.transfert.serviceOrigine"
+            >Service Origine</label
+          >
+          <select
+            class="form-control"
+            id="field_serviceOrigine"
+            data-cy="serviceOrigine"
+            name="serviceOrigine"
+            formControlName="serviceOrigine"
+            [compareWith]="compareServiceDgi"
+          >
+            @if (!editForm.get('serviceOrigine')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (serviceDgiOption of serviceDgisSharedCollection(); track $index) {
+              <option [ngValue]="serviceDgiOption">{{ serviceDgiOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (
+          editForm.get(['serviceOrigine'])!.invalid &&
+          (editForm.get(['serviceOrigine'])!.dirty || editForm.get(['serviceOrigine'])!.touched)
+        ) {
+          <div>
+            @if (editForm.get(['serviceOrigine'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+            }
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_serviceDestinataire" jhiTranslate="gestionActifsDgiApp.transfert.serviceDestinataire"
+            >Service Destinataire</label
+          >
+          <select
+            class="form-control"
+            id="field_serviceDestinataire"
+            data-cy="serviceDestinataire"
+            name="serviceDestinataire"
+            formControlName="serviceDestinataire"
+            [compareWith]="compareServiceDgi"
+          >
+            @if (!editForm.get('serviceDestinataire')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (serviceDgiOption of serviceDgisSharedCollection(); track $index) {
+              <option [ngValue]="serviceDgiOption">{{ serviceDgiOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (
+          editForm.get(['serviceDestinataire'])!.invalid &&
+          (editForm.get(['serviceDestinataire'])!.dirty || editForm.get(['serviceDestinataire'])!.touched)
+        ) {
+          <div>
+            @if (editForm.get(['serviceDestinataire'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
+            }
+          </div>
+        }
+
+        <div class="mb-3">
           <label class="form-label" for="field_demandeur" jhiTranslate="gestionActifsDgiApp.transfert.demandeur">Demandeur</label>
           <select
             class="form-control"
@@ -128,25 +192,6 @@
             }
           </select>
         </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_actif" jhiTranslate="gestionActifsDgiApp.transfert.actif">Actif</label>
-          <select class="form-control" id="field_actif" data-cy="actif" name="actif" formControlName="actif" [compareWith]="compareActif">
-            @if (editForm.get(['actif'])!.value === null) {
-              <option [ngValue]="null" selected></option>
-            }
-            @for (actifOption of actifsSharedCollection(); track $index) {
-              <option [ngValue]="actifOption">{{ actifOption.id }}</option>
-            }
-          </select>
-        </div>
-        @if (editForm.get(['actif'])!.invalid && (editForm.get(['actif'])!.dirty || editForm.get(['actif'])!.touched)) {
-          <div>
-            @if (editForm.get(['actif'])?.errors?.required) {
-              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
-            }
-          </div>
-        }
       </div>
 
       <div>

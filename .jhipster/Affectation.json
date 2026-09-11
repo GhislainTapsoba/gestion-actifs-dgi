@@ -11,12 +11,12 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "dateRestitution",
-      "fieldType": "LocalDate"
+      "fieldName": "motif",
+      "fieldType": "String"
     },
     {
-      "fieldName": "numeroBordereau",
-      "fieldType": "String"
+      "fieldName": "dateRestitution",
+      "fieldType": "LocalDate"
     }
   ],
   "jpaMetamodelFiltering": true,
@@ -24,16 +24,9 @@
   "pagination": "pagination",
   "relationships": [
     {
-      "otherEntityName": "user",
-      "relationshipName": "utilisateur",
+      "otherEntityName": "agent",
+      "relationshipName": "agent",
       "relationshipSide": "left",
-      "relationshipType": "many-to-one",
-      "relationshipWithBuiltInEntity": true
-    },
-    {
-      "otherEntityName": "actif",
-      "relationshipName": "actif",
-      "relationshipSide": "right",
       "relationshipType": "many-to-one",
       "relationshipValidateRules": "required"
     }

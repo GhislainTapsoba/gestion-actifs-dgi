@@ -23,8 +23,8 @@
       "statut": "Statut",
       "compteRendu": "Compte Rendu",
       "dateCloture": "Date Cloture",
-      "technicien": "Technicien",
-      "actif": "Actif"
+      "actif": "Actif",
+      "technicien": "Technicien"
     }
   }
 }

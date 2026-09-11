@@ -33,19 +33,19 @@
           <dd>
             <span>{{ contratRef.dateFin | formatMediumDate }}</span>
           </dd>
-          <dt><span jhiTranslate="gestionActifsDgiApp.contrat.actif">Actif</span></dt>
-          <dd>
-            @if (contrat()!.actif) {
-              <div>
-                <a [routerLink]="['/actif', contrat()!.actif?.id, 'view']">{{ contratRef.actif?.id }}</a>
-              </div>
-            }
-          </dd>
           <dt><span jhiTranslate="gestionActifsDgiApp.contrat.fournisseur">Fournisseur</span></dt>
           <dd>
             @if (contrat()!.fournisseur) {
               <div>
                 <a [routerLink]="['/fournisseur', contrat()!.fournisseur?.id, 'view']">{{ contratRef.fournisseur?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="gestionActifsDgiApp.contrat.actif">Actif</span></dt>
+          <dd>
+            @if (contrat()!.actif) {
+              <div>
+                <a [routerLink]="['/actif', contrat()!.actif?.id, 'view']">{{ contratRef.actif?.id }}</a>
               </div>
             }
           </dd>

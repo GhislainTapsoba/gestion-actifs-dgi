@@ -10,8 +10,8 @@ import { ITransfert, NewTransfert } from '../transfert.model';
 
 export type PartialUpdateTransfert = Partial<ITransfert> & Pick<ITransfert, 'id'>;
 
-type RestOf<T extends ITransfert | NewTransfert> = Omit<T, 'dateDemande' | 'dateTraitement'> & {
-  dateDemande?: string | null;
+type RestOf<T extends ITransfert | NewTransfert> = Omit<T, 'dateTransfert' | 'dateTraitement'> & {
+  dateTransfert?: string | null;
   dateTraitement?: string | null;
 };
 
@@ -45,7 +45,7 @@ export class TransfertsService {
   protected convertValueFromServer(restTransfert: RestTransfert): ITransfert {
     return {
       ...restTransfert,
-      dateDemande: restTransfert.dateDemande ? dayjs(restTransfert.dateDemande) : undefined,
+      dateTransfert: restTransfert.dateTransfert ? dayjs(restTransfert.dateTransfert) : undefined,
       dateTraitement: restTransfert.dateTraitement ? dayjs(restTransfert.dateTraitement) : undefined,
     };
   }
@@ -91,6 +91,18 @@ export class TransfertService extends TransfertsService {
     return this.http.delete<undefined>(`${this.resourceUrl}/${encodeURIComponent(id)}`);
   }
 
+  valider(id: number): Observable<ITransfert> {
+    return this.http
+      .patch<RestTransfert>(`${this.resourceUrl}/${encodeURIComponent(id)}/valider`, {})
+      .pipe(map(res => this.convertResponseFromServer(res)));
+  }
+
+  rejeter(id: number, commentaireRejet: string): Observable<ITransfert> {
+    return this.http
+      .patch<RestTransfert>(`${this.resourceUrl}/${encodeURIComponent(id)}/rejeter`, { commentaireRejet })
+      .pipe(map(res => this.convertResponseFromServer(res)));
+  }
+
   getTransfertIdentifier(transfert: Pick<ITransfert, 'id'>): number {
     return transfert.id;
   }
@@ -122,7 +134,7 @@ export class TransfertService extends TransfertsService {
   protected convertValueFromClient<T extends ITransfert | NewTransfert | PartialUpdateTransfert>(transfert: T): RestOf<T> {
     return {
       ...transfert,
-      dateDemande: transfert.dateDemande?.format(DATE_FORMAT) ?? null,
+      dateTransfert: transfert.dateTransfert?.format(DATE_FORMAT) ?? null,
       dateTraitement: transfert.dateTraitement?.format(DATE_FORMAT) ?? null,
     };
   }

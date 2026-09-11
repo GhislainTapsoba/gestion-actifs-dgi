@@ -13,17 +13,17 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface ContratMapper extends EntityMapper<ContratDTO, Contrat> {
-    @Mapping(target = "actif", source = "actif", qualifiedByName = "actifId")
     @Mapping(target = "fournisseur", source = "fournisseur", qualifiedByName = "fournisseurId")
+    @Mapping(target = "actif", source = "actif", qualifiedByName = "actifId")
     ContratDTO toDto(Contrat s);
-
-    @Named("actifId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    ActifDTO toDtoActifId(Actif actif);
 
     @Named("fournisseurId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     FournisseurDTO toDtoFournisseurId(Fournisseur fournisseur);
+
+    @Named("actifId")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    ActifDTO toDtoActifId(Actif actif);
 }

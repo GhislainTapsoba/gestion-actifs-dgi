@@ -23,8 +23,8 @@ describe('Contrat Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let contratFormService: ContratFormService;
   let contratService: ContratService;
-  let actifService: ActifService;
   let fournisseurService: FournisseurService;
+  let actifService: ActifService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -44,35 +44,13 @@ describe('Contrat Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     contratFormService = TestBed.inject(ContratFormService);
     contratService = TestBed.inject(ContratService);
-    actifService = TestBed.inject(ActifService);
     fournisseurService = TestBed.inject(FournisseurService);
+    actifService = TestBed.inject(ActifService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('should call Actif query and add missing value', () => {
-      const contrat: IContrat = { id: 25812 };
-      const actif: IActif = { id: 3500 };
-      contrat.actif = actif;
-
-      const actifCollection: IActif[] = [{ id: 3500 }];
-      vi.spyOn(actifService, 'query').mockReturnValue(of(new HttpResponse({ body: actifCollection })));
-      const additionalActifs = [actif];
-      const expectedCollection: IActif[] = [...additionalActifs, ...actifCollection];
-      vi.spyOn(actifService, 'addActifToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-      activatedRoute.data = of({ contrat });
-      comp.ngOnInit();
-
-      expect(actifService.query).toHaveBeenCalled();
-      expect(actifService.addActifToCollectionIfMissing).toHaveBeenCalledWith(
-        actifCollection,
-        ...additionalActifs.map(i => expect.objectContaining(i) as typeof i),
-      );
-      expect(comp.actifsSharedCollection()).toEqual(expectedCollection);
-    });
-
     it('should call Fournisseur query and add missing value', () => {
       const contrat: IContrat = { id: 25812 };
       const fournisseur: IFournisseur = { id: 25678 };
@@ -95,18 +73,40 @@ describe('Contrat Management Update Component', () => {
       expect(comp.fournisseursSharedCollection()).toEqual(expectedCollection);
     });
 
-    it('should update editForm', () => {
+    it('should call Actif query and add missing value', () => {
       const contrat: IContrat = { id: 25812 };
       const actif: IActif = { id: 3500 };
       contrat.actif = actif;
-      const fournisseur: IFournisseur = { id: 25678 };
-      contrat.fournisseur = fournisseur;
+
+      const actifCollection: IActif[] = [{ id: 3500 }];
+      vi.spyOn(actifService, 'query').mockReturnValue(of(new HttpResponse({ body: actifCollection })));
+      const additionalActifs = [actif];
+      const expectedCollection: IActif[] = [...additionalActifs, ...actifCollection];
+      vi.spyOn(actifService, 'addActifToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ contrat });
       comp.ngOnInit();
 
-      expect(comp.actifsSharedCollection()).toContainEqual(actif);
+      expect(actifService.query).toHaveBeenCalled();
+      expect(actifService.addActifToCollectionIfMissing).toHaveBeenCalledWith(
+        actifCollection,
+        ...additionalActifs.map(i => expect.objectContaining(i) as typeof i),
+      );
+      expect(comp.actifsSharedCollection()).toEqual(expectedCollection);
+    });
+
+    it('should update editForm', () => {
+      const contrat: IContrat = { id: 25812 };
+      const fournisseur: IFournisseur = { id: 25678 };
+      contrat.fournisseur = fournisseur;
+      const actif: IActif = { id: 3500 };
+      contrat.actif = actif;
+
+      activatedRoute.data = of({ contrat });
+      comp.ngOnInit();
+
       expect(comp.fournisseursSharedCollection()).toContainEqual(fournisseur);
+      expect(comp.actifsSharedCollection()).toContainEqual(actif);
       expect(comp.contrat).toEqual(contrat);
     });
   });
@@ -180,16 +180,6 @@ describe('Contrat Management Update Component', () => {
   });
 
   describe('Compare relationships', () => {
-    describe('compareActif', () => {
-      it('should forward to actifService', () => {
-        const entity = { id: 3500 };
-        const entity2 = { id: 21468 };
-        vi.spyOn(actifService, 'compareActif');
-        comp.compareActif(entity, entity2);
-        expect(actifService.compareActif).toHaveBeenCalledWith(entity, entity2);
-      });
-    });
-
     describe('compareFournisseur', () => {
       it('should forward to fournisseurService', () => {
         const entity = { id: 25678 };
@@ -197,6 +187,16 @@ describe('Contrat Management Update Component', () => {
         vi.spyOn(fournisseurService, 'compareFournisseur');
         comp.compareFournisseur(entity, entity2);
         expect(fournisseurService.compareFournisseur).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
+    describe('compareActif', () => {
+      it('should forward to actifService', () => {
+        const entity = { id: 3500 };
+        const entity2 = { id: 21468 };
+        vi.spyOn(actifService, 'compareActif');
+        comp.compareActif(entity, entity2);
+        expect(actifService.compareActif).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

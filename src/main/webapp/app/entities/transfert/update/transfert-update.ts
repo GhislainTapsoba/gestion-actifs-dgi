@@ -8,9 +8,9 @@ import { NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap/datepicker';
 import { TranslatePipe } from '@ngx-translate/core';
 import { Observable, finalize, map } from 'rxjs';
 
-import { IActif } from 'app/entities/actif/actif.model';
-import { ActifService } from 'app/entities/actif/service/actif.service';
 import { StatutTransfert } from 'app/entities/enumerations/statut-transfert.model';
+import { ServiceDgiService } from 'app/entities/service-dgi/service/service-dgi.service';
+import { IServiceDgi } from 'app/entities/service-dgi/service-dgi.model';
 import { UserService } from 'app/entities/user/service/user.service';
 import { IUser } from 'app/entities/user/user.model';
 import { AlertError } from 'app/shared/alert';
@@ -31,21 +31,21 @@ export class TransfertUpdate implements OnInit {
   transfert: ITransfert | null = null;
   statutTransfertValues = Object.keys(StatutTransfert);
 
+  serviceDgisSharedCollection = signal<IServiceDgi[]>([]);
   usersSharedCollection = signal<IUser[]>([]);
-  actifsSharedCollection = signal<IActif[]>([]);
 
   protected transfertService = inject(TransfertService);
   protected transfertFormService = inject(TransfertFormService);
+  protected serviceDgiService = inject(ServiceDgiService);
   protected userService = inject(UserService);
-  protected actifService = inject(ActifService);
   protected activatedRoute = inject(ActivatedRoute);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: TransfertFormGroup = this.transfertFormService.createTransfertFormGroup();
 
-  compareUser = (o1: IUser | null, o2: IUser | null): boolean => this.userService.compareUser(o1, o2);
+  compareServiceDgi = (o1: IServiceDgi | null, o2: IServiceDgi | null): boolean => this.serviceDgiService.compareServiceDgi(o1, o2);
 
-  compareActif = (o1: IActif | null, o2: IActif | null): boolean => this.actifService.compareActif(o1, o2);
+  compareUser = (o1: IUser | null, o2: IUser | null): boolean => this.userService.compareUser(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ transfert }) => {
@@ -95,13 +95,33 @@ export class TransfertUpdate implements OnInit {
     this.transfert = transfert;
     this.transfertFormService.resetForm(this.editForm, transfert);
 
+    this.serviceDgisSharedCollection.update(serviceDgis =>
+      this.serviceDgiService.addServiceDgiToCollectionIfMissing<IServiceDgi>(
+        serviceDgis,
+        transfert.serviceOrigine,
+        transfert.serviceDestinataire,
+      ),
+    );
     this.usersSharedCollection.update(users =>
       this.userService.addUserToCollectionIfMissing<IUser>(users, transfert.demandeur, transfert.validateur),
     );
-    this.actifsSharedCollection.update(actifs => this.actifService.addActifToCollectionIfMissing<IActif>(actifs, transfert.actif));
   }
 
   protected loadRelationshipsOptions(): void {
+    this.serviceDgiService
+      .query()
+      .pipe(map((res: HttpResponse<IServiceDgi[]>) => res.body ?? []))
+      .pipe(
+        map((serviceDgis: IServiceDgi[]) =>
+          this.serviceDgiService.addServiceDgiToCollectionIfMissing<IServiceDgi>(
+            serviceDgis,
+            this.transfert?.serviceOrigine,
+            this.transfert?.serviceDestinataire,
+          ),
+        ),
+      )
+      .subscribe((serviceDgis: IServiceDgi[]) => this.serviceDgisSharedCollection.set(serviceDgis));
+
     this.userService
       .query()
       .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
@@ -111,11 +131,5 @@ export class TransfertUpdate implements OnInit {
         ),
       )
       .subscribe((users: IUser[]) => this.usersSharedCollection.set(users));
-
-    this.actifService
-      .query()
-      .pipe(map((res: HttpResponse<IActif[]>) => res.body ?? []))
-      .pipe(map((actifs: IActif[]) => this.actifService.addActifToCollectionIfMissing<IActif>(actifs, this.transfert?.actif)))
-      .subscribe((actifs: IActif[]) => this.actifsSharedCollection.set(actifs));
   }
 }

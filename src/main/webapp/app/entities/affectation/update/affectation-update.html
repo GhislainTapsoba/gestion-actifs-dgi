@@ -47,6 +47,11 @@
         </div>
 
         <div class="mb-3">
+          <label class="form-label" for="field_motif" jhiTranslate="gestionActifsDgiApp.affectation.motif">Motif</label>
+          <input type="text" class="form-control" name="motif" id="field_motif" data-cy="motif" formControlName="motif" />
+        </div>
+
+        <div class="mb-3">
           <label class="form-label" for="field_dateRestitution" jhiTranslate="gestionActifsDgiApp.affectation.dateRestitution"
             >Date Restitution</label
           >
@@ -66,50 +71,19 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="field_numeroBordereau" jhiTranslate="gestionActifsDgiApp.affectation.numeroBordereau"
-            >Numero Bordereau</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            name="numeroBordereau"
-            id="field_numeroBordereau"
-            data-cy="numeroBordereau"
-            formControlName="numeroBordereau"
-          />
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_utilisateur" jhiTranslate="gestionActifsDgiApp.affectation.utilisateur">Utilisateur</label>
-          <select
-            class="form-control"
-            id="field_utilisateur"
-            data-cy="utilisateur"
-            name="utilisateur"
-            formControlName="utilisateur"
-            [compareWith]="compareUser"
-          >
-            <option [ngValue]="null"></option>
-            @for (userOption of usersSharedCollection(); track $index) {
-              <option [ngValue]="userOption">{{ userOption.id }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label" for="field_actif" jhiTranslate="gestionActifsDgiApp.affectation.actif">Actif</label>
-          <select class="form-control" id="field_actif" data-cy="actif" name="actif" formControlName="actif" [compareWith]="compareActif">
-            @if (editForm.get(['actif'])!.value === null) {
+          <label class="form-label" for="field_agent" jhiTranslate="gestionActifsDgiApp.affectation.agent">Agent</label>
+          <select class="form-control" id="field_agent" data-cy="agent" name="agent" formControlName="agent" [compareWith]="compareAgent">
+            @if (!editForm.get('agent')!.value) {
               <option [ngValue]="null" selected></option>
             }
-            @for (actifOption of actifsSharedCollection(); track $index) {
-              <option [ngValue]="actifOption">{{ actifOption.id }}</option>
+            @for (agentOption of agentsSharedCollection(); track $index) {
+              <option [ngValue]="agentOption">{{ agentOption.id }}</option>
             }
           </select>
         </div>
-        @if (editForm.get(['actif'])!.invalid && (editForm.get(['actif'])!.dirty || editForm.get(['actif'])!.touched)) {
+        @if (editForm.get(['agent'])!.invalid && (editForm.get(['agent'])!.dirty || editForm.get(['agent'])!.touched)) {
           <div>
-            @if (editForm.get(['actif'])?.errors?.required) {
+            @if (editForm.get(['agent'])?.errors?.required) {
               <small class="form-text text-danger" jhiTranslate="entity.validation.required">Ce champ est obligatoire.</small>
             }
           </div>

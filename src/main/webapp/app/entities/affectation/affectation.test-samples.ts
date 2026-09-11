@@ -10,15 +10,15 @@ export const sampleWithRequiredData: IAffectation = {
 export const sampleWithPartialData: IAffectation = {
   id: 31191,
   dateAffectation: dayjs('2026-09-02'),
+  motif: 'pff au cas où',
   dateRestitution: dayjs('2026-09-02'),
-  numeroBordereau: 'boum euh coin-coin',
 };
 
 export const sampleWithFullData: IAffectation = {
   id: 5705,
   dateAffectation: dayjs('2026-09-02'),
-  dateRestitution: dayjs('2026-09-01'),
-  numeroBordereau: 'de façon que équipe de recherche',
+  motif: 'au dépens de',
+  dateRestitution: dayjs('2026-09-02'),
 };
 
 export const sampleWithNewData: NewAffectation = {

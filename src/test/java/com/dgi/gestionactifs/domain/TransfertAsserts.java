@@ -47,7 +47,7 @@ public class TransfertAsserts {
     public static void assertTransfertUpdatableFieldsEquals(Transfert expected, Transfert actual) {
         assertThat(actual)
             .as("Verify Transfert relevant properties")
-            .satisfies(a -> assertThat(a.getDateDemande()).as("check dateDemande").isEqualTo(expected.getDateDemande()))
+            .satisfies(a -> assertThat(a.getDateTransfert()).as("check dateTransfert").isEqualTo(expected.getDateTransfert()))
             .satisfies(a -> assertThat(a.getStatut()).as("check statut").isEqualTo(expected.getStatut()))
             .satisfies(a -> assertThat(a.getCommentaireRejet()).as("check commentaireRejet").isEqualTo(expected.getCommentaireRejet()))
             .satisfies(a -> assertThat(a.getDateTraitement()).as("check dateTraitement").isEqualTo(expected.getDateTraitement()));
@@ -62,6 +62,9 @@ public class TransfertAsserts {
     public static void assertTransfertUpdatableRelationshipsEquals(Transfert expected, Transfert actual) {
         assertThat(actual)
             .as("Verify Transfert relationships")
-            .satisfies(a -> assertThat(a.getActif()).as("check actif").isEqualTo(expected.getActif()));
+            .satisfies(a -> assertThat(a.getServiceOrigine()).as("check serviceOrigine").isEqualTo(expected.getServiceOrigine()))
+            .satisfies(a ->
+                assertThat(a.getServiceDestinataire()).as("check serviceDestinataire").isEqualTo(expected.getServiceDestinataire())
+            );
     }
 }
