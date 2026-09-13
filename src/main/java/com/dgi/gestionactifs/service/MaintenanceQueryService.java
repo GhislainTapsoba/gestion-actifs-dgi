@@ -86,8 +86,7 @@ public class MaintenanceQueryService extends QueryService<Maintenance> {
                     buildRangeSpecification(criteria.getDatePanne(), Maintenance_.datePanne),
                     buildSpecification(criteria.getStatut(), Maintenance_.statut),
                     buildRangeSpecification(criteria.getDateCloture(), Maintenance_.dateCloture),
-                    buildSpecification(criteria.getActifId(), root -> root.join(Maintenance_.actif, JoinType.LEFT).get(Actif_.id)),
-                    buildSpecification(criteria.getTechnicienId(), root -> root.join(Maintenance_.technicien, JoinType.LEFT).get(User_.id))
+                    buildSpecification(criteria.getActifId(), root -> root.join(Maintenance_.actif, JoinType.LEFT).get(Actif_.id))
                 )
             );
         }

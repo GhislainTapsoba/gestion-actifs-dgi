@@ -60,9 +60,10 @@
             <column name="type_maintenance" type="string"/>
             <column name="date_panne" type="date"/>
             <column name="statut" type="string"/>
-            <column name="compte_rendu" type="clob"/>
+            <column name="compte_rendu" type="string"/>
             <column name="date_cloture" type="date"/>
             <column name="actif_id" type="numeric"/>
+            <column name="technicien_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

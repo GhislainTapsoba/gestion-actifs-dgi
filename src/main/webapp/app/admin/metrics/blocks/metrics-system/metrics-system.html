@@ -7,10 +7,12 @@
     <div class="col-md-8 text-end">{{ convertMillisecondsToDuration(systemMetricsRef['process.uptime']) }}</div>
   </div>
 
-  <div class="row">
-    <div class="col-md-4">Start time</div>
-    <div class="col-md-8 text-end">{{ systemMetricsRef['process.start.time'] | date: 'full' }}</div>
-  </div>
+  @if (systemMetricsRef['process.start.time']) {
+    <div class="row">
+      <div class="col-md-4">Start time</div>
+      <div class="col-md-8 text-end">{{ systemMetricsRef['process.start.time'] | date: 'full' }}</div>
+    </div>
+  }
 
   <div class="row">
     <div class="col-md-9">Process CPU usage</div>

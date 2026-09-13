@@ -13,8 +13,6 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface MaintenanceMapper extends EntityMapper<MaintenanceDTO, Maintenance> {
-    @Mapping(target = "actif", source = "actif", qualifiedByName = "actifId")
-    @Mapping(target = "technicien", source = "technicien", qualifiedByName = "userId")
     MaintenanceDTO toDto(Maintenance s);
 
     @Named("actifId")

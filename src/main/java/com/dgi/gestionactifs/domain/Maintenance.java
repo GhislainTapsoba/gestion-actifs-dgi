@@ -54,7 +54,7 @@ public class Maintenance implements Serializable {
     @JsonIgnoreProperties(value = { "categorie" }, allowSetters = true)
     private Actif actif;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User technicien;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
