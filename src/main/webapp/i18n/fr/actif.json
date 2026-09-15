@@ -29,7 +29,19 @@
       "localisation": "Localisation",
       "dateAcquisition": "Date Acquisition",
       "valeurAcquisition": "Valeur Acquisition",
-      "categorie": "Categorie"
+      "categorie": "Categorie",
+      "equipementsEnMaintenance": {
+        "title": "Équipements en Maintenance",
+        "notFound": "Aucun équipement en maintenance trouvé"
+      },
+      "equipementsAReformer": {
+        "title": "Équipements à Réformer",
+        "notFound": "Aucun équipement à réformer trouvé"
+      },
+      "equipementsNonAffectes": {
+        "title": "Équipements Non Affectés",
+        "notFound": "Aucun équipement non affecté trouvé"
+      }
     }
   }
 }

@@ -1,10 +1,12 @@
 package com.dgi.gestionactifs.service.impl;
 
 import com.dgi.gestionactifs.domain.Actif;
+import com.dgi.gestionactifs.domain.enumeration.StatutActif;
 import com.dgi.gestionactifs.repository.ActifRepository;
 import com.dgi.gestionactifs.service.ActifService;
 import com.dgi.gestionactifs.service.dto.ActifDTO;
 import com.dgi.gestionactifs.service.mapper.ActifMapper;
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,5 +73,26 @@ public class ActifServiceImpl implements ActifService {
     public void delete(Long id) {
         LOG.debug("Request to delete Actif : {}", id);
         actifRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ActifDTO> findEquipementsEnMaintenance() {
+        LOG.debug("Request to get all equipements en maintenance");
+        return actifRepository.findByEtat(StatutActif.EN_MAINTENANCE).stream().map(actifMapper::toDto).toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ActifDTO> findEquipementsAReformer() {
+        LOG.debug("Request to get all equipements à réformer");
+        return actifRepository.findByEtat(StatutActif.REFORME).stream().map(actifMapper::toDto).toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ActifDTO> findEquipementsNonAffectes() {
+        LOG.debug("Request to get all equipements non affectés");
+        return actifRepository.findEquipementsNonAffectes().stream().map(actifMapper::toDto).toList();
     }
 }

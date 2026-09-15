@@ -1,0 +1,102 @@
+<div class="d-flex justify-content-center">
+  <div class="col-md-9 col-lg-8">
+    @if (rapport(); as rapportRef) {
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h3 class="mb-0 fs-5">
+            <fa-icon icon="file-alt" class="me-2" />
+            <span>Rapport #{{ rapportRef.id }} : {{ rapportRef.titre }}</span>
+          </h3>
+          <span class="badge bg-light text-primary fs-6">{{ rapportRef.typeRapport }}</span>
+        </div>
+
+        <div class="card-body p-4">
+          <jhi-alert-error />
+          <jhi-alert />
+
+          <div class="row g-3 mb-4">
+            <div class="col-sm-6">
+              <label class="text-muted small fw-bold">TITRE DU RAPPORT</label>
+              <div class="fs-5 fw-semibold text-dark">{{ rapportRef.titre }}</div>
+            </div>
+
+            <div class="col-sm-6">
+              <label class="text-muted small fw-bold">TYPE DE RAPPORT</label>
+              <div>
+                <span class="badge bg-secondary">{{ rapportRef.typeRapport }}</span>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <label class="text-muted small fw-bold">DATE DE GÉNÉRATION</label>
+              <div>{{ rapportRef.dateGeneration | formatMediumDatetime }}</div>
+            </div>
+
+            <div class="col-sm-6">
+              <label class="text-muted small fw-bold">GÉNÉRÉ PAR</label>
+              <div>
+                <fa-icon icon="user" class="text-muted me-1" />
+                <strong>{{ rapportRef.generePar || 'Système' }}</strong>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <label class="text-muted small fw-bold">FORMAT D'EXPORT</label>
+              <div>
+                @if (rapportRef.formatExport === 'PDF') {
+                  <span class="badge bg-danger"> <fa-icon icon="file-pdf" class="me-1" /> PDF </span>
+                } @else if (rapportRef.formatExport === 'EXCEL') {
+                  <span class="badge bg-success"> <fa-icon icon="file-excel" class="me-1" /> EXCEL </span>
+                } @else {
+                  <span class="badge bg-info text-white">
+                    <fa-icon icon="file-alt" class="me-1" /> {{ rapportRef.formatExport || 'CSV' }}
+                  </span>
+                }
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <label class="text-muted small fw-bold">CHEMIN / FICHIER</label>
+              <div class="font-monospace small text-truncate">{{ rapportRef.cheminFichier || 'Généré dynamiquement' }}</div>
+            </div>
+
+            <div class="col-12">
+              <label class="text-muted small fw-bold">DESCRIPTION</label>
+              <div class="p-3 bg-light rounded border text-secondary">
+                {{ rapportRef.description || 'Aucune description fournie.' }}
+              </div>
+            </div>
+
+            @if (rapportRef.parametres) {
+              <div class="col-12">
+                <label class="text-muted small fw-bold">PARAMÈTRES APPLIQUÉS</label>
+                <div class="p-3 bg-light rounded border font-monospace small">
+                  {{ rapportRef.parametres }}
+                </div>
+              </div>
+            }
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-3 border-top">
+            <button type="button" (click)="previousState()" class="btn btn-outline-secondary">
+              <fa-icon icon="arrow-left" class="me-1" />
+              <span>Retour</span>
+            </button>
+
+            <div class="d-flex gap-2">
+              <button type="button" class="btn btn-outline-primary" (click)="imprimer()">
+                <fa-icon icon="print" class="me-1" />
+                <span>Imprimer</span>
+              </button>
+
+              <a [routerLink]="['/rapport', rapportRef.id, 'edit']" class="btn btn-primary">
+                <fa-icon icon="pencil-alt" class="me-1" />
+                <span>Modifier</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

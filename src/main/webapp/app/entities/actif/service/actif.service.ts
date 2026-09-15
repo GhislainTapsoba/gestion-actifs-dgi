@@ -127,4 +127,16 @@ export class ActifService extends ActifsService {
   protected convertResponseArrayFromServer(res: RestActif[]): IActif[] {
     return res.map(item => this.convertValueFromServer(item));
   }
+
+  findEquipementsEnMaintenance(): Observable<IActif[]> {
+    return this.http.get<RestActif[]>(`${this.resourceUrl}/en-maintenance`).pipe(map(res => this.convertResponseArrayFromServer(res)));
+  }
+
+  findEquipementsAReformer(): Observable<IActif[]> {
+    return this.http.get<RestActif[]>(`${this.resourceUrl}/a-reformer`).pipe(map(res => this.convertResponseArrayFromServer(res)));
+  }
+
+  findEquipementsNonAffectes(): Observable<IActif[]> {
+    return this.http.get<RestActif[]>(`${this.resourceUrl}/non-affectes`).pipe(map(res => this.convertResponseArrayFromServer(res)));
+  }
 }

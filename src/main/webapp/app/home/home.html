@@ -108,6 +108,10 @@
                 <fa-icon icon="tools" />
                 <span>Maintenance</span>
               </a>
+              <a routerLink="/rapport" class="quick-action">
+                <fa-icon icon="file-alt" />
+                <span>Rapports</span>
+              </a>
               @if (isAdmin() || isResponsable()) {
                 <a routerLink="/fournisseur" class="quick-action">
                   <fa-icon icon="truck" />

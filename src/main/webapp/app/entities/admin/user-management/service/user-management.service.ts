@@ -95,6 +95,18 @@ export class UserManagementService extends UserManagementsService {
     return this.http.post<undefined>(`${this.resourceUrl}/${encodeURIComponent(login)}/reset-password`, { newPassword });
   }
 
+  activateUser(login: string, activated: boolean): Observable<IUserManagement> {
+    return this.http
+      .put<RestUserManagement>(`${this.resourceUrl}/${encodeURIComponent(login)}/activate`, activated)
+      .pipe(map(res => this.convertResponseFromServer(res)));
+  }
+
+  assignRoles(login: string, authorities: string[]): Observable<IUserManagement> {
+    return this.http
+      .put<RestUserManagement>(`${this.resourceUrl}/${encodeURIComponent(login)}/roles`, authorities)
+      .pipe(map(res => this.convertResponseFromServer(res)));
+  }
+
   getUserManagementIdentifier(userManagement: Pick<IUserManagement, 'login'>): string {
     return userManagement.login;
   }

@@ -55,6 +55,42 @@
               </li>
               <li>
                 <a
+                  class="dropdown-item ps-4 text-warning"
+                  routerLink="/actif/en-maintenance"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                  (click)="collapseNavbar()"
+                >
+                  <fa-icon icon="tools" [fixedWidth]="true" />
+                  <span>└ En maintenance</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  class="dropdown-item ps-4 text-danger"
+                  routerLink="/actif/a-reformer"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                  (click)="collapseNavbar()"
+                >
+                  <fa-icon icon="ban" [fixedWidth]="true" />
+                  <span>└ À réformer</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  class="dropdown-item ps-4 text-success"
+                  routerLink="/actif/non-affectes"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                  (click)="collapseNavbar()"
+                >
+                  <fa-icon icon="link" [fixedWidth]="true" />
+                  <span>└ Non affectés (Stock)</span>
+                </a>
+              </li>
+              <li>
+                <a
                   class="dropdown-item"
                   routerLink="/affectation"
                   routerLinkActive="active"
@@ -267,6 +303,18 @@
                 >
                   <fa-icon icon="history" [fixedWidth]="true" />
                   <span>Historique des actions</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  class="dropdown-item fw-bold text-primary"
+                  routerLink="/rapport"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                  (click)="collapseNavbar()"
+                >
+                  <fa-icon icon="file-alt" [fixedWidth]="true" />
+                  <span>Rapports & États</span>
                 </a>
               </li>
               <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->

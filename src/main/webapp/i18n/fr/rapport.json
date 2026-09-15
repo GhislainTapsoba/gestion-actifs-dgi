@@ -1,0 +1,31 @@
+{
+  "gestionActifsDgiApp": {
+    "rapport": {
+      "home": {
+        "title": "Rapports & États",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Générer un nouveau Rapport",
+        "createOrEditLabel": "Créer ou éditer un Rapport",
+        "notFound": "Aucun Rapport trouvé"
+      },
+      "created": "Un nouveau Rapport a été généré avec l'identifiant {{ param }}",
+      "updated": "Le Rapport avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Rapport avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Rapport {{ id }} ?"
+      },
+      "detail": {
+        "title": "Détails du Rapport"
+      },
+      "id": "ID",
+      "titre": "Titre",
+      "typeRapport": "Type de Rapport",
+      "description": "Description",
+      "cheminFichier": "Chemin du Fichier",
+      "dateGeneration": "Date de Génération",
+      "generePar": "Généré Par",
+      "formatExport": "Format d'Export",
+      "parametres": "Paramètres"
+    }
+  }
+}

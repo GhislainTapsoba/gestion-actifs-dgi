@@ -1,6 +1,7 @@
 package com.dgi.gestionactifs.service;
 
 import com.dgi.gestionactifs.service.dto.ActifDTO;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -45,4 +46,25 @@ public interface ActifService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    /**
+     * Get all equipements en maintenance.
+     *
+     * @return the list of entities.
+     */
+    List<ActifDTO> findEquipementsEnMaintenance();
+
+    /**
+     * Get all equipements à réformer.
+     *
+     * @return the list of entities.
+     */
+    List<ActifDTO> findEquipementsAReformer();
+
+    /**
+     * Get all equipements non affectés.
+     *
+     * @return the list of entities.
+     */
+    List<ActifDTO> findEquipementsNonAffectes();
 }

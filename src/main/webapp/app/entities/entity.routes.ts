@@ -111,6 +111,11 @@ const routes: Routes = [
     title: 'gestionActifsDgiApp.historiqueAction.home.title',
     loadChildren: () => import('./historique-action/historique-action.routes'),
   },
+  {
+    path: 'rapport',
+    title: 'gestionActifsDgiApp.rapport.home.title',
+    loadChildren: () => import('./rapport/rapport.routes'),
+  },
   // jhipster-needle-add-entity-route - JHipster will add entity modules routes here
   // Les routes suivantes seront générées automatiquement par : jhipster jdl gestion-actifs-dgi.jdl
   // categorie-materiel, service-dgi, agent, affectation-actif, transfert-actif,

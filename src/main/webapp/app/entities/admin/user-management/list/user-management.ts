@@ -94,7 +94,7 @@ export class UserManagement {
   }
 
   setActive(userManagement: IUserManagement, isActivated: boolean): void {
-    this.userManagementService.update({ ...userManagement, activated: isActivated }).subscribe(() => this.load());
+    this.userManagementService.activateUser(userManagement.login, isActivated).subscribe(() => this.load());
   }
 
   resetPassword(userManagement: IUserManagement): void {

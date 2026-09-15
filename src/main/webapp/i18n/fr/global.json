@@ -27,7 +27,8 @@
         "recensement": "Recensement",
         "equipementRecensement": "Equipement Recensement",
         "inventaire": "Inventaire",
-        "historiqueAction": "Historique Action"
+        "historiqueAction": "Historique Action",
+        "rapport": "Rapports"
       },
       "account": {
         "main": "Compte",

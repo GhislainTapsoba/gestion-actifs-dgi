@@ -1,0 +1,172 @@
+<div>
+  <!-- Navigation par onglets -->
+  <ul class="nav nav-pills mb-4">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/actif">
+        <fa-icon icon="desktop" class="me-1" />
+        <span>Tous les actifs</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/actif/en-maintenance">
+        <fa-icon icon="tools" class="me-1" />
+        <span>En maintenance</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active bg-danger" routerLink="/actif/a-reformer">
+        <fa-icon icon="ban" class="me-1" />
+        <span>À réformer</span>
+        <span class="badge bg-light text-danger ms-1">{{ actifs().length }}</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/actif/non-affectes">
+        <fa-icon icon="link" class="me-1" />
+        <span>Non affectés</span>
+      </a>
+    </li>
+  </ul>
+
+  <!-- En-tête -->
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+      <h2 id="page-heading" class="mb-0">
+        <fa-icon icon="ban" class="text-danger me-2" />
+        <span>Équipements à Réformer (Rebut / Déclassement)</span>
+        <span class="badge bg-danger text-white ms-2">{{ filteredActifs().length }} actif(s)</span>
+      </h2>
+      <p class="text-muted mb-0 small">Liste des équipements hors d'usage, obsolètes ou proposés à la commission de réforme</p>
+    </div>
+
+    <div class="d-flex gap-2 flex-wrap">
+      <button class="btn btn-outline-secondary btn-sm" (click)="imprimer()" title="Imprimer le procès-verbal de réforme">
+        <fa-icon icon="print" class="me-1" />
+        <span>Imprimer</span>
+      </button>
+
+      <button class="btn btn-outline-success btn-sm" (click)="exporterCSV()" title="Exporter la liste au format CSV">
+        <fa-icon icon="download" class="me-1" />
+        <span>Exporter CSV</span>
+      </button>
+
+      <button class="btn btn-info btn-sm text-white" (click)="loadAll()" [disabled]="isLoading()">
+        <fa-icon icon="sync" [animation]="isLoading() ? 'spin' : undefined" class="me-1" />
+        <span>Actualiser</span>
+      </button>
+
+      <button class="btn btn-primary btn-sm" [routerLink]="['/actif/new']">
+        <fa-icon icon="plus" class="me-1" />
+        <span>Nouvel actif</span>
+      </button>
+    </div>
+  </div>
+
+  <jhi-alert-error />
+  <jhi-alert />
+
+  <!-- Barre de recherche -->
+  <div class="card mb-3 shadow-sm border-0">
+    <div class="card-body p-2">
+      <div class="input-group">
+        <span class="input-group-text bg-white border-end-0">
+          <fa-icon icon="search" class="text-muted" />
+        </span>
+        <input
+          type="text"
+          class="form-control border-start-0"
+          placeholder="Rechercher par code inventaire, désignation, marque, localisation..."
+          [value]="searchTerm()"
+          (input)="searchTerm.set($any($event.target).value)"
+        />
+        @if (searchTerm()) {
+          <button class="btn btn-outline-secondary" type="button" (click)="searchTerm.set('')">
+            <fa-icon icon="times" />
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- État de chargement -->
+  @if (isLoading()) {
+    <div class="text-center my-5">
+      <div class="spinner-border text-danger" role="status">
+        <span class="visually-hidden">Chargement...</span>
+      </div>
+      <p class="text-muted mt-2">Chargement des équipements à réformer...</p>
+    </div>
+  } @else if (filteredActifs().length === 0) {
+    <div class="alert alert-info d-flex align-items-center" role="alert">
+      <fa-icon icon="info-circle" class="me-2 fs-4" />
+      <div>
+        @if (searchTerm()) {
+          <span
+            >Aucun équipement ne correspond à votre recherche "<strong>{{ searchTerm() }}</strong
+            >".</span
+          >
+        } @else {
+          <span>Aucun équipement n'est actuellement classé à réformer dans le parc.</span>
+        }
+      </div>
+    </div>
+  } @else {
+    <!-- Tableau des équipements -->
+    <div class="table-responsive table-entities shadow-sm rounded">
+      <table class="table table-striped table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">Code Inv.</th>
+            <th scope="col">Désignation</th>
+            <th scope="col">Marque / Modèle</th>
+            <th scope="col">N° Série</th>
+            <th scope="col">Statut</th>
+            <th scope="col">Localisation</th>
+            <th scope="col">Date Acquis.</th>
+            <th scope="col" class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (actif of filteredActifs(); track trackId($index, actif)) {
+            <tr>
+              <td>
+                <a [routerLink]="['/actif', actif.id, 'view']" class="fw-bold text-decoration-none text-danger">
+                  {{ actif.codeInventaire }}
+                </a>
+              </td>
+              <td>{{ actif.designation }}</td>
+              <td>
+                <div>{{ actif.marque || '—' }}</div>
+                <small class="text-muted">{{ actif.modele }}</small>
+              </td>
+              <td>
+                <code>{{ actif.numeroSerie || '—' }}</code>
+              </td>
+              <td>
+                <span class="badge bg-danger text-white">
+                  <fa-icon icon="ban" class="me-1" />
+                  RÉFORMÉ
+                </span>
+              </td>
+              <td>{{ actif.localisation || '—' }}</td>
+              <td>{{ actif.dateAcquisition | formatMediumDate }}</td>
+              <td class="text-end">
+                <div class="btn-group btn-group-sm">
+                  <a [routerLink]="['/actif', actif.id, 'view']" class="btn btn-info text-white" title="Voir détails">
+                    <fa-icon icon="eye" />
+                  </a>
+                  <a [routerLink]="['/actif', actif.id, 'edit']" class="btn btn-primary" title="Modifier">
+                    <fa-icon icon="pencil-alt" />
+                  </a>
+                  <button type="button" class="btn btn-danger" (click)="delete(actif)" title="Supprimer">
+                    <fa-icon icon="times" />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

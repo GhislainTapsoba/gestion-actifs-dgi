@@ -227,4 +227,55 @@ public class UserResource {
             .headers(HeaderUtil.createAlert(applicationName, "userManagement.passwordReset", login))
             .build();
     }
+
+    /**
+     * {@code PUT /admin/users/:login/activate} : activate/deactivate the "login" User.
+     *
+     * @param login the login of the user to activate/deactivate.
+     * @param activated the activation status.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated user, or with status {@code 404 (Not Found)}.
+     */
+    @PutMapping("/users/{login}/activate")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<AdminUserDTO> activateUser(
+        @PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login,
+        @RequestBody Boolean activated
+    ) {
+        LOG.debug("REST request to activate/deactivate User: {}", login);
+        Optional<AdminUserDTO> user = userService.getUserWithAuthoritiesByLogin(login).map(AdminUserDTO::new);
+        if (user.isPresent()) {
+            AdminUserDTO userDTO = user.get();
+            userDTO.setActivated(activated);
+            Optional<AdminUserDTO> updatedUser = userService.updateUser(userDTO);
+            return ResponseUtil.wrapOrNotFound(
+                updatedUser,
+                HeaderUtil.createAlert(applicationName, activated ? "userManagement.activated" : "userManagement.deactivated", login)
+            );
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    /**
+     * {@code PUT /admin/users/:login/roles} : assign roles to the "login" User.
+     *
+     * @param login the login of the user to assign roles.
+     * @param authorities the list of authorities to assign.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated user, or with status {@code 404 (Not Found)}.
+     */
+    @PutMapping("/users/{login}/roles")
+    @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
+    public ResponseEntity<AdminUserDTO> assignRoles(
+        @PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login,
+        @RequestBody Set<String> authorities
+    ) {
+        LOG.debug("REST request to assign roles to User: {}", login);
+        Optional<AdminUserDTO> user = userService.getUserWithAuthoritiesByLogin(login).map(AdminUserDTO::new);
+        if (user.isPresent()) {
+            AdminUserDTO userDTO = user.get();
+            userDTO.setAuthorities(authorities);
+            Optional<AdminUserDTO> updatedUser = userService.updateUser(userDTO);
+            return ResponseUtil.wrapOrNotFound(updatedUser, HeaderUtil.createAlert(applicationName, "userManagement.rolesUpdated", login));
+        }
+        return ResponseEntity.notFound().build();
+    }
 }
