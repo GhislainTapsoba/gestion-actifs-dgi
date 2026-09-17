@@ -2,13 +2,13 @@
   <div class="auth-card">
     <!-- Branding DGI -->
     <div class="auth-brand">
-      <div class="auth-brand__mark">
-        <fa-icon icon="shield-alt" />
+      <div class="auth-brand__logo-wrapper">
+        <img src="/content/images/logo-dgi.png" alt="Logo Direction Générale des Impôts" class="auth-brand__logo" />
       </div>
-      <div>
-        <h2 class="auth-brand__title">DGI</h2>
-        <p class="auth-brand__subtitle">Gestion des Actifs Informatiques</p>
-      </div>
+      <span class="auth-brand__republic">Burkina Faso</span>
+      <h2 class="auth-brand__title">DIRECTION GÉNÉRALE DES IMPÔTS</h2>
+      <p class="auth-brand__motto">Au service du développement économique et social</p>
+      <span class="auth-brand__app">Gestion des Actifs Informatiques</span>
     </div>
 
     <h1 data-cy="loginTitle">Connexion</h1>
@@ -61,6 +61,8 @@
 
     <div class="auth-footer-links">
       <a routerLink="/account/reset/request" data-cy="forgetYourPasswordSelector">Mot de passe oublié ?</a>
+      <span class="mx-2 text-muted">•</span>
+      <a routerLink="/account/register">Créer un compte</a>
     </div>
   </div>
 </div>

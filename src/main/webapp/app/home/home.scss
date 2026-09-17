@@ -1,7 +1,9 @@
-$blue: #2563eb;
-$green: #16a34a;
+$blue: #168f66;
+$dgi-green: #168f66;
+$dgi-green-dark: #117352;
+$green: #168f66;
 $orange: #d97706;
-$red: #dc2626;
+$red: #e02b20;
 $purple: #7c3aed;
 $text: #0f172a;
 $text-muted: #64748b;
@@ -76,7 +78,7 @@ $radius: 10px;
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  background: linear-gradient(135deg, $blue 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, #168f66 0%, #117352 100%);
   color: #fff;
   border: none;
   border-radius: 12px;
@@ -85,18 +87,18 @@ $radius: 10px;
   font-weight: 700;
   cursor: pointer;
   text-decoration: none;
-  box-shadow: 0 12px 22px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 12px 22px rgba(22, 143, 102, 0.25);
   transition:
     transform 0.15s ease,
     box-shadow 0.15s ease,
     background 0.15s ease;
 
   &:hover {
-    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    background: linear-gradient(135deg, #117352 0%, #0d5c41 100%);
     color: #fff;
     text-decoration: none;
     transform: translateY(-1px);
-    box-shadow: 0 16px 26px rgba(37, 99, 235, 0.28);
+    box-shadow: 0 16px 26px rgba(22, 143, 102, 0.32);
   }
 
   &--lg {
@@ -537,43 +539,108 @@ $radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: $bg;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(22, 143, 102, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(251, 208, 34, 0.07) 0%, transparent 45%), linear-gradient(135deg, #f8fafc 0%, #edf7f2 100%);
+  padding: 2rem 1rem;
 }
 
 .dash-login__card {
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  border-radius: 20px;
+  position: relative;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(22, 143, 102, 0.16);
+  border-radius: 24px;
   padding: 3rem 2.5rem;
   text-align: center;
-  max-width: 420px;
+  max-width: 480px;
   width: 100%;
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
-  backdrop-filter: blur(8px);
+  box-shadow:
+    0 24px 60px rgba(15, 23, 42, 0.1),
+    0 4px 12px rgba(22, 143, 102, 0.06);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
 
-  h1 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: $text;
-    margin: 1rem 0 0.5rem;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #e02b20 0%, #e02b20 33%, #fbd022 33%, #fbd022 66%, #168f66 66%, #168f66 100%);
   }
 
-  p {
-    color: $text-muted;
-    font-size: 0.9rem;
-    margin-bottom: 1.75rem;
+  h1 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: $text;
+    letter-spacing: 0.02em;
+    margin: 0 0 0.3rem;
   }
 }
 
-.dash-login__icon {
-  width: 64px;
-  height: 64px;
-  background: $blue;
-  border-radius: 16px;
+.dash-login__logo-wrapper {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: #ffffff;
+  padding: 4px;
+  box-shadow:
+    0 8px 22px rgba(22, 143, 102, 0.18),
+    0 0 0 2px rgba(22, 143, 102, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 0.5rem;
-  color: #fff;
-  font-size: 1.75rem;
+  margin: 0 auto 0.85rem;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.04);
+  }
+}
+
+.dash-login__logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.dash-login__republic {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #e02b20;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.dash-login__motto {
+  font-size: 0.78rem;
+  color: #168f66;
+  font-weight: 600;
+  font-style: italic;
+  margin: 0 0 1rem;
+}
+
+.dash-login__divider {
+  width: 50px;
+  height: 2px;
+  background: linear-gradient(90deg, #168f66, #fbd022);
+  margin: 0.75rem auto 1rem;
+  border-radius: 2px;
+}
+
+.dash-login__subtitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: $text;
+  margin: 0 0 0.4rem;
+}
+
+.dash-login__desc {
+  color: $text-muted;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin-bottom: 1.75rem;
 }

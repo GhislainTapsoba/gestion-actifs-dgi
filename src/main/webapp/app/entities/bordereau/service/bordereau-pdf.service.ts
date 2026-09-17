@@ -89,7 +89,7 @@ export class BordereauPdfService {
       margin: 0;
       font-size: 17px;
       font-weight: 800;
-      color: #1e3a8a;
+      color: #117352;
       letter-spacing: 0.04em;
     }
     .doc-title .doc-ref {
@@ -137,7 +137,7 @@ export class BordereauPdfService {
       margin: 25px 0;
       padding: 14px;
       background: #fafafa;
-      border-left: 4px solid #2563eb;
+      border-left: 4px solid #168f66;
       font-size: 12px;
       font-style: italic;
       color: #334155;
@@ -188,7 +188,7 @@ export class BordereauPdfService {
       text-align: right;
     }
     .btn-print {
-      background: #2563eb;
+      background: #168f66;
       color: white;
       border: none;
       padding: 8px 16px;

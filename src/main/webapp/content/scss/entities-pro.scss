@@ -4,12 +4,14 @@
    ========================================================================== */
 
 // ── Tokens ──────────────────────────────────────────────────────────────────
-$c-primary: #2563eb;
-$c-primary-dark: #1d4ed8;
-$c-danger: #dc2626;
-$c-success: #16a34a;
-$c-warning: #d97706;
-$c-info: #0891b2;
+$c-primary: #168f66;
+$c-primary-dark: #117352;
+$c-primary-light: #e6f7f0;
+$c-danger: #e02b20;
+$c-success: #168f66;
+$c-warning: #fbd022;
+$c-warning-text: #92400e;
+$c-info: #0284c7;
 $c-purple: #7c3aed;
 
 $c-text: #0f172a;
@@ -45,6 +47,21 @@ body {
 
   p {
     margin: 0;
+  }
+
+  &__content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    font-weight: 500;
+  }
+
+  &__logo {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
   }
 }
 
