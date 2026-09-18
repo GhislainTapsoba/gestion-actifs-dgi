@@ -47,8 +47,8 @@ export default class Sidebar {
     { label: 'Agents', icon: 'user-tie', route: '/agent', roles: ['ROLE_ADMIN', 'ROLE_TECHNICIEN', 'ROLE_RESPONSABLE'] },
     { label: 'Services DGI', icon: 'building', route: '/service-dgi', roles: ['ROLE_ADMIN', 'ROLE_TECHNICIEN', 'ROLE_RESPONSABLE'] },
     { label: 'Bordereaux', icon: 'file-invoice', route: '/bordereau', roles: ['ROLE_ADMIN', 'ROLE_TECHNICIEN', 'ROLE_RESPONSABLE'] },
-    { label: 'Fournisseurs', icon: 'truck', route: '/fournisseur', roles: ['ROLE_ADMIN', 'ROLE_TECHNICIEN'] },
-    { label: 'Contrats', icon: 'file-contract', route: '/contrat', roles: ['ROLE_ADMIN', 'ROLE_TECHNICIEN'] },
+    /*{ label: 'Fournisseurs', icon: 'truck', route: '/fournisseur', roles: ['ROLE_ADMIN', 'ROLE_TECHNICIEN'] },
+    { label: 'Contrats', icon: 'file-contract', route: '/contrat', roles: ['ROLE_ADMIN', 'ROLE_TECHNICIEN'] },*/
     { label: 'Historique', icon: 'history', route: '/historique-action', roles: ['ROLE_ADMIN'] },
   ];
 
