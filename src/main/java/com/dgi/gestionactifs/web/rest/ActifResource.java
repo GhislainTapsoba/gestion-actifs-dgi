@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -60,6 +61,7 @@ public class ActifResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_AGENT')")
     public ResponseEntity<ActifDTO> createActif(@Valid @RequestBody ActifDTO actifDTO) throws URISyntaxException {
         LOG.debug("REST request to save Actif : {}", actifDTO);
         if (actifDTO.getId() != null) {
@@ -82,6 +84,7 @@ public class ActifResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_AGENT')")
     public ResponseEntity<ActifDTO> updateActif(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody ActifDTO actifDTO
@@ -116,6 +119,7 @@ public class ActifResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_AGENT')")
     public ResponseEntity<ActifDTO> partialUpdateActif(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody ActifDTO actifDTO
@@ -191,11 +195,51 @@ public class ActifResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE')")
     public ResponseEntity<Void> deleteActif(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Actif : {}", id);
         actifService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    /**
+     * {@code GET  /actifs/en-maintenance} : get all equipements en maintenance.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of equipements en maintenance in body.
+     */
+    @GetMapping("/en-maintenance")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_AGENT', 'ROLE_TECHNICIEN')")
+    public ResponseEntity<List<ActifDTO>> getEquipementsEnMaintenance() {
+        LOG.debug("REST request to get all equipements en maintenance");
+        List<ActifDTO> result = actifService.findEquipementsEnMaintenance();
+        return ResponseEntity.ok().body(result);
+    }
+
+    /**
+     * {@code GET  /actifs/a-reformer} : get all equipements à réformer.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of equipements à réformer in body.
+     */
+    @GetMapping("/a-reformer")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_AGENT', 'ROLE_TECHNICIEN')")
+    public ResponseEntity<List<ActifDTO>> getEquipementsAReformer() {
+        LOG.debug("REST request to get all equipements à réformer");
+        List<ActifDTO> result = actifService.findEquipementsAReformer();
+        return ResponseEntity.ok().body(result);
+    }
+
+    /**
+     * {@code GET  /actifs/non-affectes} : get all equipements non affectés.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of equipements non affectés in body.
+     */
+    @GetMapping("/non-affectes")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_AGENT', 'ROLE_TECHNICIEN')")
+    public ResponseEntity<List<ActifDTO>> getEquipementsNonAffectes() {
+        LOG.debug("REST request to get all equipements non affectés");
+        List<ActifDTO> result = actifService.findEquipementsNonAffectes();
+        return ResponseEntity.ok().body(result);
     }
 }

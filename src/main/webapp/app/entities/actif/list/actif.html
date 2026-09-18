@@ -1,4 +1,32 @@
 <div>
+  <!-- Navigation par onglets -->
+  <ul class="nav nav-pills mb-4">
+    <li class="nav-item">
+      <a class="nav-link active" routerLink="/actif">
+        <fa-icon icon="desktop" class="me-1" />
+        <span>Tous les actifs</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/actif/en-maintenance">
+        <fa-icon icon="tools" class="me-1" />
+        <span>En maintenance</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/actif/a-reformer">
+        <fa-icon icon="ban" class="me-1" />
+        <span>À réformer</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/actif/non-affectes">
+        <fa-icon icon="link" class="me-1" />
+        <span>Non affectés</span>
+      </a>
+    </li>
+  </ul>
+
   <h2 id="page-heading" data-cy="ActifHeading">
     <span jhiTranslate="gestionActifsDgiApp.actif.home.title">Actifs</span>
 

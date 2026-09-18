@@ -108,6 +108,10 @@
                 <fa-icon icon="tools" />
                 <span>Maintenance</span>
               </a>
+              <a routerLink="/rapport" class="quick-action">
+                <fa-icon icon="file-alt" />
+                <span>Rapports</span>
+              </a>
               @if (isAdmin() || isResponsable()) {
                 <a routerLink="/fournisseur" class="quick-action">
                   <fa-icon icon="truck" />
@@ -202,11 +206,15 @@
   <!-- Page de connexion -->
   <div class="dash-login">
     <div class="dash-login__card">
-      <div class="dash-login__icon">
-        <fa-icon icon="shield-alt" />
+      <div class="dash-login__logo-wrapper">
+        <img src="/content/images/logo-dgi.png" alt="Logo Direction Générale des Impôts" class="dash-login__logo" />
       </div>
-      <h1>Gestion des Actifs Informatiques</h1>
-      <p>Direction Générale des Impôts</p>
+      <span class="dash-login__republic">Burkina Faso</span>
+      <h1>DIRECTION GÉNÉRALE DES IMPÔTS</h1>
+      <p class="dash-login__motto">Au service du développement économique et social</p>
+      <div class="dash-login__divider"></div>
+      <h2 class="dash-login__subtitle">Gestion des Actifs Informatiques</h2>
+      <p class="dash-login__desc">Plateforme officielle de suivi du parc matériel, des affectations et de la maintenance.</p>
       <button class="btn-primary-dash btn-primary-dash--lg" (click)="login()">
         <fa-icon icon="sign-in-alt" />
         Se connecter

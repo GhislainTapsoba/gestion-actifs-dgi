@@ -29,7 +29,19 @@
       "localisation": "Localisation",
       "dateAcquisition": "Date Acquisition",
       "valeurAcquisition": "Valeur Acquisition",
-      "categorie": "Categorie"
+      "categorie": "Categorie",
+      "equipementsEnMaintenance": {
+        "title": "Equipment in Maintenance",
+        "notFound": "No equipment in maintenance found"
+      },
+      "equipementsAReformer": {
+        "title": "Equipment to be Retired",
+        "notFound": "No equipment to be retired found"
+      },
+      "equipementsNonAffectes": {
+        "title": "Unassigned Equipment",
+        "notFound": "No unassigned equipment found"
+      }
     }
   }
 }
