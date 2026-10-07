@@ -65,8 +65,42 @@ public class SecurityConfiguration {
                     .requestMatchers("/api/activate").permitAll()
                     .requestMatchers("/api/account/reset-password/init").permitAll()
                     .requestMatchers("/api/account/reset-password/finish").permitAll()
-                    .requestMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                    .requestMatchers("/api/**").authenticated()
+                    .requestMatchers("/api/account", "/api/account/**").authenticated()
+                    .requestMatchers("/api/admin/**", "/api/authorities", "/api/authorities/**")
+                    .hasAuthority(AuthoritiesConstants.ADMIN)
+                    .requestMatchers("/api/rapports", "/api/rapports/**", "/api/historique-actions", "/api/historique-actions/**")
+                    .hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.RESPONSABLE)
+                    .requestMatchers(HttpMethod.GET, "/api/actifs/count")
+                    .hasAnyAuthority(
+                        AuthoritiesConstants.ADMIN,
+                        AuthoritiesConstants.RESPONSABLE,
+                        AuthoritiesConstants.TECHNICIEN,
+                        AuthoritiesConstants.AGENT
+                    )
+                    .requestMatchers(HttpMethod.GET, "/api/pannes/count")
+                    .hasAnyAuthority(
+                        AuthoritiesConstants.ADMIN,
+                        AuthoritiesConstants.RESPONSABLE,
+                        AuthoritiesConstants.TECHNICIEN,
+                        AuthoritiesConstants.AGENT
+                    )
+                    .requestMatchers(HttpMethod.GET, "/api/transferts/count", "/api/maintenances/count")
+                    .hasAnyAuthority(
+                        AuthoritiesConstants.ADMIN,
+                        AuthoritiesConstants.RESPONSABLE,
+                        AuthoritiesConstants.TECHNICIEN
+                    )
+                    .requestMatchers("/api/actifs/en-maintenance", "/api/actifs/a-reformer", "/api/actifs/non-affectes")
+                    .hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.RESPONSABLE, AuthoritiesConstants.TECHNICIEN)
+                    .requestMatchers("/api/actifs", "/api/actifs/**", "/api/pannes", "/api/pannes/**")
+                    .hasAnyAuthority(
+                        AuthoritiesConstants.ADMIN,
+                        AuthoritiesConstants.RESPONSABLE,
+                        AuthoritiesConstants.TECHNICIEN,
+                        AuthoritiesConstants.AGENT
+                    )
+                    .requestMatchers("/api/**")
+                    .hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.RESPONSABLE, AuthoritiesConstants.TECHNICIEN)
                     .requestMatchers("/v3/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers("/management/health").permitAll()
                     .requestMatchers("/management/health/**").permitAll()

@@ -8,7 +8,7 @@ export interface IPanne {
   description?: string | null;
   dateDeclaration?: dayjs.Dayjs | null;
   statutPanne?: keyof typeof StatutPanne | null;
-  actif?: Pick<IActif, 'id'> | null;
+  actif?: Pick<IActif, 'id' | 'codeInventaire'> | null;
 }
 
 export type NewPanne = Omit<IPanne, 'id'> & { id: null };

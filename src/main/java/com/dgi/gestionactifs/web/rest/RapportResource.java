@@ -56,7 +56,7 @@ public class RapportResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_AGENT')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE')")
     public ResponseEntity<RapportDTO> createRapport(@Valid @RequestBody RapportDTO rapportDTO) throws URISyntaxException {
         LOG.debug("REST request to save Rapport : {}", rapportDTO);
         if (rapportDTO.getId() != null) {
@@ -79,7 +79,7 @@ public class RapportResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_AGENT')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE')")
     public ResponseEntity<RapportDTO> updateRapport(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody RapportDTO rapportDTO
@@ -114,7 +114,7 @@ public class RapportResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_AGENT')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE')")
     public ResponseEntity<RapportDTO> partialUpdateRapport(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody RapportDTO rapportDTO
@@ -146,7 +146,7 @@ public class RapportResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of rapports in body.
      */
     @GetMapping("")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_AGENT', 'ROLE_TECHNICIEN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE')")
     public ResponseEntity<List<RapportDTO>> getAllRapports(
         @org.springdoc.core.annotations.ParameterObject Pageable pageable,
         @RequestParam(required = false) String typeRapport,
@@ -174,7 +174,7 @@ public class RapportResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the rapportDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_AGENT', 'ROLE_TECHNICIEN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE')")
     public ResponseEntity<RapportDTO> getRapport(@PathVariable Long id) {
         LOG.debug("REST request to get Rapport : {}", id);
         RapportDTO rapportDTO = rapportService.findOne(id);

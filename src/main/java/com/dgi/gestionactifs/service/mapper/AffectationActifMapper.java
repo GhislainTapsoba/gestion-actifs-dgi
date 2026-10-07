@@ -20,10 +20,13 @@ public interface AffectationActifMapper extends EntityMapper<AffectationActifDTO
     @Named("affectationId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "dateAffectation", source = "dateAffectation")
     AffectationDTO toDtoAffectationId(Affectation affectation);
 
     @Named("actifId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "codeInventaire", source = "codeInventaire")
+    @Mapping(target = "designation", source = "designation")
     ActifDTO toDtoActifId(Actif actif);
 }

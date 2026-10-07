@@ -22,8 +22,8 @@ public class HistoriqueAction implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "historiqueActionSequence")
+    @SequenceGenerator(name = "historiqueActionSequence", sequenceName = "historique_action_seq", allocationSize = 1)
     @Column(name = "id")
     private Long id;
 

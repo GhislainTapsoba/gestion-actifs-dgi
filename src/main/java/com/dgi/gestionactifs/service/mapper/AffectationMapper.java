@@ -17,5 +17,7 @@ public interface AffectationMapper extends EntityMapper<AffectationDTO, Affectat
     @Named("agentId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "nom", source = "nom")
+    @Mapping(target = "prenom", source = "prenom")
     AgentDTO toDtoAgentId(Agent agent);
 }

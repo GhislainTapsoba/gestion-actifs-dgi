@@ -67,7 +67,7 @@
               <option [ngValue]="null" selected></option>
             }
             @for (affectationOption of affectationsSharedCollection(); track $index) {
-              <option [ngValue]="affectationOption">{{ affectationOption.id }}</option>
+              <option [ngValue]="affectationOption">{{ affectationOption.dateAffectation }}</option>
             }
           </select>
         </div>
@@ -86,7 +86,7 @@
               <option [ngValue]="null" selected></option>
             }
             @for (actifOption of actifsSharedCollection(); track $index) {
-              <option [ngValue]="actifOption">{{ actifOption.id }}</option>
+              <option [ngValue]="actifOption">{{ actifOption.codeInventaire }} - {{ actifOption.designation }}</option>
             }
           </select>
         </div>

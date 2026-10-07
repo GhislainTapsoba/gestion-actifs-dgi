@@ -28,47 +28,61 @@
           [routerLink]="item.route"
           routerLinkActive="sidebar__link--active"
           [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
-          [title]="collapsed() ? item.label : ''"
+          [title]="collapsed() ? getItemLabel(item) : ''"
         >
           <fa-icon [icon]="item.icon" class="sidebar__link-icon" />
           @if (!collapsed()) {
-            <span class="sidebar__link-label">{{ item.label }}</span>
+            <span class="sidebar__link-label">{{ getItemLabel(item) }}</span>
           }
         </a>
       }
     }
 
     <!-- Groupe : Incidents -->
-    @if (!collapsed()) {
-      <span class="sidebar__section-label sidebar__section-label--mt">Incidents</span>
-    } @else {
-      <div class="sidebar__divider"></div>
-    }
-    @for (item of incidentItems; track item.route) {
-      @if (isVisible(item)) {
-        <a class="sidebar__link" [routerLink]="item.route" routerLinkActive="sidebar__link--active" [title]="collapsed() ? item.label : ''">
-          <fa-icon [icon]="item.icon" class="sidebar__link-icon" />
-          @if (!collapsed()) {
-            <span class="sidebar__link-label">{{ item.label }}</span>
-          }
-        </a>
+    @if (hasVisibleItems(incidentItems)) {
+      @if (!collapsed()) {
+        <span class="sidebar__section-label sidebar__section-label--mt">Incidents</span>
+      } @else {
+        <div class="sidebar__divider"></div>
+      }
+      @for (item of incidentItems; track item.route) {
+        @if (isVisible(item)) {
+          <a
+            class="sidebar__link"
+            [routerLink]="item.route"
+            routerLinkActive="sidebar__link--active"
+            [title]="collapsed() ? getItemLabel(item) : ''"
+          >
+            <fa-icon [icon]="item.icon" class="sidebar__link-icon" />
+            @if (!collapsed()) {
+              <span class="sidebar__link-label">{{ getItemLabel(item) }}</span>
+            }
+          </a>
+        }
       }
     }
 
     <!-- Groupe : Gestion -->
-    @if (!collapsed()) {
-      <span class="sidebar__section-label sidebar__section-label--mt">Gestion</span>
-    } @else {
-      <div class="sidebar__divider"></div>
-    }
-    @for (item of gestionItems; track item.route) {
-      @if (isVisible(item)) {
-        <a class="sidebar__link" [routerLink]="item.route" routerLinkActive="sidebar__link--active" [title]="collapsed() ? item.label : ''">
-          <fa-icon [icon]="item.icon" class="sidebar__link-icon" />
-          @if (!collapsed()) {
-            <span class="sidebar__link-label">{{ item.label }}</span>
-          }
-        </a>
+    @if (hasVisibleItems(gestionItems)) {
+      @if (!collapsed()) {
+        <span class="sidebar__section-label sidebar__section-label--mt">Gestion</span>
+      } @else {
+        <div class="sidebar__divider"></div>
+      }
+      @for (item of gestionItems; track item.route) {
+        @if (isVisible(item)) {
+          <a
+            class="sidebar__link"
+            [routerLink]="item.route"
+            routerLinkActive="sidebar__link--active"
+            [title]="collapsed() ? getItemLabel(item) : ''"
+          >
+            <fa-icon [icon]="item.icon" class="sidebar__link-icon" />
+            @if (!collapsed()) {
+              <span class="sidebar__link-label">{{ getItemLabel(item) }}</span>
+            }
+          </a>
+        }
       }
     }
 

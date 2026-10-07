@@ -118,19 +118,23 @@
               <td>
                 @if (bordereau.transfert) {
                   <div>
-                    <a [routerLink]="['/transfert', bordereau.transfert.id, 'view']">Transfert #{{ bordereau.transfert.id }}</a>
+                    <a [routerLink]="['/transfert', bordereau.transfert.id, 'view']">
+                      Transfert du {{ bordereau.transfert.dateTransfert }}
+                    </a>
                   </div>
                 }
               </td>
               <td>
                 @if (bordereau.affectation) {
                   <div>
-                    <a [routerLink]="['/affectation', bordereau.affectation.id, 'view']">Affectation #{{ bordereau.affectation.id }}</a>
+                    <a [routerLink]="['/affectation', bordereau.affectation.id, 'view']">
+                      Affectation du {{ bordereau.affectation.dateAffectation }}
+                    </a>
                   </div>
                 }
               </td>
               <td>
-                {{ bordereau.emetteur ? '#' + bordereau.emetteur.id : '—' }}
+                {{ bordereau.emetteur?.login || '—' }}
               </td>
               <td class="text-end">
                 <div class="btn-group">

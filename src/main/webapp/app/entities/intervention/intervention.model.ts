@@ -11,8 +11,8 @@ export interface IIntervention {
   typeIntervention?: keyof typeof TypeIntervention | null;
   statut?: keyof typeof StatutIntervention | null;
   description?: string | null;
-  panne?: Pick<IPanne, 'id'> | null;
-  plannings?: Pick<IPlanningMaintenance, 'id'>[] | null;
+  panne?: Pick<IPanne, 'id' | 'description' | 'dateDeclaration'> | null;
+  plannings?: Pick<IPlanningMaintenance, 'id' | 'datePrevue' | 'description'>[] | null;
 }
 
 export type NewIntervention = Omit<IIntervention, 'id'> & { id: null };

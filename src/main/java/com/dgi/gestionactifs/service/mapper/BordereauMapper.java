@@ -23,15 +23,18 @@ public interface BordereauMapper extends EntityMapper<BordereauDTO, Bordereau> {
     @Named("transfertId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "dateTransfert", source = "dateTransfert")
     TransfertDTO toDtoTransfertId(Transfert transfert);
 
     @Named("affectationId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "dateAffectation", source = "dateAffectation")
     AffectationDTO toDtoAffectationId(Affectation affectation);
 
     @Named("userId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "login", source = "login")
     UserDTO toDtoUserId(User user);
 }

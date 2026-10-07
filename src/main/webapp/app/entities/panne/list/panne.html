@@ -82,7 +82,7 @@
               <td>
                 @if (panne.actif) {
                   <div>
-                    <a [routerLink]="['/actif', panne.actif.id, 'view']">{{ panne.actif.id }}</a>
+                    <a [routerLink]="['/actif', panne.actif.id, 'view']">{{ panne.actif.codeInventaire }}</a>
                   </div>
                 }
               </td>

@@ -39,7 +39,7 @@
           <dd>
             @if (intervention()!.panne) {
               <div>
-                <a [routerLink]="['/panne', intervention()!.panne?.id, 'view']">{{ interventionRef.panne?.id }}</a>
+                <a [routerLink]="['/panne', intervention()!.panne?.id, 'view']">{{ interventionRef.panne?.description }}</a>
               </div>
             }
           </dd>
@@ -47,7 +47,7 @@
           <dd>
             @for (planning of interventionRef.plannings; track $index; let last = $last) {
               <span>
-                <a [routerLink]="['/planning-maintenance', planning.id, 'view']">{{ planning?.id }}</a
+                <a [routerLink]="['/planning-maintenance', planning.id, 'view']">{{ planning?.datePrevue }}</a
                 >{{ last ? '' : ', ' }}
               </span>
             }

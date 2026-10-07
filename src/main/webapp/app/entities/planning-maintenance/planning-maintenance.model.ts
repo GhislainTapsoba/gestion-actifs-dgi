@@ -9,7 +9,7 @@ export interface IPlanningMaintenance {
   periodicite?: string | null;
   statut?: keyof typeof StatutPlanning | null;
   description?: string | null;
-  interventions?: Pick<IIntervention, 'id'>[] | null;
+  interventions?: Pick<IIntervention, 'id' | 'dateDeclaration'>[] | null;
 }
 
 export type NewPlanningMaintenance = Omit<IPlanningMaintenance, 'id'> & { id: null };

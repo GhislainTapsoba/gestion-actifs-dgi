@@ -4,31 +4,33 @@
     <li class="nav-item">
       <a class="nav-link active" routerLink="/actif">
         <fa-icon icon="desktop" class="me-1" />
-        <span>Tous les actifs</span>
+        <span>{{ canManage() ? 'Tous les actifs' : 'Mes équipements affectés' }}</span>
       </a>
     </li>
-    <li class="nav-item">
-      <a class="nav-link" routerLink="/actif/en-maintenance">
-        <fa-icon icon="tools" class="me-1" />
-        <span>En maintenance</span>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" routerLink="/actif/a-reformer">
-        <fa-icon icon="ban" class="me-1" />
-        <span>À réformer</span>
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" routerLink="/actif/non-affectes">
-        <fa-icon icon="link" class="me-1" />
-        <span>Non affectés</span>
-      </a>
-    </li>
+    @if (canManage()) {
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/actif/en-maintenance">
+          <fa-icon icon="tools" class="me-1" />
+          <span>En maintenance</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/actif/a-reformer">
+          <fa-icon icon="ban" class="me-1" />
+          <span>À réformer</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/actif/non-affectes">
+          <fa-icon icon="link" class="me-1" />
+          <span>Non affectés</span>
+        </a>
+      </li>
+    }
   </ul>
 
   <h2 id="page-heading" data-cy="ActifHeading">
-    <span jhiTranslate="gestionActifsDgiApp.actif.home.title">Actifs</span>
+    <span>{{ canManage() ? 'Actifs' : 'Mes équipements affectés' }}</span>
 
     <div class="d-flex justify-content-end">
       <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading()">
@@ -36,15 +38,17 @@
         <span jhiTranslate="gestionActifsDgiApp.actif.home.refreshListLabel">Actualiser la liste</span>
       </button>
 
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-actif"
-        [routerLink]="['/actif/new']"
-      >
-        <fa-icon icon="plus" />
-        <span jhiTranslate="gestionActifsDgiApp.actif.home.createLabel">Créer un nouveau Actif</span>
-      </button>
+      @if (canManage()) {
+        <button
+          id="jh-create-entity"
+          data-cy="entityCreateButton"
+          class="btn btn-primary jh-create-entity create-actif"
+          [routerLink]="['/actif/new']"
+        >
+          <fa-icon icon="plus" />
+          <span jhiTranslate="gestionActifsDgiApp.actif.home.createLabel">Créer un nouveau Actif</span>
+        </button>
+      }
     </div>
   </h2>
 
@@ -56,7 +60,7 @@
 
   @if (actifs().length === 0) {
     <div class="alert alert-warning" id="no-result">
-      <span jhiTranslate="gestionActifsDgiApp.actif.home.notFound">Aucun Actif trouvé</span>
+      <span>{{ canManage() ? 'Aucun Actif trouvé' : 'Aucun équipement ne vous est actuellement affecté' }}</span>
     </div>
   } @else {
     <div class="table-responsive table-entities" id="entities">
@@ -181,7 +185,7 @@
               <td>
                 @if (actif.categorie) {
                   <div>
-                    <a [routerLink]="['/categorie-materiel', actif.categorie.id, 'view']">{{ actif.categorie.id }}</a>
+                    <a [routerLink]="['/categorie-materiel', actif.categorie.id, 'view']">{{ actif.categorie.libelle }}</a>
                   </div>
                 }
               </td>
@@ -192,15 +196,17 @@
                     <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Voir</span>
                   </a>
 
-                  <a [routerLink]="['/actif', actif.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                    <fa-icon icon="pencil-alt" />
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editer</span>
-                  </a>
+                  @if (canManage()) {
+                    <a [routerLink]="['/actif', actif.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                      <fa-icon icon="pencil-alt" />
+                      <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editer</span>
+                    </a>
 
-                  <button type="submit" (click)="delete(actif)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times" />
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Supprimer</span>
-                  </button>
+                    <button type="submit" (click)="delete(actif)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                      <fa-icon icon="times" />
+                      <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Supprimer</span>
+                    </button>
+                  }
                 </div>
               </td>
             </tr>

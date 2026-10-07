@@ -104,7 +104,7 @@
             [compareWith]="compareIntervention"
           >
             @for (interventionOption of interventionsSharedCollection(); track $index) {
-              <option [ngValue]="interventionOption">{{ interventionOption.id }}</option>
+              <option [ngValue]="interventionOption">{{ interventionOption.dateDeclaration }}</option>
             }
           </select>
         </div>

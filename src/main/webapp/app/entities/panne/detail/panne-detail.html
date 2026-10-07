@@ -33,7 +33,7 @@
           <dd>
             @if (panne()!.actif) {
               <div>
-                <a [routerLink]="['/actif', panne()!.actif?.id, 'view']">{{ panneRef.actif?.id }}</a>
+                <a [routerLink]="['/actif', panne()!.actif?.id, 'view']">{{ panneRef.actif?.codeInventaire }}</a>
               </div>
             }
           </dd>

@@ -12,8 +12,8 @@ export interface IMaintenance {
   statut?: keyof typeof StatutMaintenance | null;
   compteRendu?: string | null;
   dateCloture?: dayjs.Dayjs | null;
-  actif?: Pick<IActif, 'id'> | null;
-  technicien?: Pick<IUser, 'id'> | null;
+  actif?: Pick<IActif, 'id' | 'codeInventaire'> | null;
+  technicien?: Pick<IUser, 'id' | 'login'> | null;
 }
 
 export type NewMaintenance = Omit<IMaintenance, 'id'> & { id: null };

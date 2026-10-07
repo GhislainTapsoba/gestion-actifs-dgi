@@ -1,6 +1,8 @@
 package com.dgi.gestionactifs.web.rest;
 
 import com.dgi.gestionactifs.repository.ActifRepository;
+import com.dgi.gestionactifs.security.AuthoritiesConstants;
+import com.dgi.gestionactifs.security.SecurityUtils;
 import com.dgi.gestionactifs.service.ActifQueryService;
 import com.dgi.gestionactifs.service.ActifService;
 import com.dgi.gestionactifs.service.criteria.ActifCriteria;
@@ -61,7 +63,7 @@ public class ActifResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_AGENT')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_TECHNICIEN')")
     public ResponseEntity<ActifDTO> createActif(@Valid @RequestBody ActifDTO actifDTO) throws URISyntaxException {
         LOG.debug("REST request to save Actif : {}", actifDTO);
         if (actifDTO.getId() != null) {
@@ -84,7 +86,7 @@ public class ActifResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_AGENT')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_TECHNICIEN')")
     public ResponseEntity<ActifDTO> updateActif(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody ActifDTO actifDTO
@@ -119,7 +121,7 @@ public class ActifResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_AGENT')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_TECHNICIEN')")
     public ResponseEntity<ActifDTO> partialUpdateActif(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody ActifDTO actifDTO
@@ -158,7 +160,9 @@ public class ActifResource {
     ) {
         LOG.debug("REST request to get Actifs by criteria: {}", criteria);
 
-        Page<ActifDTO> page = actifQueryService.findByCriteria(criteria, pageable);
+        Page<ActifDTO> page = isAgentOnly()
+            ? actifQueryService.findActifsAffectesAuCurrentAgent(pageable)
+            : actifQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -172,7 +176,8 @@ public class ActifResource {
     @GetMapping("/count")
     public ResponseEntity<Long> countActifs(ActifCriteria criteria) {
         LOG.debug("REST request to count Actifs by criteria: {}", criteria);
-        return ResponseEntity.ok().body(actifQueryService.countByCriteria(criteria));
+        long count = isAgentOnly() ? actifQueryService.countActifsAffectesAuCurrentAgent() : actifQueryService.countByCriteria(criteria);
+        return ResponseEntity.ok().body(count);
     }
 
     /**
@@ -184,6 +189,9 @@ public class ActifResource {
     @GetMapping("/{id}")
     public ResponseEntity<ActifDTO> getActif(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Actif : {}", id);
+        if (isAgentOnly() && !actifRepository.isActifAffecteAuCurrentAgent(id)) {
+            return ResponseEntity.notFound().build();
+        }
         Optional<ActifDTO> actifDTO = actifService.findOne(id);
         return ResponseUtil.wrapOrNotFound(actifDTO);
     }
@@ -195,7 +203,7 @@ public class ActifResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_TECHNICIEN')")
     public ResponseEntity<Void> deleteActif(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Actif : {}", id);
         actifService.delete(id);
@@ -241,5 +249,16 @@ public class ActifResource {
         LOG.debug("REST request to get all equipements non affectés");
         List<ActifDTO> result = actifService.findEquipementsNonAffectes();
         return ResponseEntity.ok().body(result);
+    }
+
+    private boolean isAgentOnly() {
+        return (
+            SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.AGENT) &&
+            SecurityUtils.hasCurrentUserNoneOfAuthorities(
+                AuthoritiesConstants.ADMIN,
+                AuthoritiesConstants.TECHNICIEN,
+                AuthoritiesConstants.RESPONSABLE
+            )
+        );
     }
 }

@@ -25,7 +25,9 @@
           <dd>
             @if (transfertActif()!.transfert) {
               <div>
-                <a [routerLink]="['/transfert', transfertActif()!.transfert?.id, 'view']">{{ transfertActifRef.transfert?.id }}</a>
+                <a [routerLink]="['/transfert', transfertActif()!.transfert?.id, 'view']">
+                  {{ transfertActifRef.transfert?.dateTransfert }}
+                </a>
               </div>
             }
           </dd>
@@ -33,7 +35,7 @@
           <dd>
             @if (transfertActif()!.actif) {
               <div>
-                <a [routerLink]="['/actif', transfertActif()!.actif?.id, 'view']">{{ transfertActifRef.actif?.id }}</a>
+                <a [routerLink]="['/actif', transfertActif()!.actif?.id, 'view']">{{ transfertActifRef.actif?.codeInventaire }}</a>
               </div>
             }
           </dd>

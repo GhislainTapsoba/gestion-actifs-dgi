@@ -17,5 +17,6 @@ public interface ActifMapper extends EntityMapper<ActifDTO, Actif> {
     @Named("categorieMaterielId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "libelle", source = "libelle")
     CategorieMaterielDTO toDtoCategorieMaterielId(CategorieMateriel categorieMateriel);
 }

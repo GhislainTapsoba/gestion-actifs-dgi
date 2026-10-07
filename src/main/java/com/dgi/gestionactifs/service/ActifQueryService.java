@@ -50,6 +50,16 @@ public class ActifQueryService extends QueryService<Actif> {
         return actifRepository.findAll(specification, page).map(actifMapper::toDto);
     }
 
+    @Transactional(readOnly = true)
+    public Page<ActifDTO> findActifsAffectesAuCurrentAgent(Pageable page) {
+        return actifRepository.findActifsAffectesAuCurrentAgent(page).map(actifMapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public long countActifsAffectesAuCurrentAgent() {
+        return actifRepository.countActifsAffectesAuCurrentAgent();
+    }
+
     /**
      * Return the number of matching entities in the database.
      * @param criteria The object which holds all the filters, which the entities should match.

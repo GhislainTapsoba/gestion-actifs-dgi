@@ -198,7 +198,7 @@ public class MaintenanceResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_TECHNICIEN')")
     public ResponseEntity<Void> deleteMaintenance(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Maintenance : {}", id);
         maintenanceService.delete(id);

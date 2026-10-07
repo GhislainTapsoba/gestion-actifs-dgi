@@ -20,10 +20,13 @@ public interface ContratMapper extends EntityMapper<ContratDTO, Contrat> {
     @Named("fournisseurId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "nom", source = "nom")
     FournisseurDTO toDtoFournisseurId(Fournisseur fournisseur);
 
     @Named("actifId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "codeInventaire", source = "codeInventaire")
+    @Mapping(target = "designation", source = "designation")
     ActifDTO toDtoActifId(Actif actif);
 }

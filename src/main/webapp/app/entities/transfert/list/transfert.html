@@ -116,7 +116,7 @@
                 @if (transfert.serviceOrigine) {
                   <div>
                     <a [routerLink]="['/service-dgi', transfert.serviceOrigine.id, 'view']">
-                      {{ transfert.serviceOrigine.nomService || '#' + transfert.serviceOrigine.id }}
+                      {{ transfert.serviceOrigine.nomService }}
                     </a>
                   </div>
                 }
@@ -125,16 +125,16 @@
                 @if (transfert.serviceDestinataire) {
                   <div>
                     <a [routerLink]="['/service-dgi', transfert.serviceDestinataire.id, 'view']">
-                      {{ transfert.serviceDestinataire.nomService || '#' + transfert.serviceDestinataire.id }}
+                      {{ transfert.serviceDestinataire.nomService }}
                     </a>
                   </div>
                 }
               </td>
               <td>
-                {{ transfert.demandeur?.login || transfert.demandeur?.id }}
+                {{ transfert.demandeur?.login }}
               </td>
               <td>
-                {{ transfert.validateur?.login || transfert.validateur?.id }}
+                {{ transfert.validateur?.login }}
               </td>
               <td class="text-end">
                 <div class="btn-group">

@@ -10,7 +10,7 @@ export interface IHistoriqueAction {
   entiteCiblee?: string | null;
   ancienneValeur?: string | null;
   nouvelleValeur?: string | null;
-  utilisateur?: Pick<IUser, 'id'> | null;
+  utilisateur?: Pick<IUser, 'id' | 'login'> | null;
 }
 
 export type NewHistoriqueAction = Omit<IHistoriqueAction, 'id'> & { id: null };

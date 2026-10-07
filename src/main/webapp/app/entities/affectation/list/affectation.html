@@ -80,7 +80,9 @@
               <td>
                 @if (affectation.agent) {
                   <div>
-                    <a [routerLink]="['/agent', affectation.agent.id, 'view']">{{ affectation.agent.id }}</a>
+                    <a [routerLink]="['/agent', affectation.agent.id, 'view']">
+                      {{ affectation.agent.nom }} {{ affectation.agent.prenom }}
+                    </a>
                   </div>
                 }
               </td>

@@ -10,8 +10,8 @@ export interface IEquipementRecensement {
   dateConstat?: dayjs.Dayjs | null;
   emplacementConstate?: string | null;
   anomalieConstatee?: boolean | null;
-  recensement?: Pick<IRecensement, 'id'> | null;
-  actif?: Pick<IActif, 'id'> | null;
+  recensement?: Pick<IRecensement, 'id' | 'dateDebut'> | null;
+  actif?: Pick<IActif, 'id' | 'codeInventaire'> | null;
 }
 
 export type NewEquipementRecensement = Omit<IEquipementRecensement, 'id'> & { id: null };

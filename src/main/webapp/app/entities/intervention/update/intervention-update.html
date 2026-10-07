@@ -109,7 +109,7 @@
               <option [ngValue]="null" selected></option>
             }
             @for (panneOption of pannesSharedCollection(); track $index) {
-              <option [ngValue]="panneOption">{{ panneOption.id }}</option>
+              <option [ngValue]="panneOption">{{ panneOption.dateDeclaration }} - {{ panneOption.description }}</option>
             }
           </select>
         </div>
@@ -133,7 +133,9 @@
             [compareWith]="comparePlanningMaintenance"
           >
             @for (planningMaintenanceOption of planningMaintenancesSharedCollection(); track $index) {
-              <option [ngValue]="planningMaintenanceOption">{{ planningMaintenanceOption.id }}</option>
+              <option [ngValue]="planningMaintenanceOption">
+                {{ planningMaintenanceOption.datePrevue }} - {{ planningMaintenanceOption.description }}
+              </option>
             }
           </select>
         </div>

@@ -82,7 +82,7 @@
             @if (actif()!.categorie) {
               <div>
                 <a [routerLink]="['/categorie-materiel', actif()!.categorie?.id, 'view']">
-                  {{ actifRef.categorie?.libelle || '#' + actifRef.categorie?.id }}
+                  {{ actifRef.categorie?.libelle }}
                 </a>
               </div>
             }
@@ -159,9 +159,11 @@
             <fa-icon icon="print" />&nbsp;<span>Imprimer l'étiquette</span>
           </button>
 
-          <button type="button" [routerLink]="['/actif', actifRef.id, 'edit']" class="btn btn-primary">
-            <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
-          </button>
+          @if (canManage()) {
+            <button type="button" [routerLink]="['/actif', actifRef.id, 'edit']" class="btn btn-primary">
+              <fa-icon icon="pencil-alt" />&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+            </button>
+          }
         </div>
       </div>
     }

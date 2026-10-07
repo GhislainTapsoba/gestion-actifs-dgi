@@ -43,7 +43,7 @@
           <dd>
             @if (bordereau()!.transfert) {
               <div>
-                <a [routerLink]="['/transfert', bordereau()!.transfert?.id, 'view']">{{ bordereauRef.transfert?.id }}</a>
+                <a [routerLink]="['/transfert', bordereau()!.transfert?.id, 'view']">{{ bordereauRef.transfert?.dateTransfert }}</a>
               </div>
             }
           </dd>
@@ -51,13 +51,13 @@
           <dd>
             @if (bordereau()!.affectation) {
               <div>
-                <a [routerLink]="['/affectation', bordereau()!.affectation?.id, 'view']">{{ bordereauRef.affectation?.id }}</a>
+                <a [routerLink]="['/affectation', bordereau()!.affectation?.id, 'view']">{{ bordereauRef.affectation?.dateAffectation }}</a>
               </div>
             }
           </dd>
           <dt><span jhiTranslate="gestionActifsDgiApp.bordereau.emetteur">Emetteur</span></dt>
           <dd>
-            <span>{{ bordereauRef.emetteur?.id }}</span>
+            <span>{{ bordereauRef.emetteur?.login }}</span>
           </dd>
         </dl>
 

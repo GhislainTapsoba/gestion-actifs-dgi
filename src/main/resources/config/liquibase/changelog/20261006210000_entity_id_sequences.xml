@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="20261006210000-1" author="jhipster">
+        <createSequence sequenceName="actif_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="affectation_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="affectation_actif_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="agent_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="bordereau_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="categorie_materiel_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="contrat_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="equipement_recensement_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="fournisseur_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="historique_action_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="intervention_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="inventaire_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="maintenance_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="panne_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="planning_maintenance_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="rapport_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="recensement_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="service_dgi_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="transfert_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="transfert_actif_seq" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="jhi_user_seq" startValue="2" incrementBy="1"/>
+    </changeSet>
+    <changeSet id="20261006210000-2" author="jhipster">
+        <sql dbms="postgresql">SELECT setval('actif_seq', COALESCE((SELECT MAX(id) FROM actif), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('affectation_seq', COALESCE((SELECT MAX(id) FROM affectation), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('affectation_actif_seq', COALESCE((SELECT MAX(id) FROM affectation_actif), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('agent_seq', COALESCE((SELECT MAX(id) FROM agent), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('bordereau_seq', COALESCE((SELECT MAX(id) FROM bordereau), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('categorie_materiel_seq', COALESCE((SELECT MAX(id) FROM categorie_materiel), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('contrat_seq', COALESCE((SELECT MAX(id) FROM contrat), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('equipement_recensement_seq', COALESCE((SELECT MAX(id) FROM equipement_recensement), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('fournisseur_seq', COALESCE((SELECT MAX(id) FROM fournisseur), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('historique_action_seq', COALESCE((SELECT MAX(id) FROM historique_action), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('intervention_seq', COALESCE((SELECT MAX(id) FROM intervention), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('inventaire_seq', COALESCE((SELECT MAX(id) FROM inventaire), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('maintenance_seq', COALESCE((SELECT MAX(id) FROM maintenance), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('panne_seq', COALESCE((SELECT MAX(id) FROM panne), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('planning_maintenance_seq', COALESCE((SELECT MAX(id) FROM planning_maintenance), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('rapport_seq', COALESCE((SELECT MAX(id) FROM rapport), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('recensement_seq', COALESCE((SELECT MAX(id) FROM recensement), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('service_dgi_seq', COALESCE((SELECT MAX(id) FROM service_dgi), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('transfert_seq', COALESCE((SELECT MAX(id) FROM transfert), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('transfert_actif_seq', COALESCE((SELECT MAX(id) FROM transfert_actif), 0) + 1, false);</sql>
+        <sql dbms="postgresql">SELECT setval('jhi_user_seq', COALESCE((SELECT MAX(id) FROM jhi_user), 0) + 1, false);</sql>
+    </changeSet>
+</databaseChangeLog>

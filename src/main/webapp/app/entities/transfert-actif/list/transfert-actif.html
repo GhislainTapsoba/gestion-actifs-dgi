@@ -72,14 +72,14 @@
               <td>
                 @if (transfertActif.transfert) {
                   <div>
-                    <a [routerLink]="['/transfert', transfertActif.transfert.id, 'view']">{{ transfertActif.transfert.id }}</a>
+                    <a [routerLink]="['/transfert', transfertActif.transfert.id, 'view']">{{ transfertActif.transfert.dateTransfert }}</a>
                   </div>
                 }
               </td>
               <td>
                 @if (transfertActif.actif) {
                   <div>
-                    <a [routerLink]="['/actif', transfertActif.actif.id, 'view']">{{ transfertActif.actif.id }}</a>
+                    <a [routerLink]="['/actif', transfertActif.actif.id, 'view']">{{ transfertActif.actif.codeInventaire }}</a>
                   </div>
                 }
               </td>

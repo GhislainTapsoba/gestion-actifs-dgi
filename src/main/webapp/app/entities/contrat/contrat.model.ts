@@ -10,8 +10,8 @@ export interface IContrat {
   reference?: string | null;
   dateDebut?: dayjs.Dayjs | null;
   dateFin?: dayjs.Dayjs | null;
-  fournisseur?: Pick<IFournisseur, 'id'> | null;
-  actif?: Pick<IActif, 'id'> | null;
+  fournisseur?: Pick<IFournisseur, 'id' | 'nom'> | null;
+  actif?: Pick<IActif, 'id' | 'codeInventaire' | 'designation'> | null;
 }
 
 export type NewContrat = Omit<IContrat, 'id'> & { id: null };

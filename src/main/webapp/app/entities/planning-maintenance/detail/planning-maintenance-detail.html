@@ -41,7 +41,7 @@
           <dd>
             @for (intervention of planningMaintenanceRef.interventions; track $index; let last = $last) {
               <span>
-                <a [routerLink]="['/intervention', intervention.id, 'view']">{{ intervention?.id }}</a
+                <a [routerLink]="['/intervention', intervention.id, 'view']">{{ intervention?.dateDeclaration }}</a
                 >{{ last ? '' : ', ' }}
               </span>
             }

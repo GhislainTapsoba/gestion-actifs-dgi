@@ -22,10 +22,12 @@ public interface TransfertMapper extends EntityMapper<TransfertDTO, Transfert> {
     @Named("serviceDgiId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "nomService", source = "nomService")
     ServiceDgiDTO toDtoServiceDgiId(ServiceDgi serviceDgi);
 
     @Named("userId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "login", source = "login")
     UserDTO toDtoUserId(User user);
 }

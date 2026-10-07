@@ -2,8 +2,11 @@ import { Routes } from '@angular/router';
 
 import { ASC } from 'app/config';
 import { userRouteAccessService } from 'app/core/auth';
+import { Authority } from 'app/shared/jhipster/constants';
 
 import ActifResolve from './route/actif-routing-resolve.service';
+
+const assetManagers = [Authority.ADMIN, Authority.TECHNICIEN, Authority.RESPONSABLE];
 
 const actifRoute: Routes = [
   {
@@ -18,17 +21,20 @@ const actifRoute: Routes = [
     path: 'en-maintenance',
     loadComponent: () =>
       import('./equipements-en-maintenance/equipements-en-maintenance.component').then(m => m.EquipementsEnMaintenanceComponent),
+    data: { authorities: assetManagers },
     canActivate: [userRouteAccessService],
   },
   {
     path: 'a-reformer',
     loadComponent: () => import('./equipements-a-reformer/equipements-a-reformer.component').then(m => m.EquipementsAReformerComponent),
+    data: { authorities: assetManagers },
     canActivate: [userRouteAccessService],
   },
   {
     path: 'non-affectes',
     loadComponent: () =>
       import('./equipements-non-affectes/equipements-non-affectes.component').then(m => m.EquipementsNonAffectesComponent),
+    data: { authorities: assetManagers },
     canActivate: [userRouteAccessService],
   },
   {
@@ -42,6 +48,7 @@ const actifRoute: Routes = [
   {
     path: 'new',
     loadComponent: () => import('./update/actif-update').then(m => m.ActifUpdate),
+    data: { authorities: assetManagers },
     resolve: {
       actif: ActifResolve,
     },
@@ -50,6 +57,7 @@ const actifRoute: Routes = [
   {
     path: ':id/edit',
     loadComponent: () => import('./update/actif-update').then(m => m.ActifUpdate),
+    data: { authorities: assetManagers },
     resolve: {
       actif: ActifResolve,
     },

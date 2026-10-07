@@ -77,7 +77,7 @@
               <option [ngValue]="null" selected></option>
             }
             @for (agentOption of agentsSharedCollection(); track $index) {
-              <option [ngValue]="agentOption">{{ agentOption.id }}</option>
+              <option [ngValue]="agentOption">{{ agentOption.nom }} {{ agentOption.prenom }}</option>
             }
           </select>
         </div>

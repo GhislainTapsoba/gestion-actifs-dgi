@@ -25,7 +25,11 @@
             </span>
           </a>
         </li>
-        @if (account() !== null) {
+        @if (
+          account()?.authorities?.includes('ROLE_ADMIN') ||
+          account()?.authorities?.includes('ROLE_RESPONSABLE') ||
+          account()?.authorities?.includes('ROLE_TECHNICIEN')
+        ) {
           <li
             ngbDropdown
             class="nav-item dropdown pointer"

@@ -81,14 +81,16 @@
               <td>
                 @if (affectationActif.affectation) {
                   <div>
-                    <a [routerLink]="['/affectation', affectationActif.affectation.id, 'view']">{{ affectationActif.affectation.id }}</a>
+                    <a [routerLink]="['/affectation', affectationActif.affectation.id, 'view']">
+                      {{ affectationActif.affectation.dateAffectation }}
+                    </a>
                   </div>
                 }
               </td>
               <td>
                 @if (affectationActif.actif) {
                   <div>
-                    <a [routerLink]="['/actif', affectationActif.actif.id, 'view']">{{ affectationActif.actif.id }}</a>
+                    <a [routerLink]="['/actif', affectationActif.actif.id, 'view']">{{ affectationActif.actif.codeInventaire }}</a>
                   </div>
                 }
               </td>

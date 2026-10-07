@@ -20,10 +20,12 @@ public interface TransfertActifMapper extends EntityMapper<TransfertActifDTO, Tr
     @Named("transfertId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "dateTransfert", source = "dateTransfert")
     TransfertDTO toDtoTransfertId(Transfert transfert);
 
     @Named("actifId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "codeInventaire", source = "codeInventaire")
     ActifDTO toDtoActifId(Actif actif);
 }

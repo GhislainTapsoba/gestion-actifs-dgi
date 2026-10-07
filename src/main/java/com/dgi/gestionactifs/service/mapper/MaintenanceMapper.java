@@ -18,10 +18,12 @@ public interface MaintenanceMapper extends EntityMapper<MaintenanceDTO, Maintena
     @Named("actifId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "codeInventaire", source = "codeInventaire")
     ActifDTO toDtoActifId(Actif actif);
 
     @Named("userId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "login", source = "login")
     UserDTO toDtoUserId(User user);
 }

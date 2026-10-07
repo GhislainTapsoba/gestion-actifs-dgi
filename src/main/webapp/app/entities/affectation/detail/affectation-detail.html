@@ -31,7 +31,9 @@
           <dd>
             @if (affectation()!.agent) {
               <div>
-                <a [routerLink]="['/agent', affectation()!.agent?.id, 'view']">{{ affectationRef.agent?.id }}</a>
+                <a [routerLink]="['/agent', affectation()!.agent?.id, 'view']">
+                  {{ affectationRef.agent?.nom }} {{ affectationRef.agent?.prenom }}
+                </a>
               </div>
             }
           </dd>

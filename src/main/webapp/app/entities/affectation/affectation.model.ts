@@ -7,7 +7,7 @@ export interface IAffectation {
   dateAffectation?: dayjs.Dayjs | null;
   motif?: string | null;
   dateRestitution?: dayjs.Dayjs | null;
-  agent?: Pick<IAgent, 'id'> | null;
+  agent?: Pick<IAgent, 'id' | 'nom' | 'prenom'> | null;
 }
 
 export type NewAffectation = Omit<IAffectation, 'id'> & { id: null };

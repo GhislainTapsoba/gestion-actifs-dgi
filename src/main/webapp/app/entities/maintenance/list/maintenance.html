@@ -104,12 +104,12 @@
               <td>
                 @if (maintenance.actif) {
                   <div>
-                    <a [routerLink]="['/actif', maintenance.actif.id, 'view']">{{ maintenance.actif.id }}</a>
+                    <a [routerLink]="['/actif', maintenance.actif.id, 'view']">{{ maintenance.actif.codeInventaire }}</a>
                   </div>
                 }
               </td>
               <td>
-                {{ maintenance.technicien?.id }}
+                {{ maintenance.technicien?.login }}
               </td>
               <td class="text-end">
                 <div class="btn-group">

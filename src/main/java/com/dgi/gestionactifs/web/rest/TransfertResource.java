@@ -211,7 +211,7 @@ public class TransfertResource {
      * @param id l'id du transfert à valider.
      * @return le transfert mis à jour.
      */
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_TECHNICIEN')")
     @PatchMapping("/{id}/valider")
     public ResponseEntity<TransfertDTO> validerTransfert(@PathVariable Long id) {
         LOG.debug("REST request to valider Transfert : {}", id);
@@ -228,7 +228,7 @@ public class TransfertResource {
      * @param body contient la clé "commentaireRejet".
      * @return le transfert mis à jour.
      */
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_TECHNICIEN')")
     @PatchMapping("/{id}/rejeter")
     public ResponseEntity<TransfertDTO> rejeterTransfert(@PathVariable Long id, @RequestBody(required = false) Map<String, String> body) {
         LOG.debug("REST request to rejeter Transfert : {}", id);

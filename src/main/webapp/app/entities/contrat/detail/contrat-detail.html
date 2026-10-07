@@ -37,7 +37,7 @@
           <dd>
             @if (contrat()!.fournisseur) {
               <div>
-                <a [routerLink]="['/fournisseur', contrat()!.fournisseur?.id, 'view']">{{ contratRef.fournisseur?.id }}</a>
+                <a [routerLink]="['/fournisseur', contrat()!.fournisseur?.id, 'view']">{{ contratRef.fournisseur?.nom }}</a>
               </div>
             }
           </dd>
@@ -45,7 +45,7 @@
           <dd>
             @if (contrat()!.actif) {
               <div>
-                <a [routerLink]="['/actif', contrat()!.actif?.id, 'view']">{{ contratRef.actif?.id }}</a>
+                <a [routerLink]="['/actif', contrat()!.actif?.id, 'view']">{{ contratRef.actif?.codeInventaire }}</a>
               </div>
             }
           </dd>

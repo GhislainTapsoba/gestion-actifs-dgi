@@ -94,7 +94,7 @@
               <option [ngValue]="null" selected></option>
             }
             @for (fournisseurOption of fournisseursSharedCollection(); track $index) {
-              <option [ngValue]="fournisseurOption">{{ fournisseurOption.id }}</option>
+              <option [ngValue]="fournisseurOption">{{ fournisseurOption.nom }}</option>
             }
           </select>
         </div>
@@ -111,7 +111,7 @@
           <select class="form-control" id="field_actif" data-cy="actif" name="actif" formControlName="actif" [compareWith]="compareActif">
             <option [ngValue]="null"></option>
             @for (actifOption of actifsSharedCollection(); track $index) {
-              <option [ngValue]="actifOption">{{ actifOption.id }}</option>
+              <option [ngValue]="actifOption">{{ actifOption.codeInventaire }} - {{ actifOption.designation }}</option>
             }
           </select>
         </div>

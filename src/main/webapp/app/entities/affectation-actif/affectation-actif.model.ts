@@ -6,8 +6,8 @@ export interface IAffectationActif {
   id: number;
   observation?: string | null;
   statut?: keyof typeof StatutAffectation | null;
-  affectation?: Pick<IAffectation, 'id'> | null;
-  actif?: Pick<IActif, 'id'> | null;
+  affectation?: Pick<IAffectation, 'id' | 'dateAffectation'> | null;
+  actif?: Pick<IActif, 'id' | 'codeInventaire' | 'designation'> | null;
 }
 
 export type NewAffectationActif = Omit<IAffectationActif, 'id'> & { id: null };

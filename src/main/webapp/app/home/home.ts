@@ -43,6 +43,11 @@ export default class Home {
   });
   readonly isAdmin = computed(() => this.account()?.authorities?.includes('ROLE_ADMIN') ?? false);
   readonly isResponsable = computed(() => this.account()?.authorities?.includes('ROLE_RESPONSABLE') ?? false);
+  readonly isTechnicienOnly = computed(() => {
+    const authorities = this.account()?.authorities ?? [];
+    return authorities.includes('ROLE_TECHNICIEN') && !authorities.includes('ROLE_ADMIN') && !authorities.includes('ROLE_RESPONSABLE');
+  });
+  readonly canViewStatistics = computed(() => this.isAdmin() || this.isResponsable());
 
   // Accès nommés pour les alertes (uniquement utilisés dans la vue non-agent)
   readonly kpiTransferts = computed(() => this.kpis().find(k => k.label === 'Transferts en attente') ?? null);
@@ -90,29 +95,42 @@ export default class Home {
     this.loaded = true;
     this.loading.set(true);
 
-    forkJoin({
-      totalActifs: this.http.get<number>('/api/actifs/count'),
-      enMaintenance: this.http.get<number>('/api/actifs/count', { params: new HttpParams().set('etat.equals', 'EN_MAINTENANCE') }),
-      transfertsAttente: this.http.get<number>('/api/transferts/count', { params: new HttpParams().set('statut.equals', 'EN_ATTENTE') }),
-      maintenancesOuvertes: this.http.get<number>('/api/maintenances/count', {
-        params: new HttpParams().set('statut.in', 'OUVERTE,EN_COURS'),
-      }),
-      actifsDispo: this.http.get<number>('/api/actifs/count', { params: new HttpParams().set('etat.equals', 'EN_SERVICE') }),
-    }).subscribe({
-      next: data => {
-        if (this.isAgentOnly()) {
+    if (this.isAgentOnly()) {
+      forkJoin({
+        actifsAffectes: this.http.get<number>('/api/actifs/count'),
+        pannesSurActifsAffectes: this.http.get<number>('/api/pannes/count'),
+      }).subscribe({
+        next: data => {
           this.kpis.set([
-            { label: 'Mes actifs affectés', value: data.totalActifs, icon: 'desktop', color: 'blue', routerLink: '/actif' },
+            { label: 'Mes actifs affectés', value: data.actifsAffectes, icon: 'desktop', color: 'blue', routerLink: '/actif' },
             {
-              label: 'Mes demandes en attente',
-              value: data.transfertsAttente,
-              icon: 'exchange-alt',
+              label: 'Pannes sur mes actifs',
+              value: data.pannesSurActifsAffectes,
+              icon: 'exclamation-triangle',
               color: 'orange',
-              routerLink: '/transfert',
+              routerLink: '/panne',
             },
-            { label: 'Mes signalements', value: data.maintenancesOuvertes, icon: 'tools', color: 'red', routerLink: '/maintenance' },
           ]);
-        } else {
+          this.loading.set(false);
+        },
+        error: () => {
+          this.loaded = false;
+          this.loading.set(false);
+        },
+      });
+      return;
+    }
+
+    if (this.isTechnicienOnly()) {
+      forkJoin({
+        totalActifs: this.http.get<number>('/api/actifs/count'),
+        enMaintenance: this.http.get<number>('/api/actifs/count', { params: new HttpParams().set('etat.equals', 'EN_MAINTENANCE') }),
+        transfertsAttente: this.http.get<number>('/api/transferts/count', { params: new HttpParams().set('statut.equals', 'EN_ATTENTE') }),
+        maintenancesOuvertes: this.http.get<number>('/api/maintenances/count', {
+          params: new HttpParams().set('statut.in', 'OUVERTE,EN_COURS'),
+        }),
+      }).subscribe({
+        next: data => {
           this.kpis.set([
             {
               label: 'Total des actifs',
@@ -120,23 +138,15 @@ export default class Home {
               icon: 'desktop',
               color: 'blue',
               routerLink: '/actif',
-              trend: 'Parc complet',
-            },
-            {
-              label: 'Actifs en service',
-              value: data.actifsDispo,
-              icon: 'check-circle',
-              color: 'green',
-              routerLink: '/actif',
-              trend: 'Disponibles',
+              trend: 'Inventaire',
             },
             {
               label: 'En maintenance',
               value: data.enMaintenance,
               icon: 'tools',
               color: 'orange',
-              routerLink: '/actif',
-              trend: 'Indisponibles',
+              routerLink: '/actif/en-maintenance',
+              trend: 'Opérations',
             },
             {
               label: 'Transferts en attente',
@@ -144,7 +154,7 @@ export default class Home {
               icon: 'exchange-alt',
               color: 'red',
               routerLink: '/transfert',
-              trend: 'À valider',
+              trend: 'À traiter',
             },
             {
               label: 'Interventions ouvertes',
@@ -155,14 +165,82 @@ export default class Home {
               trend: 'En cours',
             },
           ]);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.loaded = false;
+          this.loading.set(false);
+        },
+      });
+      return;
+    }
 
-          const total = data.totalActifs || 1;
-          this.chartBars.set([
-            { label: 'En service', value: data.actifsDispo, max: total, color: '#22c55e' },
-            { label: 'En maintenance', value: data.enMaintenance, max: total, color: '#f59e0b' },
-            { label: 'Autres', value: Math.max(0, total - data.actifsDispo - data.enMaintenance), max: total, color: '#94a3b8' },
-          ]);
-        }
+    if (!this.canViewStatistics()) {
+      this.kpis.set([]);
+      this.chartBars.set([]);
+      this.loading.set(false);
+      return;
+    }
+
+    forkJoin({
+      totalActifs: this.http.get<number>('/api/actifs/count'),
+      enMaintenance: this.http.get<number>('/api/actifs/count', { params: new HttpParams().set('etat.equals', 'EN_MAINTENANCE') }),
+      transfertsAttente: this.http.get<number>('/api/transferts/count', { params: new HttpParams().set('statut.equals', 'EN_ATTENTE') }),
+      maintenancesOuvertes: this.http.get<number>('/api/maintenances/count', {
+        params: new HttpParams().set('statut.in', 'OUVERTE,EN_COURS'),
+      }),
+      actifsDispo: this.http.get<number>('/api/actifs/count', { params: new HttpParams().set('etat.equals', 'EN_SERVICE') }),
+    }).subscribe({
+      next: data => {
+        this.kpis.set([
+          {
+            label: 'Total des actifs',
+            value: data.totalActifs,
+            icon: 'desktop',
+            color: 'blue',
+            routerLink: '/actif',
+            trend: 'Parc complet',
+          },
+          {
+            label: 'Actifs en service',
+            value: data.actifsDispo,
+            icon: 'check-circle',
+            color: 'green',
+            routerLink: '/actif',
+            trend: 'Disponibles',
+          },
+          {
+            label: 'En maintenance',
+            value: data.enMaintenance,
+            icon: 'tools',
+            color: 'orange',
+            routerLink: '/actif',
+            trend: 'Indisponibles',
+          },
+          {
+            label: 'Transferts en attente',
+            value: data.transfertsAttente,
+            icon: 'exchange-alt',
+            color: 'red',
+            routerLink: '/transfert',
+            trend: 'À valider',
+          },
+          {
+            label: 'Interventions ouvertes',
+            value: data.maintenancesOuvertes,
+            icon: 'wrench',
+            color: 'purple',
+            routerLink: '/maintenance',
+            trend: 'En cours',
+          },
+        ]);
+
+        const total = data.totalActifs || 1;
+        this.chartBars.set([
+          { label: 'En service', value: data.actifsDispo, max: total, color: '#22c55e' },
+          { label: 'En maintenance', value: data.enMaintenance, max: total, color: '#f59e0b' },
+          { label: 'Autres', value: Math.max(0, total - data.actifsDispo - data.enMaintenance), max: total, color: '#94a3b8' },
+        ]);
         this.loading.set(false);
       },
       error: () => {

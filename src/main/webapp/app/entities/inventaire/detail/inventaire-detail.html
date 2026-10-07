@@ -27,7 +27,7 @@
           <dd>
             @if (inventaire()!.actif) {
               <div>
-                <a [routerLink]="['/actif', inventaire()!.actif?.id, 'view']">{{ inventaireRef.actif?.id }}</a>
+                <a [routerLink]="['/actif', inventaire()!.actif?.id, 'view']">{{ inventaireRef.actif?.codeInventaire }}</a>
               </div>
             }
           </dd>

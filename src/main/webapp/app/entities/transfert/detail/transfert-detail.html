@@ -44,7 +44,7 @@
             @if (transfert()!.serviceOrigine) {
               <div>
                 <a [routerLink]="['/service-dgi', transfert()!.serviceOrigine?.id, 'view']">
-                  {{ transfertRef.serviceOrigine?.nomService || '#' + transfertRef.serviceOrigine?.id }}
+                  {{ transfertRef.serviceOrigine?.nomService }}
                 </a>
               </div>
             }
@@ -54,18 +54,18 @@
             @if (transfert()!.serviceDestinataire) {
               <div>
                 <a [routerLink]="['/service-dgi', transfert()!.serviceDestinataire?.id, 'view']">
-                  {{ transfertRef.serviceDestinataire?.nomService || '#' + transfertRef.serviceDestinataire?.id }}
+                  {{ transfertRef.serviceDestinataire?.nomService }}
                 </a>
               </div>
             }
           </dd>
           <dt><span jhiTranslate="gestionActifsDgiApp.transfert.demandeur">Demandeur</span></dt>
           <dd>
-            <span>{{ transfertRef.demandeur?.login || transfertRef.demandeur?.id || '—' }}</span>
+            <span>{{ transfertRef.demandeur?.login || '—' }}</span>
           </dd>
           <dt><span jhiTranslate="gestionActifsDgiApp.transfert.validateur">Validateur</span></dt>
           <dd>
-            <span>{{ transfertRef.validateur?.login || transfertRef.validateur?.id || '—' }}</span>
+            <span>{{ transfertRef.validateur?.login || '—' }}</span>
           </dd>
         </dl>
 

@@ -24,8 +24,8 @@ public class Maintenance implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "maintenanceSequence")
+    @SequenceGenerator(name = "maintenanceSequence", sequenceName = "maintenance_seq", allocationSize = 1)
     @Column(name = "id")
     private Long id;
 
@@ -42,8 +42,7 @@ public class Maintenance implements Serializable {
     @Column(name = "statut", nullable = false)
     private StatutMaintenance statut;
 
-    @Lob
-    @Column(name = "compte_rendu")
+    @Column(name = "compte_rendu", columnDefinition = "text")
     private String compteRendu;
 
     @Column(name = "date_cloture")

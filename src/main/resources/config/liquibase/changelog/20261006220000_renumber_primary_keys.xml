@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="20261006220000-1" author="jhipster" dbms="postgresql">
+        <sql splitStatements="false"><![CDATA[DO $$
+DECLARE
+    entity_table text;
+    foreign_key record;
+    contains_invalid_ids boolean;
+BEGIN
+    CREATE TEMP TABLE id_renumber_tables (table_name text PRIMARY KEY) ON COMMIT DROP;
+    INSERT INTO id_renumber_tables (table_name) VALUES
+        ('actif'),
+        ('affectation'),
+        ('affectation_actif'),
+        ('agent'),
+        ('bordereau'),
+        ('categorie_materiel'),
+        ('contrat'),
+        ('equipement_recensement'),
+        ('fournisseur'),
+        ('historique_action'),
+        ('intervention'),
+        ('inventaire'),
+        ('jhi_user'),
+        ('maintenance'),
+        ('panne'),
+        ('planning_maintenance'),
+        ('rapport'),
+        ('recensement'),
+        ('service_dgi'),
+        ('transfert'),
+        ('transfert_actif');
+
+    CREATE TEMP TABLE id_renumber_map (
+        table_name text NOT NULL,
+        old_id bigint NOT NULL,
+        new_id bigint NOT NULL,
+        PRIMARY KEY (table_name, old_id),
+        UNIQUE (table_name, new_id)
+    ) ON COMMIT DROP;
+
+    FOR entity_table IN SELECT table_name FROM id_renumber_tables ORDER BY table_name LOOP
+        EXECUTE format('SELECT EXISTS (SELECT 1 FROM %I WHERE id <= 0)', entity_table) INTO contains_invalid_ids;
+        IF contains_invalid_ids THEN
+            RAISE EXCEPTION 'Cannot renumber %: IDs must be positive before migration', entity_table;
+        END IF;
+
+        EXECUTE format(
+            'INSERT INTO id_renumber_map (table_name, old_id, new_id) SELECT %L, id, row_number() OVER (ORDER BY id) FROM %I',
+            entity_table,
+            entity_table
+        );
+    END LOOP;
+
+    IF EXISTS (
+        SELECT 1
+        FROM pg_constraint constraint_info
+        JOIN id_renumber_tables target_table ON to_regclass(target_table.table_name) = constraint_info.confrelid
+        WHERE constraint_info.contype = 'f'
+          AND (array_length(constraint_info.conkey, 1) <> 1 OR array_length(constraint_info.confkey, 1) <> 1)
+    ) THEN
+        RAISE EXCEPTION 'Cannot renumber IDs: a composite foreign key references an entity ID';
+    END IF;
+
+    CREATE TEMP TABLE id_renumber_foreign_keys ON COMMIT DROP AS
+    SELECT
+        constraint_info.conrelid::regclass::text AS source_table,
+        constraint_info.conname AS constraint_name,
+        pg_get_constraintdef(constraint_info.oid) AS constraint_definition,
+        target_table.table_name AS target_table,
+        source_column.attname AS source_column
+    FROM pg_constraint constraint_info
+    JOIN id_renumber_tables target_table ON to_regclass(target_table.table_name) = constraint_info.confrelid
+    JOIN pg_attribute source_column
+      ON source_column.attrelid = constraint_info.conrelid
+     AND source_column.attnum = constraint_info.conkey[1]
+    WHERE constraint_info.contype = 'f';
+
+    FOR foreign_key IN SELECT * FROM id_renumber_foreign_keys ORDER BY source_table, constraint_name LOOP
+        EXECUTE format('ALTER TABLE %s DROP CONSTRAINT %I', foreign_key.source_table, foreign_key.constraint_name);
+    END LOOP;
+
+    FOR foreign_key IN SELECT * FROM id_renumber_foreign_keys ORDER BY source_table, constraint_name LOOP
+        EXECUTE format(
+            'UPDATE %s AS child SET %I = -id_map.new_id FROM id_renumber_map AS id_map WHERE id_map.table_name = %L AND child.%I = id_map.old_id',
+            foreign_key.source_table,
+            foreign_key.source_column,
+            foreign_key.target_table,
+            foreign_key.source_column
+        );
+    END LOOP;
+
+    FOR entity_table IN SELECT table_name FROM id_renumber_tables ORDER BY table_name LOOP
+        EXECUTE format(
+            'UPDATE %I AS entity SET id = -id_map.new_id FROM id_renumber_map AS id_map WHERE id_map.table_name = %L AND entity.id = id_map.old_id',
+            entity_table,
+            entity_table
+        );
+    END LOOP;
+
+    FOR entity_table IN SELECT table_name FROM id_renumber_tables ORDER BY table_name LOOP
+        EXECUTE format('UPDATE %I SET id = -id WHERE id < 0', entity_table);
+    END LOOP;
+
+    FOR foreign_key IN SELECT * FROM id_renumber_foreign_keys ORDER BY source_table, constraint_name LOOP
+        EXECUTE format(
+            'UPDATE %s SET %I = -%I WHERE %I < 0',
+            foreign_key.source_table,
+            foreign_key.source_column,
+            foreign_key.source_column,
+            foreign_key.source_column
+        );
+    END LOOP;
+
+    FOR foreign_key IN SELECT * FROM id_renumber_foreign_keys ORDER BY source_table, constraint_name LOOP
+        EXECUTE format(
+            'ALTER TABLE %s ADD CONSTRAINT %I %s',
+            foreign_key.source_table,
+            foreign_key.constraint_name,
+            foreign_key.constraint_definition
+        );
+    END LOOP;
+END $$;]]></sql>
+    </changeSet>
+    <changeSet id="20261006220000-2" author="jhipster" dbms="postgresql">
+        <sql splitStatements="false"><![CDATA[DO $$
+DECLARE
+    sequence_info record;
+BEGIN
+    FOR sequence_info IN
+        SELECT * FROM (VALUES
+            ('actif', 'actif_seq'),
+            ('affectation', 'affectation_seq'),
+            ('affectation_actif', 'affectation_actif_seq'),
+            ('agent', 'agent_seq'),
+            ('bordereau', 'bordereau_seq'),
+            ('categorie_materiel', 'categorie_materiel_seq'),
+            ('contrat', 'contrat_seq'),
+            ('equipement_recensement', 'equipement_recensement_seq'),
+            ('fournisseur', 'fournisseur_seq'),
+            ('historique_action', 'historique_action_seq'),
+            ('intervention', 'intervention_seq'),
+            ('inventaire', 'inventaire_seq'),
+            ('jhi_user', 'jhi_user_seq'),
+            ('maintenance', 'maintenance_seq'),
+            ('panne', 'panne_seq'),
+            ('planning_maintenance', 'planning_maintenance_seq'),
+            ('rapport', 'rapport_seq'),
+            ('recensement', 'recensement_seq'),
+            ('service_dgi', 'service_dgi_seq'),
+            ('transfert', 'transfert_seq'),
+            ('transfert_actif', 'transfert_actif_seq')
+        ) AS sequences(table_name, sequence_name)
+    LOOP
+        EXECUTE format(
+            'SELECT setval(%L, COALESCE((SELECT MAX(id) FROM %I), 0) + 1, false)',
+            sequence_info.sequence_name,
+            sequence_info.table_name
+        );
+    END LOOP;
+END $$;]]></sql>
+    </changeSet>
+</databaseChangeLog>

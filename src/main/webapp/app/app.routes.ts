@@ -10,6 +10,10 @@ const routes: Routes = [
     path: '',
     loadComponent: () => import('./home/home'),
     title: 'home.title',
+    data: {
+      authorities: [Authority.ADMIN, Authority.RESPONSABLE, Authority.TECHNICIEN, Authority.AGENT],
+    },
+    canActivate: [userRouteAccessService],
   },
   {
     path: '',

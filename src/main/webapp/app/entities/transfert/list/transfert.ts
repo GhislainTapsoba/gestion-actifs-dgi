@@ -96,7 +96,7 @@ export class Transfert {
   trackId = (item: ITransfert): number => this.transfertService.getTransfertIdentifier(item);
 
   canValidate(): boolean {
-    return this.accountService.hasAnyAuthority(['ROLE_ADMIN', 'ROLE_RESPONSABLE']);
+    return this.accountService.hasAnyAuthority(['ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_TECHNICIEN']);
   }
 
   valider(transfert: ITransfert): void {

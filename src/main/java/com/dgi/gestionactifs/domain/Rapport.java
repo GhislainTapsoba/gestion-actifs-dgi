@@ -24,7 +24,7 @@ public class Rapport implements Serializable, Persistable<Long> {
     @NotNull
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "rapportSequence")
-    @SequenceGenerator(name = "rapportSequence", sequenceName = "rapport_seq")
+    @SequenceGenerator(name = "rapportSequence", sequenceName = "rapport_seq", allocationSize = 1)
     private Long id;
 
     @NotNull

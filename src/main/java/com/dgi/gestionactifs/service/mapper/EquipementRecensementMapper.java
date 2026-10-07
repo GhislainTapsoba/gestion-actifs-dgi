@@ -20,10 +20,12 @@ public interface EquipementRecensementMapper extends EntityMapper<EquipementRece
     @Named("recensementId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "dateDebut", source = "dateDebut")
     RecensementDTO toDtoRecensementId(Recensement recensement);
 
     @Named("actifId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "codeInventaire", source = "codeInventaire")
     ActifDTO toDtoActifId(Actif actif);
 }

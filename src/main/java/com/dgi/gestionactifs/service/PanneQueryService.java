@@ -50,6 +50,16 @@ public class PanneQueryService extends QueryService<Panne> {
         return panneRepository.findAll(specification, page).map(panneMapper::toDto);
     }
 
+    @Transactional(readOnly = true)
+    public Page<PanneDTO> findPannesSurActifsAffectesAuCurrentAgent(Pageable page) {
+        return panneRepository.findPannesSurActifsAffectesAuCurrentAgent(page).map(panneMapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public long countPannesSurActifsAffectesAuCurrentAgent() {
+        return panneRepository.countPannesSurActifsAffectesAuCurrentAgent();
+    }
+
     /**
      * Return the number of matching entities in the database.
      * @param criteria The object which holds all the filters, which the entities should match.

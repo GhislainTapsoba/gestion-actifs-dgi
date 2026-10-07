@@ -5,8 +5,8 @@ export interface IAgent {
   id: number;
   nom?: string | null;
   prenom?: string | null;
-  service?: Pick<IServiceDgi, 'id'> | null;
-  utilisateur?: Pick<IUser, 'id'> | null;
+  service?: Pick<IServiceDgi, 'id' | 'nomService'> | null;
+  utilisateur?: Pick<IUser, 'id' | 'login'> | null;
 }
 
 export type NewAgent = Omit<IAgent, 'id'> & { id: null };

@@ -56,7 +56,9 @@
           <dd>
             @if (equipementRecensement()!.actif) {
               <div>
-                <a [routerLink]="['/actif', equipementRecensement()!.actif?.id, 'view']">{{ equipementRecensementRef.actif?.id }}</a>
+                <a [routerLink]="['/actif', equipementRecensement()!.actif?.id, 'view']">
+                  {{ equipementRecensementRef.actif?.codeInventaire }}
+                </a>
               </div>
             }
           </dd>

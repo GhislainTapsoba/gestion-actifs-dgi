@@ -6,7 +6,7 @@ export interface IInventaire {
   id: number;
   nomFichier?: string | null;
   dateImport?: dayjs.Dayjs | null;
-  actif?: Pick<IActif, 'id'> | null;
+  actif?: Pick<IActif, 'id' | 'codeInventaire'> | null;
 }
 
 export type NewInventaire = Omit<IInventaire, 'id'> & { id: null };

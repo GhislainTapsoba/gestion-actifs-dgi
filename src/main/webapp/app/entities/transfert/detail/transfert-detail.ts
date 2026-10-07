@@ -22,7 +22,7 @@ export class TransfertDetail {
   protected readonly transfertService = inject(TransfertService);
 
   canValidate(): boolean {
-    return this.accountService.hasAnyAuthority(['ROLE_ADMIN', 'ROLE_RESPONSABLE']);
+    return this.accountService.hasAnyAuthority(['ROLE_ADMIN', 'ROLE_RESPONSABLE', 'ROLE_TECHNICIEN']);
   }
 
   valider(): void {

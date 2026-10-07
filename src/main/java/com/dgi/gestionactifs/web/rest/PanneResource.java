@@ -1,6 +1,9 @@
 package com.dgi.gestionactifs.web.rest;
 
+import com.dgi.gestionactifs.repository.ActifRepository;
 import com.dgi.gestionactifs.repository.PanneRepository;
+import com.dgi.gestionactifs.security.AuthoritiesConstants;
+import com.dgi.gestionactifs.security.SecurityUtils;
 import com.dgi.gestionactifs.service.PanneQueryService;
 import com.dgi.gestionactifs.service.PanneService;
 import com.dgi.gestionactifs.service.criteria.PanneCriteria;
@@ -19,7 +22,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -44,11 +49,19 @@ public class PanneResource {
 
     private final PanneRepository panneRepository;
 
+    private final ActifRepository actifRepository;
+
     private final PanneQueryService panneQueryService;
 
-    public PanneResource(PanneService panneService, PanneRepository panneRepository, PanneQueryService panneQueryService) {
+    public PanneResource(
+        PanneService panneService,
+        PanneRepository panneRepository,
+        ActifRepository actifRepository,
+        PanneQueryService panneQueryService
+    ) {
         this.panneService = panneService;
         this.panneRepository = panneRepository;
+        this.actifRepository = actifRepository;
         this.panneQueryService = panneQueryService;
     }
 
@@ -65,6 +78,7 @@ public class PanneResource {
         if (panneDTO.getId() != null) {
             throw new BadRequestAlertException("A new panne cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        ensureAgentCanAccessActif(panneDTO.getActif() == null ? null : panneDTO.getActif().getId());
         panneDTO = panneService.save(panneDTO);
         return ResponseEntity.created(new URI("/api/pannes/" + panneDTO.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, panneDTO.getId().toString()))
@@ -97,6 +111,8 @@ public class PanneResource {
         if (!panneRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
+        ensureExistingPanneAccessible(id);
+        ensureAgentCanAccessActif(panneDTO.getActif() == null ? null : panneDTO.getActif().getId());
 
         panneDTO = panneService.update(panneDTO);
         return ResponseEntity.ok()
@@ -131,6 +147,10 @@ public class PanneResource {
         if (!panneRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
+        ensureExistingPanneAccessible(id);
+        if (panneDTO.getActif() != null) {
+            ensureAgentCanAccessActif(panneDTO.getActif().getId());
+        }
 
         Optional<PanneDTO> result = panneService.partialUpdate(panneDTO);
 
@@ -154,7 +174,9 @@ public class PanneResource {
     ) {
         LOG.debug("REST request to get Pannes by criteria: {}", criteria);
 
-        Page<PanneDTO> page = panneQueryService.findByCriteria(criteria, pageable);
+        Page<PanneDTO> page = isAgentOnly()
+            ? panneQueryService.findPannesSurActifsAffectesAuCurrentAgent(pageable)
+            : panneQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -168,7 +190,10 @@ public class PanneResource {
     @GetMapping("/count")
     public ResponseEntity<Long> countPannes(PanneCriteria criteria) {
         LOG.debug("REST request to count Pannes by criteria: {}", criteria);
-        return ResponseEntity.ok().body(panneQueryService.countByCriteria(criteria));
+        long count = isAgentOnly()
+            ? panneQueryService.countPannesSurActifsAffectesAuCurrentAgent()
+            : panneQueryService.countByCriteria(criteria);
+        return ResponseEntity.ok().body(count);
     }
 
     /**
@@ -181,6 +206,9 @@ public class PanneResource {
     public ResponseEntity<PanneDTO> getPanne(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Panne : {}", id);
         Optional<PanneDTO> panneDTO = panneService.findOne(id);
+        if (isAgentOnly()) {
+            panneDTO = panneDTO.filter(this::hasAgentAccess);
+        }
         return ResponseUtil.wrapOrNotFound(panneDTO);
     }
 
@@ -193,9 +221,37 @@ public class PanneResource {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePanne(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Panne : {}", id);
+        ensureExistingPanneAccessible(id);
         panneService.delete(id);
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    private boolean isAgentOnly() {
+        return (
+            SecurityUtils.hasCurrentUserAnyOfAuthorities(AuthoritiesConstants.AGENT) &&
+            SecurityUtils.hasCurrentUserNoneOfAuthorities(
+                AuthoritiesConstants.ADMIN,
+                AuthoritiesConstants.TECHNICIEN,
+                AuthoritiesConstants.RESPONSABLE
+            )
+        );
+    }
+
+    private boolean hasAgentAccess(PanneDTO panne) {
+        return panne.getActif() != null && actifRepository.isActifAffecteAuCurrentAgent(panne.getActif().getId());
+    }
+
+    private void ensureExistingPanneAccessible(Long id) {
+        if (isAgentOnly() && panneService.findOne(id).filter(this::hasAgentAccess).isEmpty()) {
+            throw new AccessDeniedException("The panne is not related to an asset assigned to the current agent");
+        }
+    }
+
+    private void ensureAgentCanAccessActif(Long actifId) {
+        if (isAgentOnly() && (actifId == null || !actifRepository.isActifAffecteAuCurrentAgent(actifId))) {
+            throw new AccessDeniedException("The asset is not assigned to the current agent");
+        }
     }
 }

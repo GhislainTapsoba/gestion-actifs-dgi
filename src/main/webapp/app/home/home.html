@@ -43,24 +43,26 @@
       </div>
     } @else {
       <!-- KPI Cards -->
-      <section class="dash__kpis">
-        @for (kpi of kpis(); track kpi.label) {
-          <a class="kpi-card kpi-card--{{ kpi.color }}" [routerLink]="kpi.routerLink">
-            <div class="kpi-card__icon">
-              <fa-icon [icon]="kpi.icon" />
-            </div>
-            <div class="kpi-card__body">
-              <span class="kpi-card__value">{{ kpi.value ?? '—' }}</span>
-              <span class="kpi-card__label">{{ kpi.label }}</span>
-              @if (kpi.trend) {
-                <span class="kpi-card__trend">{{ kpi.trend }}</span>
-              }
-            </div>
-          </a>
-        }
-      </section>
+      @if (kpis().length > 0) {
+        <section class="dash__kpis">
+          @for (kpi of kpis(); track kpi.label) {
+            <a class="kpi-card kpi-card--{{ kpi.color }}" [routerLink]="kpi.routerLink">
+              <div class="kpi-card__icon">
+                <fa-icon [icon]="kpi.icon" />
+              </div>
+              <div class="kpi-card__body">
+                <span class="kpi-card__value">{{ kpi.value ?? '—' }}</span>
+                <span class="kpi-card__label">{{ kpi.label }}</span>
+                @if (kpi.trend) {
+                  <span class="kpi-card__trend">{{ kpi.trend }}</span>
+                }
+              </div>
+            </a>
+          }
+        </section>
+      }
 
-      @if (!isAgentOnly()) {
+      @if (canViewStatistics()) {
         <div class="dash__row">
           <!-- Graphique répartition parc -->
           <section class="dash__card dash__card--chart">
@@ -173,6 +175,21 @@
             </div>
           </section>
         }
+      } @else if (isTechnicienOnly()) {
+        <section class="dash__card dash__card--actions">
+          <div class="dash__card-header">
+            <fa-icon icon="th-list" />
+            <h2>Gestion opérationnelle</h2>
+          </div>
+          <div class="quick-actions">
+            <a routerLink="/actif" class="quick-action"><fa-icon icon="desktop" /><span>Actifs</span></a>
+            <a routerLink="/inventaire" class="quick-action"><fa-icon icon="file-upload" /><span>Imports inventaire</span></a>
+            <a routerLink="/affectation" class="quick-action"><fa-icon icon="users" /><span>Affectations</span></a>
+            <a routerLink="/transfert" class="quick-action"><fa-icon icon="exchange-alt" /><span>Transferts</span></a>
+            <a routerLink="/maintenance" class="quick-action"><fa-icon icon="tools" /><span>Maintenance</span></a>
+            <a routerLink="/panne" class="quick-action"><fa-icon icon="exclamation-triangle" /><span>Pannes</span></a>
+          </div>
+        </section>
       } @else {
         <!-- Vue Agent -->
         <section class="dash__card">
@@ -185,16 +202,8 @@
               <fa-icon icon="desktop" />
               <span>Mes actifs</span>
             </a>
-            <a routerLink="/affectation" class="quick-action">
-              <fa-icon icon="list" />
-              <span>Mes affectations</span>
-            </a>
-            <a routerLink="/transfert" class="quick-action">
-              <fa-icon icon="exchange-alt" />
-              <span>Mes demandes</span>
-            </a>
-            <a routerLink="/maintenance" class="quick-action">
-              <fa-icon icon="tools" />
+            <a routerLink="/panne/new" class="quick-action">
+              <fa-icon icon="exclamation-triangle" />
               <span>Signaler une panne</span>
             </a>
           </div>

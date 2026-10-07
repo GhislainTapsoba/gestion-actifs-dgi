@@ -43,13 +43,13 @@
           <dd>
             @if (maintenance()!.actif) {
               <div>
-                <a [routerLink]="['/actif', maintenance()!.actif?.id, 'view']">{{ maintenanceRef.actif?.id }}</a>
+                <a [routerLink]="['/actif', maintenance()!.actif?.id, 'view']">{{ maintenanceRef.actif?.codeInventaire }}</a>
               </div>
             }
           </dd>
           <dt><span jhiTranslate="gestionActifsDgiApp.maintenance.technicien">Technicien</span></dt>
           <dd>
-            <span>{{ maintenanceRef.technicien?.id }}</span>
+            <span>{{ maintenanceRef.technicien?.login }}</span>
           </dd>
         </dl>
 

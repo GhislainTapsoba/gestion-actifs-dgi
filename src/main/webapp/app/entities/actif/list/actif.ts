@@ -1,5 +1,5 @@
 import { HttpHeaders } from '@angular/common/http';
-import { Component, effect, inject, signal, untracked } from '@angular/core';
+import { Component, computed, effect, inject, signal, untracked } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Data, ParamMap, Router, RouterLink } from '@angular/router';
 
@@ -9,6 +9,7 @@ import { NgbPagination } from '@ng-bootstrap/ng-bootstrap/pagination';
 import { combineLatest, filter, map, tap } from 'rxjs';
 
 import { DEFAULT_SORT_DATA, ITEMS_PER_PAGE, ITEM_DELETED_EVENT, PAGE_HEADER, SORT, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config';
+import { AccountService } from 'app/core/auth';
 import { Alert, AlertError } from 'app/shared/alert';
 import { FormatMediumDatePipe } from 'app/shared/date';
 import { Filter, FilterOptions, IFilterOption, IFilterOptions } from 'app/shared/filter';
@@ -38,6 +39,7 @@ import { ActifService } from '../service/actif.service';
 })
 export class Actif {
   readonly actifs = signal<IActif[]>([]);
+  readonly canManage = computed(() => this.accountService.hasAnyAuthority(['ROLE_ADMIN', 'ROLE_TECHNICIEN', 'ROLE_RESPONSABLE']));
 
   sortState = sortStateSignal({});
   filters: IFilterOptions = new FilterOptions();
@@ -47,6 +49,7 @@ export class Actif {
   readonly page = signal(1);
 
   readonly router = inject(Router);
+  private readonly accountService = inject(AccountService);
   protected readonly actifService = inject(ActifService);
   // eslint-disable-next-line @typescript-eslint/member-ordering
   readonly isLoading = this.actifService.actifsResource.isLoading;

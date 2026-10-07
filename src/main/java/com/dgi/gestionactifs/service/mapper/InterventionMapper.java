@@ -26,11 +26,15 @@ public interface InterventionMapper extends EntityMapper<InterventionDTO, Interv
     @Named("panneId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "description", source = "description")
+    @Mapping(target = "dateDeclaration", source = "dateDeclaration")
     PanneDTO toDtoPanneId(Panne panne);
 
     @Named("planningMaintenanceId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "datePrevue", source = "datePrevue")
+    @Mapping(target = "description", source = "description")
     PlanningMaintenanceDTO toDtoPlanningMaintenanceId(PlanningMaintenance planningMaintenance);
 
     @Named("planningMaintenanceIdSet")

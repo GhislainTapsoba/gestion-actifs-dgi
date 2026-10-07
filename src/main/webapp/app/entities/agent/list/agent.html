@@ -79,12 +79,12 @@
               <td>
                 @if (agent.service) {
                   <div>
-                    <a [routerLink]="['/service-dgi', agent.service.id, 'view']">{{ agent.service.id }}</a>
+                    <a [routerLink]="['/service-dgi', agent.service.id, 'view']">{{ agent.service.nomService }}</a>
                   </div>
                 }
               </td>
               <td>
-                {{ agent.utilisateur?.id }}
+                {{ agent.utilisateur?.login }}
               </td>
               <td class="text-end">
                 <div class="btn-group">

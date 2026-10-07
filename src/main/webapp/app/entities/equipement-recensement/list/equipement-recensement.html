@@ -113,7 +113,9 @@
               <td>
                 @if (equipementRecensement.actif) {
                   <div>
-                    <a [routerLink]="['/actif', equipementRecensement.actif.id, 'view']">{{ equipementRecensement.actif.id }}</a>
+                    <a [routerLink]="['/actif', equipementRecensement.actif.id, 'view']">
+                      {{ equipementRecensement.actif.codeInventaire }}
+                    </a>
                   </div>
                 }
               </td>

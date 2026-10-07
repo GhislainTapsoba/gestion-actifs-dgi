@@ -41,7 +41,7 @@
           <dd>
             @if (affectationActif()!.actif) {
               <div>
-                <a [routerLink]="['/actif', affectationActif()!.actif?.id, 'view']">{{ affectationActifRef.actif?.id }}</a>
+                <a [routerLink]="['/actif', affectationActif()!.actif?.id, 'view']">{{ affectationActifRef.actif?.codeInventaire }}</a>
               </div>
             }
           </dd>

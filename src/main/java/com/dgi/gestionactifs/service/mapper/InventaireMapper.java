@@ -17,5 +17,6 @@ public interface InventaireMapper extends EntityMapper<InventaireDTO, Inventaire
     @Named("actifId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "codeInventaire", source = "codeInventaire")
     ActifDTO toDtoActifId(Actif actif);
 }

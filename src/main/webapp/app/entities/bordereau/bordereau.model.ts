@@ -13,9 +13,9 @@ export interface IBordereau {
   typeBordereau?: keyof typeof TypeBordereau | null;
   statutValidation?: keyof typeof StatutBordereau | null;
   dateValidation?: dayjs.Dayjs | null;
-  transfert?: Pick<ITransfert, 'id'> | null;
-  affectation?: Pick<IAffectation, 'id'> | null;
-  emetteur?: Pick<IUser, 'id'> | null;
+  transfert?: Pick<ITransfert, 'id' | 'dateTransfert'> | null;
+  affectation?: Pick<IAffectation, 'id' | 'dateAffectation'> | null;
+  emetteur?: Pick<IUser, 'id' | 'login'> | null;
 }
 
 export type NewBordereau = Omit<IBordereau, 'id'> & { id: null };

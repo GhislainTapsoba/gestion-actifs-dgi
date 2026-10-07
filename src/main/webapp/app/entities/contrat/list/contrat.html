@@ -93,14 +93,14 @@
               <td>
                 @if (contrat.fournisseur) {
                   <div>
-                    <a [routerLink]="['/fournisseur', contrat.fournisseur.id, 'view']">{{ contrat.fournisseur.id }}</a>
+                    <a [routerLink]="['/fournisseur', contrat.fournisseur.id, 'view']">{{ contrat.fournisseur.nom }}</a>
                   </div>
                 }
               </td>
               <td>
                 @if (contrat.actif) {
                   <div>
-                    <a [routerLink]="['/actif', contrat.actif.id, 'view']">{{ contrat.actif.id }}</a>
+                    <a [routerLink]="['/actif', contrat.actif.id, 'view']">{{ contrat.actif.codeInventaire }}</a>
                   </div>
                 }
               </td>

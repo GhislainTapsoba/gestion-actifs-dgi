@@ -27,13 +27,13 @@
           <dd>
             @if (agent()!.service) {
               <div>
-                <a [routerLink]="['/service-dgi', agent()!.service?.id, 'view']">{{ agentRef.service?.id }}</a>
+                <a [routerLink]="['/service-dgi', agent()!.service?.id, 'view']">{{ agentRef.service?.nomService }}</a>
               </div>
             }
           </dd>
           <dt><span jhiTranslate="gestionActifsDgiApp.agent.utilisateur">Utilisateur</span></dt>
           <dd>
-            <span>{{ agentRef.utilisateur?.id }}</span>
+            <span>{{ agentRef.utilisateur?.login }}</span>
           </dd>
         </dl>
 
