@@ -52,6 +52,7 @@
     <include file="config/liquibase/changelog/20260902210000_added_custom_authorities.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20261006210000_entity_id_sequences.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20261006220000_renumber_primary_keys.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20261007020000_rich_sample_data.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>
